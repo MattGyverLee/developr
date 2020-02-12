@@ -29,6 +29,7 @@ for (let index = 0; index < 2; index++) {
       plan = `file://LangTechGrunt.xml`;
       comp = `file://LangTechComp.xml`;
       planrt = `1-root`;
+      domain = "LT";
 
       break;
 
@@ -37,6 +38,7 @@ for (let index = 0; index < 2; index++) {
       plan = `file://GenCompGrunt.xml`;
       comp = `file://GenComp.xml`;
       planrt = `2-root`;
+      domain = "GC";
       break;
   }
 
@@ -57,6 +59,7 @@ for (let index = 0; index < 2; index++) {
       MERGE (d:Domain {id: DomainDetails.id})
       SET d.label = DomainDetails.label_en,
       d.label_fr	= DomainDetails.label_fr
+      RETURN count(d), ${domain}
       `);
 
   //Competency List
@@ -82,6 +85,7 @@ for (let index = 0; index < 2; index++) {
       t1.label_label_es = TargetCompetency.label_es, 
       t1.label_es_modified = TargetCompetency.label_es_modified, 
       t1.label_es_created = TargetCompetency.label_es_created
+      RETURN count(t1), ${domain}
   `);
 
   //TargetComp Relations
@@ -105,6 +109,7 @@ for (let index = 0; index < 2; index++) {
       ac.label_label_es = AssessmentCriteria.label_es, 
       ac.label_es_modified = AssessmentCriteria.label_es_modified, 
       ac.label_es_created = AssessmentCriteria.label_es_created 
+      RETURN count(ac), ${domain}
   `);
 
   q.push(cypher`
@@ -127,6 +132,7 @@ for (let index = 0; index < 2; index++) {
       sn.label_es = ShortName.label_es, 
       sn.label_es_modified = ShortName.label_es_modified, 
       sn.label_es_created = ShortName.label_es_created 
+      RETURN count(sn), ${domain}
   `);
 
   q.push(cypher`
@@ -292,11 +298,11 @@ for (let index = 0; index < 2; index++) {
       
   `);
 
-  // Creates Competency Groups
+  // Links Competency Groups
   q.push(cypher`
    CALL apoc.load.xml(${plan},'//compGroup',{},true) YIELD value as CompGroup 
      CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-     MATCH (p:Plan {id: Plans.id}) 
+     MERGE (p:Plan {id: Plans.id}) 
      MERGE (p)-[:HAS_COMPETENCY_LIST { 
      planId: Plans.id
      }]->(g:CompetencyGroup {id: ${planrt}, smartsheet_id: ${planrt}}) 
@@ -305,11 +311,12 @@ for (let index = 0; index < 2; index++) {
 
   // Link Subgroups to Groups
   q.push(cypher`
-    CALL apoc.load.xml(${plan},'//compGroup',{},true) YIELD value as CompGroup 
+    CALL apoc.load.xml(${plan},'//compGroup[@SSId!=""]',{},true) YIELD value as CompGroup 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
       WHERE NOT (cg1)-[:IN_GROUP]->(cg2)
       MERGE (cg1)-[:IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2) 
+      return cg1, cg2
   `);
   //TODO: Make ShortName into Node
 
@@ -334,7 +341,9 @@ for (let index = 0; index < 2; index++) {
 console.log(q.length);
 
 function doSafeQuery(inQuery) {
-  const result = inQuery.run().then(result => {});
+  const result = inQuery.run().then(result => {
+    console.log(result);
+  });
 }
 
 function sleep(milliseconds) {
@@ -349,7 +358,6 @@ for (let index = 0; index < q.length; index++) {
   doSafeQuery(q[index]);
   const idx = index + 1;
   console.log("Finished " + idx + " of " + q.length);
-  sleep(200);
 }
 console.log("Finished All");
 
