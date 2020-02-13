@@ -4,7 +4,9 @@ const neo4j = require("neo4j-driver");
 const inferSchema = require("neo4j-graphql-js").inferSchema;
 const makeAugmentedSchema = require("neo4j-graphql-js").makeAugmentedSchema;
 const dotenv = require("dotenv");
-const ApolloServer = require("apollo-server");
+const fs = require("fs");
+const path = require("path");
+//const typeDefs = require("./graphql-schema").typeDefs;
 
 dotenv.config();
 
@@ -16,26 +18,24 @@ const driver = neo4j.driver(
   )
 );
 
-const inferAugmentedSchema = driver => {
-  return inferSchema(driver).then(result => {
-    return makeAugmentedSchema({
-      typeDefs: result.typeDefs
-    });
-  });
-};
+const storedSchema = inferSchema(driver).then(result => {
+  console.log(result.typeDefs);
+  fs.writeFileSync("./generatedSchemas/inferredTypes.graphql", result.typeDefs);
+  return result.typeDefs;
+});
 
-// Spin up GraphQL server using auto-generated GraphQL schema object
-const createServer = schema =>
-  new ApolloServer({
-    context: { driver },
-    schema: schema,
-    playground: true
-  });
+const typeDefs = fs
+  .readFileSync(
+    process.env.GRAPHQL_SCHEMA ||
+      path.join("./generatedSchemas/inferredTypes.graphql")
+  )
+  .toString("utf-8");
+console.log(typeDefs);
+const schema = makeAugmentedSchema({ typeDefs });
 
-inferAugmentedSchema(driver)
-  .then(createServer)
-  .then(server => server.listen(3000, "0.0.0.0"))
-  .then(({ url }) => {
-    console.log(`GraphQL API ready at ${url}`);
-  })
-  .catch(err => console.error(err));
+var tempvar = schema;
+console.log(tempvar);
+
+// const schema = makeAugmentedSchema({typeDefs}.toString("UTF-8"));
+
+//console.log(schema);

@@ -1,6 +1,11 @@
+//https://blog.grandstack.io/inferring-graphql-type-definitions-from-an-existing-neo4j-database-dadca2138b25
+
 const neo4j = require("neo4j-driver");
 const inferSchema = require("neo4j-graphql-js").inferSchema;
+const makeAugmentedSchema = require("neo4j-graphql-js").makeAugmentedSchema;
 const dotenv = require("dotenv");
+const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 
@@ -12,6 +17,11 @@ const driver = neo4j.driver(
   )
 );
 
-inferSchema(driver).then(result => {
+const schema = inferSchema(driver).then(result => {
   console.log(result.typeDefs);
+  fs.writeFileSync("./generatedSchemas/inferredTypes.graphql", result.typeDefs);
+  return result.typeDefs;
 });
+
+driver.close();
+console.log("Schema Created, Connection Closed");

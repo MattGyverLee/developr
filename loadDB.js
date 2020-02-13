@@ -25,21 +25,19 @@ var planrt = "";
 for (let index = 0; index < 2; index++) {
   switch (index) {
     case 0:
-      dom = `file://LangTechDom.xml`;
-      plan = `file://LangTechGrunt.xml`;
-      comp = `file://LangTechComp.xml`;
-      planrt = `1-root`;
-      domain = "LT";
-
+      dom = process.env.LTDOM;
+      plan = process.env.LTPLAN;
+      comp = process.env.LTCOMP;
+      planrt = process.env.LTROOT;
+      domain = process.env.LTPREFIX;
       break;
 
     case 1:
-      dom = `file://GenCoreDom.xml`;
-      plan = `file://GenCompGrunt.xml`;
-      comp = `file://GenComp.xml`;
-      planrt = `0-root`;
-      domain = "GC";
-      break;
+      dom = process.env.GCDOM;
+      plan = process.env.GCPLAN;
+      comp = process.env.GCCOMP;
+      planrt = process.env.GCROOT;
+      domain = process.env.GCPREFIX;
   }
 
   console.log;

@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server": "^2.10.0",
+    "apollo-server-express": "^2.10.0",
     "cypher-tagged-templates": "^3.0.0",
     "dotenv": "^8.2.0",
     "neo4j-driver": "^4.0.1",
