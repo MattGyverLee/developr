@@ -1,6 +1,6 @@
 //https://blog.grandstack.io/inferring-graphql-type-definitions-from-an-existing-neo4j-database-dadca2138b25
 
-const neo4j = require("neo4j-driver");
+const neo4j = require("neo4j-driver").v1;
 const inferSchema = require("neo4j-graphql-js").inferSchema;
 const dotenv = require("dotenv");
 

@@ -1,7 +1,6 @@
 //https://blog.grandstack.io/inferring-graphql-type-definitions-from-an-existing-neo4j-database-dadca2138b25
 
-const neo4j = require("neo4j-driver");
-const inferSchema = require("neo4j-graphql-js").inferSchema;
+const neo4j = require("neo4j-driver").v1;
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -43,11 +42,17 @@ for (let index = 0; index < 2; index++) {
   console.log;
 
   const Cypher = require("cypher-tagged-templates").default;
-  const driver = neo4j.driver(process.env.NEO4J_URI || "bolt://localhost:7687", neo4j.auth.basic(process.env.NEO4J_USER || "neo4j", process.env.NEO4J_PASSWORD || "neo4j"));
-  const cypher = new Cypher({driver}).query;
+  const driver = neo4j.driver(
+    process.env.NEO4J_URI || "bolt://localhost:7687",
+    neo4j.auth.basic(
+      process.env.NEO4J_USER || "neo4j",
+      process.env.NEO4J_PASSWORD || "neo4j"
+    )
+  );
+  const cypher = new Cypher({ driver }).query;
 
   //Domain
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${dom},'',{},true) YIELD value as DomainDetails
       MERGE (d:Domain {id: DomainDetails.id})
       SET d.label = DomainDetails.label_en,
@@ -56,7 +61,7 @@ for (let index = 0; index < 2; index++) {
       `);
 
   //Competency List
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//CompetencyDetails/Competency',{},true) YIELD value as Competency
       MERGE (c:Competency {id: Competency.id}) 
       SET c.smartsheet_id = Competency.SSId,
@@ -67,7 +72,7 @@ for (let index = 0; index < 2; index++) {
       MERGE (d2)-[:PRIMARY_DOMAIN_OF]->(c)`);
 
   //Target Competency
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//targetComp',{},true) YIELD value as TargetCompetency 
       MERGE (t1:TargetCompetency {id: TargetCompetency.id }) 
       SET t1.label = TargetCompetency.label_en, 
@@ -83,7 +88,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   //TargetComp Relations
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//targetComp',{},true) YIELD value as TargetComp 
       MATCH (c2:Competency {smartsheet_id: TargetComp.parentSSId}), 
       (t2:TargetCompetency {id: TargetComp.id}) 
@@ -91,7 +96,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // Assessment Criteria
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//AssessCrit',{},true) YIELD value as AssessmentCriteria 
       MERGE (ac:AssessmentCriteria { id: AssessmentCriteria.id}) 
       SET ac.label = AssessmentCriteria.label_en, 
@@ -106,7 +111,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(ac), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//AssessCrit',{},true) YIELD value as AssessmentCrit 
       MATCH (c2:Competency {smartsheet_id: AssessmentCrit.parentSSId}), 
       (ac2:AssessmentCriteria {id: AssessmentCrit.id}) 
@@ -114,7 +119,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   //Short Name
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//ShortName',{},true) YIELD value as ShortName 
       MERGE (sn:ShortName { id: ShortName.id}) 
       SET sn.label = ShortName.label_en, 
@@ -129,7 +134,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(sn), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//ShortName',{},true) YIELD value as ShortN 
       MATCH (c2:Competency {smartsheet_id: ShortN.parentSSId}), 
       (sn2:ShortName {id: ShortN.id}) 
@@ -137,7 +142,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L0
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv0Activities',{},true) YIELD value as Lv0Act 
       MERGE (l0:Lv0Activities { id: Lv0Act.id}) 
       SET l0.label = Lv0Act.label_en, 
@@ -152,7 +157,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(l0), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv0Activities',{},true) YIELD value as Lv0 
       MATCH (c2:Competency {smartsheet_id: Lv0.parentSSId}), 
       (l02:Lv0Activities {id: Lv0.id}) 
@@ -160,7 +165,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L1
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv1Activities',{},true) YIELD value as Lv1Act
       MERGE (l1:Lv1Activities { id: Lv1Act.id}) 
       SET l1.label = Lv1Act.label_en, 
@@ -175,7 +180,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(l1), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv1Activities',{},true) YIELD value as Lv1 
       MATCH (c2:Competency {smartsheet_id: Lv1.parentSSId}), 
       (l12:Lv1Activities {id: Lv1.id}) 
@@ -183,7 +188,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L2
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv2Activities',{},true) YIELD value as Lv2Act 
       MERGE (l2:Lv2Activities { id: Lv2Act.id}) 
       SET l2.label = Lv2Act.label_en, 
@@ -198,7 +203,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(l2), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv2Activities',{},true) YIELD value as Lv2 
       MATCH (c2:Competency {smartsheet_id: Lv2.parentSSId}), 
       (l22:Lv2Activities {id: Lv2.id}) 
@@ -206,7 +211,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L3
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv3Activities',{},true) YIELD value as Lv3Act 
       MERGE (l3:Lv3Activities { id: Lv3Act.id}) 
       SET l3.label = Lv3Act.label_en, 
@@ -221,7 +226,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(l3), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv3Activities',{},true) YIELD value as Lv3 
       MATCH (c2:Competency {smartsheet_id: Lv3.parentSSId}), 
       (l32:Lv3Activities {id: Lv3.id}) 
@@ -229,7 +234,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L4
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv4Activities',{},true) YIELD value as Lv4Act 
       MERGE (l4:Lv4Activities { id: Lv4Act.id}) 
       SET l4.label = Lv4Act.label_en, 
@@ -244,7 +249,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(l4), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv4Activities',{},true) YIELD value as Lv4 
       MATCH (c2:Competency {smartsheet_id: Lv4.parentSSId}), 
       (l42:Lv4Activities {id: Lv4.id}) 
@@ -252,7 +257,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L5
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv5Activities',{},true) YIELD value as Lv5Act 
       MERGE (l5:Lv5Activities { id: Lv5Act.id}) 
       SET l5.label = Lv5Act.label_en, 
@@ -267,7 +272,7 @@ for (let index = 0; index < 2; index++) {
       RETURN count(l5), ${domain}
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv5Activities',{},true) YIELD value as Lv5 
       MATCH (c2:Competency {smartsheet_id: Lv5.parentSSId}), 
       (l52:Lv5Activities {id: Lv5.id}) 
@@ -275,7 +280,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // Import Plan and Connecting Plan to Domain
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       MERGE (p:Plan {id: Plans.id}) 
       SET p.plan_class = Plans.positionClass, 
@@ -286,7 +291,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // Creates Competency Groups
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${plan},'//compGroup',{},true) YIELD value as CompGroup 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       MERGE (p:Plan {id: Plans.id}) 
@@ -300,7 +305,7 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // Links Competency Groups
-  q.push(cypher `
+  q.push(cypher`
    CALL apoc.load.xml(${plan},'//compGroup',{},true) YIELD value as CompGroup 
      CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
      MERGE (p:Plan {id: Plans.id}) 
@@ -311,7 +316,7 @@ for (let index = 0; index < 2; index++) {
  `);
 
   // Link Subgroups to Groups
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${plan},'//compGroup[@SSId!=""]',{},true) YIELD value as CompGroup 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
@@ -320,7 +325,7 @@ for (let index = 0; index < 2; index++) {
       return cg1, cg2
   `);
 
-  q.push(cypher `
+  q.push(cypher`
   CALL apoc.load.xml(${plan},'//compGroup[@SSId!=""]',{},true) YIELD value as CompGroup 
     CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
     Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
@@ -331,7 +336,7 @@ for (let index = 0; index < 2; index++) {
   //TODO: Make ShortName into Node
 
   // Links Competencies to Groups
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${plan},'//Competency[@SSId!=""]',{},true) YIELD value as Compet 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       Match (co {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
@@ -340,7 +345,7 @@ for (let index = 0; index < 2; index++) {
       return co, c4
   `);
 
-  q.push(cypher `
+  q.push(cypher`
     CALL apoc.load.xml(${plan},'//Competency[@SSId!=""]',{},true) YIELD value as Compet 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       Match (co {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
@@ -352,7 +357,7 @@ for (let index = 0; index < 2; index++) {
   var dateobj = new Date();
   var myNow = dateobj.toISOString();
   ///Note, these will run twice, but it should be OK.
-  q.push(cypher `
+  q.push(cypher`
     MATCH (a)-[r]-(b)
     WHERE NOT EXISTS(r.startDate)
     SET r.startDate = ${myNow}
@@ -363,8 +368,14 @@ console.log(q.length);
 
 function doSafeQuery(inQuery, indexy) {
   const Cypher = require("cypher-tagged-templates").default;
-  const driver = neo4j.driver(process.env.NEO4J_URI || "bolt://localhost:7687", neo4j.auth.basic(process.env.NEO4J_USER || "neo4j", process.env.NEO4J_PASSWORD || "neo4j"));
-  const cypher = new Cypher({driver}).query;
+  const driver = neo4j.driver(
+    process.env.NEO4J_URI || "bolt://localhost:7687",
+    neo4j.auth.basic(
+      process.env.NEO4J_USER || "neo4j",
+      process.env.NEO4J_PASSWORD || "neo4j"
+    )
+  );
+  const cypher = new Cypher({ driver }).query;
   const result = inQuery[indexy].run().then(result => {
     console.log(result);
     //sleep(100);
@@ -384,6 +395,6 @@ function sleep(milliseconds) {
 
 doSafeQuery(q, 0);
 
-console.log("Database updated, Connection Closed");
+//.then(console.log("Database updated, Connection Closed"));
 
 //driver.close();

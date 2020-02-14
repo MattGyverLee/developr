@@ -183,8 +183,8 @@ type CompetencyGroup {
 type Domain {
    _id: Long!
    id: String!
-   label: String
-   label_fr: String
+   label: String!
+   label_fr: String!
    primary_domain_of: [Competency] @relation(name: "PRIMARY_DOMAIN_OF", direction: "OUT")
    PRIMARY_DOMAIN_OF_rel: [PRIMARY_DOMAIN_OF]
    competencys: [Competency] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "IN")
@@ -193,6 +193,12 @@ type Domain {
 type HAS_PRIMARY_DOMAIN @relation(name: "HAS_PRIMARY_DOMAIN") {
   from: Competency!
   to: Domain!
+  startDate: String!
+}
+
+type PRIMARY_DOMAIN_OF @relation(name: "PRIMARY_DOMAIN_OF") {
+  from: Domain!
+  to: Competency!
   startDate: String!
 }
 
@@ -262,12 +268,6 @@ type IN_GROUP @relation(name: "IN_GROUP") {
   to: CompetencyGroup!
   order: String!
   planId: String!
-  startDate: String!
-}
-
-type PRIMARY_DOMAIN_OF @relation(name: "PRIMARY_DOMAIN_OF") {
-  from: Domain!
-  to: Competency!
   startDate: String!
 }
 
