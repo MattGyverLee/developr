@@ -334,8 +334,8 @@ for (let index = 0; index < 2; index++) {
   ///Note, these will run twice, but it should be OK.
   q.push(cypher `
     MATCH (a)-[r]-(b)
-    WHERE NOT EXISTS(r.from)
-    SET r.from = ${myNow}
+    WHERE NOT EXISTS(r.startDate)
+    SET r.startDate = ${myNow}
 `);
 }
 
@@ -363,5 +363,7 @@ function sleep(milliseconds) {
 }
 
 doSafeQuery(q, 0);
+
+console.log("Database updated, Connection Closed");
 
 //driver.close();

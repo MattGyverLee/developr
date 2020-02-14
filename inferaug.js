@@ -10,28 +10,11 @@ const path = require("path");
 
 dotenv.config();
 
-const driver = neo4j.driver(
-  process.env.NEO4J_URI || "bolt://localhost:7687",
-  neo4j.auth.basic(
-    process.env.NEO4J_USER || "neo4j",
-    process.env.NEO4J_PASSWORD || "neo4j"
-  )
-);
+const driver = neo4j.driver(process.env.NEO4J_URI || "bolt://localhost:7687", neo4j.auth.basic(process.env.NEO4J_USER || "neo4j", process.env.NEO4J_PASSWORD || "neo4j"));
 
-const storedSchema = inferSchema(driver).then(result => {
-  console.log(result.typeDefs);
-  fs.writeFileSync("./generatedSchemas/inferredTypes.graphql", result.typeDefs);
-  return result.typeDefs;
-});
-
-const typeDefs = fs
-  .readFileSync(
-    process.env.GRAPHQL_SCHEMA ||
-      path.join("./generatedSchemas/inferredTypes.graphql")
-  )
-  .toString("utf-8");
+const typeDefs = fs.readFileSync(process.env.GRAPHQL_SCHEMA || path.join("./generatedSchemas/inferredTypes.graphql")).toString("utf-8");
 console.log(typeDefs);
-const schema = makeAugmentedSchema({ typeDefs });
+const schema = makeAugmentedSchema({typeDefs});
 
 var tempvar = schema;
 console.log(tempvar);
