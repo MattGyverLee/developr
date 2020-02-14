@@ -63,7 +63,8 @@ for (let index = 0; index < 2; index++) {
       c.label = Competency.label, 
       c.default_weight = Competency.defaultWeight 
       MERGE (d2:Domain {id: Competency.domainId }) 
-      MERGE (c)-[:HAS_PRIMARY_DOMAIN]->(d2)`);
+      MERGE (c)-[:HAS_PRIMARY_DOMAIN]->(d2)
+      MERGE (d2)-[:PRIMARY_DOMAIN_OF]->(c)`);
 
   //Target Competency
   q.push(cypher `
@@ -315,9 +316,18 @@ for (let index = 0; index < 2; index++) {
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
       WHERE NOT (cg1)-[:IN_GROUP]->(cg2)
-      MERGE (cg1)-[:IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2) 
+      MERGE (cg1)-[:IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2)
       return cg1, cg2
   `);
+
+  q.push(cypher `
+  CALL apoc.load.xml(${plan},'//compGroup[@SSId!=""]',{},true) YIELD value as CompGroup 
+    CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
+    Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
+    WHERE NOT (cg2)-[:CHILD_OF]->(cg1)
+    MERGE (cg2)-[:CHILD_OF {order: CompGroup.order, planId: Plans.id}]->(cg1) 
+    return cg1, cg2
+`);
   //TODO: Make ShortName into Node
 
   // Links Competencies to Groups
@@ -329,6 +339,16 @@ for (let index = 0; index < 2; index++) {
       MERGE (co)-[:IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
       return co, c4
   `);
+
+  q.push(cypher `
+    CALL apoc.load.xml(${plan},'//Competency[@SSId!=""]',{},true) YIELD value as Compet 
+      CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
+      Match (co {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
+      WHERE NOT (c4)-[:CHILD_OF]->(co) 
+      MERGE (c4)-[:CHILD_OF {order: Compet.order, planId: Plans.id}]->(co) 
+      return co, c4
+  `);
+
   var dateobj = new Date();
   var myNow = dateobj.toISOString();
   ///Note, these will run twice, but it should be OK.
@@ -347,7 +367,7 @@ function doSafeQuery(inQuery, indexy) {
   const cypher = new Cypher({driver}).query;
   const result = inQuery[indexy].run().then(result => {
     console.log(result);
-    sleep(100);
+    //sleep(100);
     if (indexy < inQuery.length - 1) {
       doSafeQuery(inQuery, indexy + 1);
     }
