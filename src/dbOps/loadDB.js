@@ -15,7 +15,8 @@ dotenv.config();
 
 const session = driver.session(); */
 
-var q = [];
+var q = [],
+  r = [];
 var dom = "";
 var plan = "";
 var comp = "";
@@ -51,6 +52,13 @@ for (let index = 0; index < 2; index++) {
   );
   const cypher = new Cypher({ driver }).query;
 
+  //Clear Database, only funs first time.
+  if (index == 0) {
+    q.push(cypher`
+      MATCH (n) DETACH DELETE n
+    `);
+    // TODO: Make this Reserve
+  }
   //Domain
   q.push(cypher`
     CALL apoc.load.xml(${dom},'',{},true) YIELD value as DomainDetails
@@ -59,6 +67,15 @@ for (let index = 0; index < 2; index++) {
       d.label_fr	= DomainDetails.label_fr
       RETURN count(d), ${domain}
       `);
+
+  // Create Plan
+  q.push(cypher`
+    CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
+      MERGE (p:PlanRoot {id: ${planrt}}) 
+      SET p.plan_class = Plans.positionClass, 
+      p.label = Plans.label_en, 
+      p.label_fr = Plans.label_fr 
+  `);
 
   //Competency List
   q.push(cypher`
@@ -279,22 +296,29 @@ for (let index = 0; index < 2; index++) {
       MERGE (c2)-[:HAS_LV5_ACTIVITIES]->(l52) 
   `);
 
+  //TODO: Merge
   // Import Plan and Connecting Plan to Domain
   q.push(cypher`
-    CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-      MERGE (p:Plan {id: Plans.id}) 
-      SET p.plan_class = Plans.positionClass, 
-      p.label = Plans.label_en, 
-      p.label_fr = Plans.label_fr 
+  CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
+      MATCH (p:PlanRoot {id: ${planrt}}) 
       MERGE (d3:Domain {id: Plans.domainId }) 
       MERGE (p)-[:HAS_PRIMARY_DOMAIN]->(d3) 
   `);
 
-  // Creates Competency Groups
+  // Creates Competency Categories
   q.push(cypher`
-    CALL apoc.load.xml(${plan},'//compGroup',{},true) YIELD value as CompGroup 
-      CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-      MERGE (p:Plan {id: Plans.id}) 
+    CALL apoc.load.xml(${plan},'//compGroup[@level="1"]',{},true) YIELD value as CompGroup 
+      MERGE (cg:CompetencyCategory {id: CompGroup.id, smartsheet_id: CompGroup.SSId }) 
+      SET cg.smartsheet_id = CompGroup.SSId, 
+      cg.parent_id = CompGroup.parentSSId, 
+      cg.label = CompGroup.name, 
+      cg.level = CompGroup.level 
+      RETURN count(cg), ${domain}
+      
+  `);
+  // Creates L3 Competency Groups
+  q.push(cypher`
+    CALL apoc.load.xml(${plan},'//compGroup[@level="3"]',{},true) YIELD value as CompGroup 
       MERGE (cg:CompetencyGroup {id: CompGroup.id, smartsheet_id: CompGroup.SSId }) 
       SET cg.smartsheet_id = CompGroup.SSId, 
       cg.parent_id = CompGroup.parentSSId, 
@@ -304,53 +328,59 @@ for (let index = 0; index < 2; index++) {
       
   `);
 
-  // Links Competency Groups
+  // Creates L2 Competency Groups
   q.push(cypher`
-   CALL apoc.load.xml(${plan},'//compGroup',{},true) YIELD value as CompGroup 
-     CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-     MERGE (p:Plan {id: Plans.id}) 
-     MERGE (p)-[:HAS_COMPETENCY_LIST { 
-     planId: Plans.id
-     }]->(g:CompetencyGroup {id: ${planrt}, smartsheet_id: ${planrt}, label: ${planrt}}) 
-     SET g.planId = Plans.id 
- `);
+    CALL apoc.load.xml(${plan},'//compGroup[@level="2"]',{},true) YIELD value as CompGroup 
+      MERGE (cg:CompetencyGroup {id: CompGroup.id, smartsheet_id: CompGroup.SSId }) 
+      SET cg.smartsheet_id = CompGroup.SSId, 
+      cg.parent_id = CompGroup.parentSSId, 
+      cg.label = CompGroup.name, 
+      cg.level = CompGroup.level 
+      RETURN count(cg), ${domain}
+      
+  `);
 
-  // Link Subgroups to Groups
+  // Link PlanRoots to Categories
   q.push(cypher`
-    CALL apoc.load.xml(${plan},'//compGroup[@SSId!=""]',{},true) YIELD value as CompGroup 
+  CALL apoc.load.xml(${plan},'//compGroup[@level="1"]',{},true) YIELD value as CompGroup 
+    CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans
+    Match (p:PlanRoot {id: ${planrt}}), (cg1:CompetencyCategory {level: "1", smartsheet_id: CompGroup.SSId}) 
+    WHERE NOT (p)-[:HAS_CATEGORY]->(cg1)
+    MERGE (p)-[:HAS_CATEGORY {order: CompGroup.order, planId: Plans.id}]->(cg1) 
+    MERGE (cg1)-[:IS_CATEGORY_OF {order: CompGroup.order, planId: Plans.id}]->(p) 
+    return p, cg1
+  `);
+
+  // Link Category to SubGroups
+  q.push(cypher`
+    CALL apoc.load.xml(${plan},'//compGroup[@level="2"]',{},true) YIELD value as CompGroup 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-      Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
+      Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyCategory {smartsheet_id: CompGroup.parentSSId} ) 
       WHERE NOT (cg1)-[:IN_GROUP]->(cg2)
-      MERGE (cg1)-[:IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2)
+      MERGE (cg2)-[:HAS_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg1)
+      MERGE (cg1)-[:IS_IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2)
       return cg1, cg2
   `);
 
+  // Link Subgroups to SubGroups
   q.push(cypher`
-  CALL apoc.load.xml(${plan},'//compGroup[@SSId!=""]',{},true) YIELD value as CompGroup 
-    CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-    Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
-    WHERE NOT (cg2)-[:CHILD_OF]->(cg1)
-    MERGE (cg2)-[:CHILD_OF {order: CompGroup.order, planId: Plans.id}]->(cg1) 
-    return cg1, cg2
-`);
-  //TODO: Make ShortName into Node
+    CALL apoc.load.xml(${plan},'//compGroup[@level="3"]',{},true) YIELD value as CompGroup 
+      CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
+      Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
+      WHERE NOT (cg1)-[:IN_GROUP]->(cg2)
+      MERGE (cg2)-[:HAS_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg1)
+      MERGE (cg1)-[:IS_IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2)
+      return cg1, cg2
+  `);
 
   // Links Competencies to Groups
   q.push(cypher`
     CALL apoc.load.xml(${plan},'//Competency[@SSId!=""]',{},true) YIELD value as Compet 
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-      Match (co {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
+      Match (co:Competency {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
       WHERE NOT (co)-[:IN_GROUP]->(c4) 
-      MERGE (co)-[:IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
-      return co, c4
-  `);
-
-  q.push(cypher`
-    CALL apoc.load.xml(${plan},'//Competency[@SSId!=""]',{},true) YIELD value as Compet 
-      CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
-      Match (co {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
-      WHERE NOT (c4)-[:CHILD_OF]->(co) 
-      MERGE (c4)-[:CHILD_OF {order: Compet.order, planId: Plans.id}]->(co) 
+      MERGE (co)-[:IS_IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
+      MERGE (c4)-[:HAS_SUBGROUP_OF {order: Compet.order, planId: Plans.id}]->(co) 
       return co, c4
   `);
 

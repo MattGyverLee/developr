@@ -9,10 +9,16 @@
     "build": "babel src -d build; cp .env build; cp src/schema.graphql build",
     "now-build": "babel src -d build; cp .env build; cp src/schema.graphql build",
     "start": "npm run build && node build/index.js",
+    "client": "yarn --cwd client start ",
+    "dev": "concurrently \"yarn start-dev\" \"yarn client\" ",
     "infer": "node src/dbOps/infer.js",
     "dump": "node src/dbOps/dump.js",
+    "load-dev": "nodemon src/dbOps/loadDB.js",
     "load": "node src/dbOps/loadDB.js",
     "augment": "node src/dbOps/inferAug.js"
+  },
+  "comments": {
+    "client": "npm way would be 'npm start --prefix client'"
   },
   "author": "Matthew Lee",
   "license": "MIT",
@@ -22,6 +28,8 @@
     "apollo-client": "^2.6.4",
     "apollo-link-http": "^1.5.15",
     "apollo-server": "^2.8.2",
+    "concurrently": "^5.1.0",
+    "cors": "^2.8.5",
     "cypher-tagged-templates": "^3.0.0",
     "dotenv": "^7.0.0",
     "graphql": "^14.6.0",
@@ -47,5 +55,9 @@
       "prettier --write",
       "git add"
     ]
-  }
+  },
+  "beautify.ignore": [
+    "**/*.js",
+    "**/*.jsx"
+  ]
 }
