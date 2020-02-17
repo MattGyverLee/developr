@@ -1,0 +1,37 @@
+{
+  PlanRoot {
+    id
+    label
+    plan_class
+    has_category {
+      id
+      label
+      category_has_competencies_of {
+        id
+        label
+        default_weight
+        default_expiration
+      }
+      has_group {
+        id
+        label
+        group_has_competencies_of {
+          id
+          label
+          default_weight
+          default_expiration
+        }
+        has_group {
+          id
+          label
+          group_has_competencies_of {
+            id
+            label
+            default_weight
+            default_expiration
+          }
+        }
+      }
+    }
+  }
+}

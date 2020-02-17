@@ -16,7 +16,7 @@ dotenv.config();
 const session = driver.session(); */
 
 var q = [],
-  r = [];
+  p = [];
 var dom = "";
 var plan = "";
 var comp = "";
@@ -65,7 +65,7 @@ for (let index = 0; index < 2; index++) {
       MERGE (d:Domain {id: DomainDetails.id})
       SET d.label = DomainDetails.label_en,
       d.label_fr	= DomainDetails.label_fr
-      RETURN count(d), ${domain}
+      RETURN count(d), ${domain}, "Domain"
       `);
 
   // Create Plan
@@ -75,6 +75,7 @@ for (let index = 0; index < 2; index++) {
       SET p.plan_class = Plans.positionClass, 
       p.label = Plans.label_en, 
       p.label_fr = Plans.label_fr 
+      return count(p), "Create Plan"
   `);
 
   // AddsCompetency Structure
@@ -83,7 +84,7 @@ for (let index = 0; index < 2; index++) {
     MERGE (cc:Competency {id: Compet.id}) 
     SET cc.parent_id = Compet.parentSSId, 
     cc.smartsheet_id = Compet.SSId 
-    RETURN count(cc), ${domain}
+    RETURN count(cc), ${domain}, "Add Compet Structure"
   `);
 
   //Competency Details
@@ -93,19 +94,21 @@ for (let index = 0; index < 2; index++) {
       SET c.default_weight = Competency.defaultWeight,
       c.default_expiration = Competency.defaultExpiration,
       c.label = Competency.label
+      return count(c), "Competency Details"
 `);
   // Todo: Decide if Domain is Necessary
-  /*  MERGE (d2:Domain {id: Competency.domainId }) 
-      MERGE (c)-[:HAS_PRIMARY_DOMAIN]->(d2)
-      MERGE (d2)-[:PRIMARY_DOMAIN_OF]->(c) 
-      */
+  /*  MERGE (d2:Domain {id: Competency.domainId })
+                                                  MERGE (c)-[:HAS_PRIMARY_DOMAIN]->(d2)
+                                                  MERGE (d2)-[:PRIMARY_DOMAIN_OF]->(c)
+                                                  */
 
   // Import Plan and Connect Plan to Domain
   q.push(cypher`
   CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       MATCH (p:PlanRoot {id: ${planrt}}) 
       MERGE (d3:Domain {id: Plans.domainId }) 
-      MERGE (p)-[:HAS_PRIMARY_DOMAIN]->(d3) 
+      MERGE (p)-[r:HAS_PRIMARY_DOMAIN]->(d3) 
+      return count(r), "Connect Plan to Domain"
   `);
 
   // Creates Competency Categories
@@ -116,7 +119,7 @@ for (let index = 0; index < 2; index++) {
       cc.parent_id = CompGroup.parentSSId, 
       cc.label = CompGroup.name, 
       cc.level = CompGroup.level 
-      RETURN count(cc), ${domain}
+      RETURN count(cc), ${domain}, "Create Categories"
       
   `);
   // Creates Competency Subgroups
@@ -127,7 +130,7 @@ for (let index = 0; index < 2; index++) {
       cg.parent_id = CompGroup.parentSSId, 
       cg.label = CompGroup.name, 
       cg.level = CompGroup.level 
-      RETURN count(cg), ${domain}
+      RETURN count(cg), ${domain}, "Create other Subgroups"
   `);
 
   // Link PlanRoots to Categories
@@ -138,7 +141,7 @@ for (let index = 0; index < 2; index++) {
     WHERE NOT (p)-[:HAS_CATEGORY]->(cg1)
     MERGE (p)-[:HAS_CATEGORY {order: CompGroup.order, planId: Plans.id}]->(cg1) 
     MERGE (cg1)-[:IS_CATEGORY_OF {order: CompGroup.order, planId: Plans.id}]->(p) 
-    RETURN count(cg1), ${domain}
+    RETURN count(cg1), ${domain}, "Link Planroot to Cats"
   `);
 
   // Link Categories directly to Competencies
@@ -148,9 +151,9 @@ for (let index = 0; index < 2; index++) {
     Match (co:Competency {smartsheet_id: Compet.SSId }), (c4:CompetencyCategory {smartsheet_id: Compet.parentSSId} ) 
       WHERE NOT (co)-[:IN_GROUP]->(c4) 
       SET co.parent_id = Compet.parentSSId
-      MERGE (co)-[:IS_IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
-      MERGE (c4)-[:HAS_COMPETENCIES_OF {order: Compet.order, planId: Plans.id}]->(co) 
-      return count(co), count(c4)
+      MERGE (co)-[r:IS_IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
+      MERGE (c4)-[:CATEGORY_HAS_COMPETENCIES_OF {order: Compet.order, planId: Plans.id}]->(co) 
+      return count(r), ${domain}, "Link Categories to Competencies" 
   `);
 
   // Link Category to SubGroups
@@ -159,9 +162,9 @@ for (let index = 0; index < 2; index++) {
       CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
       Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyCategory {smartsheet_id: CompGroup.parentSSId} ) 
       WHERE NOT (cg1)-[:IN_GROUP]->(cg2)
-      MERGE (cg2)-[:HAS_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg1)
+      MERGE (cg2)-[r:HAS_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg1)
       MERGE (cg1)-[:IS_IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2)
-      return count(cg1), count(cg2)
+      return count(r), ${domain}, "Link Categories to Subgroups"
   `);
 
   // Link Subgroups to SubGroups
@@ -170,9 +173,9 @@ for (let index = 0; index < 2; index++) {
     CALL apoc.load.xml(${plan},'//Plans/PlanProfile',{},true) YIELD value as Plans 
     Match (cg1:CompetencyGroup {smartsheet_id: CompGroup.SSId }), (cg2:CompetencyGroup {smartsheet_id: CompGroup.parentSSId} ) 
     WHERE NOT (cg1)-[:IS_IN_GROUP]->(cg2)
-    MERGE (cg2)-[:HAS_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg1)
+    MERGE (cg2)-[r:HAS_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg1)
     MERGE (cg1)-[:IS_IN_GROUP {order: CompGroup.order, planId: Plans.id}]->(cg2)
-    return count(cg1), count(cg2)
+    return count(r), ${domain}, "Link SubGroups to Subgroups"
 `);
 
   // Links Competencies to Groups
@@ -182,29 +185,29 @@ for (let index = 0; index < 2; index++) {
       Match (co:Competency {smartsheet_id: Compet.SSId }), (c4:CompetencyGroup {smartsheet_id: Compet.parentSSId} ) 
       WHERE NOT (co)-[:IN_GROUP]->(c4) 
       SET co.parent_id = Compet.parentSSId
-      MERGE (co)-[:IS_IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
-      MERGE (c4)-[:HAS_COMPETENCIES_OF {order: Compet.order, planId: Plans.id}]->(co) 
-      return count(co), count(c4)
+      MERGE (co)-[r:IS_IN_GROUP {order: Compet.order, planId: Plans.id}]->(c4) 
+      MERGE (c4)-[:GROUP_HAS_COMPETENCIES_OF {order: Compet.order, planId: Plans.id}]->(co) 
+      return count(r), ${domain}, "Link Competencies to Subgroups"
   `);
 
   //Target Competency
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//targetComp',{},true) YIELD value as TargetCompetency 
       MERGE (t1:TargetCompetency {id: TargetCompetency.id }) 
-      SET t1.label = TargetCompetency.label_en, 
+      SET t1.label = replace(TargetCompetency.label_en,"\n               "," "), 
       t1.label_modified = TargetCompetency.label_en_modified, 
       t1.label_created = TargetCompetency.label_en_created, 
-      t1.label_fr = TargetCompetency.label_fr, 
+      t1.label_fr = replace(TargetCompetency.label_fr,"\n               "," "), 
       t1.label_fr_modified = TargetCompetency.label_fr_modified, 
       t1.label_fr_created = TargetCompetency.label_fr_created, 
-      t1.label_label_es = TargetCompetency.label_es, 
+      t1.label_label_es = replace(TargetCompetency.label_es,"\n               "," "), 
       t1.label_es_modified = TargetCompetency.label_es_modified, 
       t1.label_es_created = TargetCompetency.label_es_created
       RETURN count(t1), ${domain}
   `);
 
   //TargetComp Relations
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//targetComp',{},true) YIELD value as TargetComp 
       MATCH (c2:Competency {smartsheet_id: TargetComp.parentSSId}), 
       (t2:TargetCompetency {id: TargetComp.id}) 
@@ -212,22 +215,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // Assessment Criteria
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//AssessCrit',{},true) YIELD value as AssessmentCriteria 
       MERGE (ac:AssessmentCriteria { id: AssessmentCriteria.id}) 
-      SET ac.label = AssessmentCriteria.label_en, 
+      SET ac.label = replace(AssessmentCriteria.label_en,"\n               "," "), 
       ac.label_modified = AssessmentCriteria.label_en_modified, 
       ac.label_created = AssessmentCriteria.label_en_created, 
-      ac.label_fr = AssessmentCriteria.label_fr, 
+      ac.label_fr = replace(AssessmentCriteria.label_fr,"\n               "," "),  
       ac.label_fr_modified = AssessmentCriteria.label_fr_modified, 
       ac.label_fr_created = AssessmentCriteria.label_fr_created, 
-      ac.label_label_es = AssessmentCriteria.label_es, 
+      ac.label_label_es = replace(AssessmentCriteria.label_es,"\n               "," "), 
       ac.label_es_modified = AssessmentCriteria.label_es_modified, 
       ac.label_es_created = AssessmentCriteria.label_es_created 
       RETURN count(ac), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//AssessCrit',{},true) YIELD value as AssessmentCrit 
       MATCH (c2:Competency {smartsheet_id: AssessmentCrit.parentSSId}), 
       (ac2:AssessmentCriteria {id: AssessmentCrit.id}) 
@@ -235,22 +238,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   //Short Name
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//ShortName',{},true) YIELD value as ShortName 
       MERGE (sn:ShortName { id: ShortName.id}) 
-      SET sn.label = ShortName.label_en, 
+      SET sn.label = replace(ShortName.label_en,"\n               "," "), 
       sn.label_modified = ShortName.label_en_modified, 
       sn.label_created = ShortName.label_en_created, 
-      sn.label_fr = ShortName.label_fr, 
+      sn.label_fr = replace(ShortName.label_fr,"\n               "," "), 
       sn.label_fr_modified = ShortName.label_fr_modified, 
       sn.label_fr_created = ShortName.label_fr_created, 
-      sn.label_es = ShortName.label_es, 
+      sn.label_es = replace(ShortName.label_es,"\n               "," "),  
       sn.label_es_modified = ShortName.label_es_modified, 
       sn.label_es_created = ShortName.label_es_created 
       RETURN count(sn), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//ShortName',{},true) YIELD value as ShortN 
       MATCH (c2:Competency {smartsheet_id: ShortN.parentSSId}), 
       (sn2:ShortName {id: ShortN.id}) 
@@ -258,22 +261,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L0
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv0Activities',{},true) YIELD value as Lv0Act 
       MERGE (l0:Lv0Activities { id: Lv0Act.id}) 
-      SET l0.label = Lv0Act.label_en, 
+      SET l0.label = replace(Lv0Act.label_en,"\n               "," "),  
       l0.label_modified = Lv0Act.label_en_modified, 
       l0.label_created = Lv0Act.label_en_created, 
-      l0.label_fr = Lv0Act.label_fr, 
+      l0.label_fr = replace(Lv0Act.label_fr,"\n               "," "),  
       l0.label_fr_modified = Lv0Act.label_fr_modified, 
       l0.label_fr_created = Lv0Act.label_fr_created, 
-      l0.label_es = Lv0Act.label_es, 
+      l0.label_es = replace(Lv0Act.label_es,"\n               "," "),  
       l0.label_es_modified = Lv0Act.label_es_modified, 
       l0.label_es_created = Lv0Act.label_es_created 
       RETURN count(l0), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv0Activities',{},true) YIELD value as Lv0 
       MATCH (c2:Competency {smartsheet_id: Lv0.parentSSId}), 
       (l02:Lv0Activities {id: Lv0.id}) 
@@ -281,22 +284,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L1
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv1Activities',{},true) YIELD value as Lv1Act
       MERGE (l1:Lv1Activities { id: Lv1Act.id}) 
       SET l1.label = Lv1Act.label_en, 
-      l1.label_modified = Lv1Act.label_en_modified, 
+      l1.label_modified = replace(Lv1Act.label_en,"\n              "," "),  
       l1.label_created = Lv1Act.label_en_created, 
-      l1.label_fr = Lv1Act.label_fr, 
+      l1.label_fr = replace(Lv1Act.label_fr,"\n              "," "), 
       l1.label_fr_modified = Lv1Act.label_fr_modified, 
       l1.label_fr_created = Lv1Act.label_fr_created, 
-      l1.label_es = Lv1Act.label_es, 
+      l1.label_es = replace(Lv1Act.label_es,"\n              "," "),  
       l1.label_es_modified = Lv1Act.label_es_modified, 
       l1.label_es_created = Lv1Act.label_es_created 
       RETURN count(l1), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv1Activities',{},true) YIELD value as Lv1 
       MATCH (c2:Competency {smartsheet_id: Lv1.parentSSId}), 
       (l12:Lv1Activities {id: Lv1.id}) 
@@ -304,22 +307,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L2
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv2Activities',{},true) YIELD value as Lv2Act 
       MERGE (l2:Lv2Activities { id: Lv2Act.id}) 
-      SET l2.label = Lv2Act.label_en, 
+      SET l2.label = replace(Lv2Act.label_en,"\n               "," "),  
       l2.label_modified = Lv2Act.label_en_modified, 
       l2.label_created = Lv2Act.label_en_created, 
-      l2.label_fr = Lv2Act.label_fr, 
+      l2.label_fr = replace(Lv2Act.label_fr,"\n               "," "), 
       l2.label_fr_modified = Lv2Act.label_fr_modified, 
       l2.label_fr_created = Lv2Act.label_fr_created, 
-      l2.label_es = Lv2Act.label_es, 
+      l2.label_es = replace(Lv2Act.label_es,"\n               "," "),   
       l2.label_es_modified = Lv2Act.label_es_modified, 
       l2.label_es_created = Lv2Act.label_es_created 
       RETURN count(l2), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv2Activities',{},true) YIELD value as Lv2 
       MATCH (c2:Competency {smartsheet_id: Lv2.parentSSId}), 
       (l22:Lv2Activities {id: Lv2.id}) 
@@ -327,22 +330,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L3
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv3Activities',{},true) YIELD value as Lv3Act 
       MERGE (l3:Lv3Activities { id: Lv3Act.id}) 
-      SET l3.label = Lv3Act.label_en, 
+      SET l3.label = replace(Lv3Act.label_en,"\n               "," "),  
       l3.label_modified = Lv3Act.label_en_modified, 
       l3.label_created = Lv3Act.label_en_created, 
-      l3.label_fr = Lv3Act.label_fr, 
+      l3.label_fr = replace(Lv3Act.label_fr,"\n               "," "),  
       l3.label_fr_modified = Lv3Act.label_fr_modified, 
       l3.label_fr_created = Lv3Act.label_fr_created, 
-      l3.label_es = Lv3Act.label_es, 
+      l3.label_es = replace(Lv3Act.label_es,"\n               "," "),   
       l3.label_es_modified = Lv3Act.label_es_modified, 
       l3.label_es_created = Lv3Act.label_es_created 
       RETURN count(l3), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv3Activities',{},true) YIELD value as Lv3 
       MATCH (c2:Competency {smartsheet_id: Lv3.parentSSId}), 
       (l32:Lv3Activities {id: Lv3.id}) 
@@ -350,22 +353,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L4
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv4Activities',{},true) YIELD value as Lv4Act 
       MERGE (l4:Lv4Activities { id: Lv4Act.id}) 
-      SET l4.label = Lv4Act.label_en, 
+      SET l4.label = replace(Lv4Act.label_en,"\n               "," "),  
       l4.label_modified = Lv4Act.label_en_modified, 
       l4.label_created = Lv4Act.label_en_created, 
-      l4.label_fr = Lv4Act.label_fr, 
+      l4.label_fr = replace(Lv4Act.label_fr,"\n               "," "),  
       l4.label_fr_modified = Lv4Act.label_fr_modified, 
       l4.label_fr_created = Lv4Act.label_fr_created, 
-      l4.label_es = Lv4Act.label_es, 
+      l4.label_es = replace(Lv4Act.label_es,"\n               "," "),  
       l4.label_es_modified = Lv4Act.label_es_modified, 
       l4.label_es_created = Lv4Act.label_es_created 
       RETURN count(l4), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv4Activities',{},true) YIELD value as Lv4 
       MATCH (c2:Competency {smartsheet_id: Lv4.parentSSId}), 
       (l42:Lv4Activities {id: Lv4.id}) 
@@ -373,22 +376,22 @@ for (let index = 0; index < 2; index++) {
   `);
 
   // L5
-  r.push(cypher`
+  q.push(cypher`
     CALL apoc.load.xml(${comp},'//Lv5Activities',{},true) YIELD value as Lv5Act 
       MERGE (l5:Lv5Activities { id: Lv5Act.id}) 
-      SET l5.label = Lv5Act.label_en, 
+      SET l5.label = replace(Lv5Act.label_en,"\n               "," "),  
       l5.label_modified = Lv5Act.label_en_modified, 
       l5.label_created = Lv5Act.label_en_created, 
-      l5.label_fr = Lv5Act.label_fr, 
+      l5.label_fr = replace(Lv5Act.label_fr,"\n               "," "),  
       l5.label_fr_modified = Lv5Act.label_fr_modified, 
       l5.label_fr_created = Lv5Act.label_fr_created, 
-      l5.label_es = Lv5Act.label_es, 
+      l5.label_es = replace(Lv5Act.label_es,"\n               "," "),  
       l5.label_es_modified = Lv5Act.label_es_modified, 
       l5.label_es_created = Lv5Act.label_es_created 
       RETURN count(l5), ${domain}
   `);
 
-  r.push(cypher`
+  q.push(cypher`
   CALL apoc.load.xml(${comp},'//Lv5Activities',{},true) YIELD value as Lv5 
     MATCH (c2:Competency {smartsheet_id: Lv5.parentSSId}), 
     (l52:Lv5Activities {id: Lv5.id}) 

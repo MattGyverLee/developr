@@ -1,11 +1,24 @@
+type PlanRoot {
+   _id: Long!
+   id: String!
+   label: String!
+   label_fr: String
+   plan_class: String!
+   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
+   HAS_PRIMARY_DOMAIN_rel: [HAS_PRIMARY_DOMAIN]
+   has_category: [CompetencyCategory] @relation(name: "HAS_CATEGORY", direction: "OUT")
+   HAS_CATEGORY_rel: [HAS_CATEGORY]
+   competencycategorys: [CompetencyCategory] @relation(name: "IS_CATEGORY_OF", direction: "IN")
+}
+
 type Competency {
    _id: Long!
+   default_expiration: String!
    default_weight: String!
    id: String!
    label: String!
+   parent_id: String!
    smartsheet_id: String!
-   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
-   HAS_PRIMARY_DOMAIN_rel: [HAS_PRIMARY_DOMAIN]
    has_target_competency: [TargetCompetency] @relation(name: "HAS_TARGET_COMPETENCY", direction: "OUT")
    HAS_TARGET_COMPETENCY_rel: [HAS_TARGET_COMPETENCY]
    has_assessment_criteria: [AssessmentCriteria] @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "OUT")
@@ -24,10 +37,35 @@ type Competency {
    HAS_LV4_ACTIVITIES_rel: [HAS_LV4_ACTIVITIES]
    has_lv5_activities: [Lv5Activities] @relation(name: "HAS_LV5_ACTIVITIES", direction: "OUT")
    HAS_LV5_ACTIVITIES_rel: [HAS_LV5_ACTIVITIES]
-   in_group: [CompetencyGroup] @relation(name: "IN_GROUP", direction: "OUT")
-   IN_GROUP_rel: [IN_GROUP]
-   domains: [Domain] @relation(name: "PRIMARY_DOMAIN_OF", direction: "IN")
-   competencygroups: [CompetencyGroup] @relation(name: "CHILD_OF", direction: "IN")
+   competencycategorys: [CompetencyCategory] @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "IN")
+   competencygroups: [CompetencyGroup] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
+}
+
+type CompetencyCategory {
+   _id: Long!
+   id: String!
+   label: String!
+   level: String!
+   parent_id: String!
+   smartsheet_id: String!
+   is_category_of: [PlanRoot] @relation(name: "IS_CATEGORY_OF", direction: "OUT")
+   IS_CATEGORY_OF_rel: [IS_CATEGORY_OF]
+   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
+   category_has_competencies_of: [Competency] @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "OUT")
+   CATEGORY_HAS_COMPETENCIES_OF_rel: [CATEGORY_HAS_COMPETENCIES_OF]
+   planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
+}
+
+type CompetencyGroup {
+   _id: Long!
+   id: String!
+   label: String!
+   level: String!
+   parent_id: String!
+   smartsheet_id: String!
+   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
+   group_has_competencies_of: [Competency] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
+   GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]
 }
 
 type TargetCompetency {
@@ -156,49 +194,51 @@ type Lv5Activities {
    competencys: [Competency] @relation(name: "HAS_LV5_ACTIVITIES", direction: "IN")
 }
 
-type Plan {
-   _id: Long!
-   id: String!
-   label: String
-   label_fr: String
-   plan_class: String!
-   has_competency_list: [CompetencyGroup] @relation(name: "HAS_COMPETENCY_LIST", direction: "OUT")
-   HAS_COMPETENCY_LIST_rel: [HAS_COMPETENCY_LIST]
-}
-
-type CompetencyGroup {
-   _id: Long!
-   id: String!
-   label: String!
-   level: String
-   parent_id: String
-   planId: String
-   smartsheet_id: String!
-   child_of: [Competency] @relation(name: "CHILD_OF", direction: "OUT")
-   CHILD_OF_rel: [CHILD_OF]
-   plans: [Plan] @relation(name: "HAS_COMPETENCY_LIST", direction: "IN")
-   competencys: [Competency] @relation(name: "IN_GROUP", direction: "IN")
-}
-
 type Domain {
    _id: Long!
    id: String!
    label: String!
    label_fr: String!
-   primary_domain_of: [Competency] @relation(name: "PRIMARY_DOMAIN_OF", direction: "OUT")
-   PRIMARY_DOMAIN_OF_rel: [PRIMARY_DOMAIN_OF]
-   competencys: [Competency] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "IN")
+   planroots: [PlanRoot] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "IN")
 }
 
 type HAS_PRIMARY_DOMAIN @relation(name: "HAS_PRIMARY_DOMAIN") {
-  from: Competency!
+  from: PlanRoot!
   to: Domain!
   startDate: String!
 }
 
-type PRIMARY_DOMAIN_OF @relation(name: "PRIMARY_DOMAIN_OF") {
-  from: Domain!
+type HAS_CATEGORY @relation(name: "HAS_CATEGORY") {
+  from: PlanRoot!
+  to: CompetencyCategory!
+  order: String!
+  planId: String!
+  startDate: String!
+}
+
+type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
+  from: CompetencyCategory!
+  to: PlanRoot!
+  order: String!
+  planId: String!
+  startDate: String!
+}
+
+
+
+type CATEGORY_HAS_COMPETENCIES_OF @relation(name: "CATEGORY_HAS_COMPETENCIES_OF") {
+  from: CompetencyCategory!
   to: Competency!
+  order: String!
+  planId: String!
+  startDate: String!
+}
+
+type GROUP_HAS_COMPETENCIES_OF @relation(name: "GROUP_HAS_COMPETENCIES_OF") {
+  from: CompetencyGroup!
+  to: Competency!
+  order: String!
+  planId: String!
   startDate: String!
 }
 
@@ -253,29 +293,6 @@ type HAS_LV4_ACTIVITIES @relation(name: "HAS_LV4_ACTIVITIES") {
 type HAS_LV5_ACTIVITIES @relation(name: "HAS_LV5_ACTIVITIES") {
   from: Competency!
   to: Lv5Activities!
-  startDate: String!
-}
-
-type HAS_COMPETENCY_LIST @relation(name: "HAS_COMPETENCY_LIST") {
-  from: Plan!
-  to: CompetencyGroup!
-  planId: String!
-  startDate: String!
-}
-
-type IN_GROUP @relation(name: "IN_GROUP") {
-  from: Competency!
-  to: CompetencyGroup!
-  order: String!
-  planId: String!
-  startDate: String!
-}
-
-type CHILD_OF @relation(name: "CHILD_OF") {
-  from: CompetencyGroup!
-  to: Competency!
-  order: String!
-  planId: String!
   startDate: String!
 }
 
