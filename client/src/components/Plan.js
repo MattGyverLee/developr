@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Category from "./Category";
 
-const DOMAIN_QUERY = rootId => gql`
+const DOMAIN_QUERY = (rootId, userId) => gql`
   query DomainQuery {
     PlanRoot(id: "${rootId}") {
       id
@@ -17,32 +17,34 @@ const DOMAIN_QUERY = rootId => gql`
           label
           default_weight
           default_expiration
-          has_short_name {
+          short_name {
             label
           }
-          has_target_competency {
+          target_competency {
             label
           }
-          has_assessment_criteria {
+          assessment_criteria {
             label
           }
-          has_lv0_activities {
+          lv1_activity {
             label
           }
-          has_lv1_activities {
+          lv2_activity {
             label
           }
-          has_lv2_activities {
+          lv3_activity {
             label
           }
-          has_lv3_activities {
+          lv4_activity {
             label
           }
-          has_lv4_activities {
+          lv5_activity {
             label
           }
-          has_lv5_activities {
-            label
+          HAS_USER_PROGRESS_rel(filter: { userId: "1" }) {
+            Progress {
+              currentLevel
+            }
           }
         }
         has_group {
@@ -53,32 +55,34 @@ const DOMAIN_QUERY = rootId => gql`
             label
             default_weight
             default_expiration
-            has_short_name {
+            short_name {
               label
             }
-            has_target_competency {
+            target_competency {
               label
             }
-            has_assessment_criteria {
+            assessment_criteria {
               label
             }
-            has_lv0_activities {
+            lv1_activity {
               label
             }
-            has_lv1_activities {
+            lv2_activity {
               label
             }
-            has_lv2_activities {
+            lv3_activity {
               label
             }
-            has_lv3_activities {
+            lv4_activity {
               label
             }
-            has_lv4_activities {
+            lv5_activity {
               label
             }
-            has_lv5_activities {
-              label
+            HAS_USER_PROGRESS_rel(filter: { userId: "1" }) {
+              Progress {
+                currentLevel
+              }
             }
           }
           has_group {
@@ -89,32 +93,34 @@ const DOMAIN_QUERY = rootId => gql`
               label
               default_weight
               default_expiration
-              has_short_name {
+              short_name {
                 label
               }
-              has_target_competency {
+              target_competency {
                 label
               }
-              has_assessment_criteria {
+              assessment_criteria {
                 label
               }
-              has_lv0_activities {
+              lv1_activity {
                 label
               }
-              has_lv1_activities {
+              lv2_activity {
                 label
               }
-              has_lv2_activities {
+              lv3_activity {
                 label
               }
-              has_lv3_activities {
+              lv4_activity {
                 label
               }
-              has_lv4_activities {
+              lv5_activity {
                 label
               }
-              has_lv5_activities {
-                label
+              HAS_USER_PROGRESS_rel(filter: { userId: "1" }) {
+                Progress {
+                  currentLevel
+                }
               }
             }
           }
@@ -124,26 +130,33 @@ const DOMAIN_QUERY = rootId => gql`
   }
 `;
 
+//todo: Sub string for userId variable
 export class Plan extends Component {
   render() {
     return (
       <div>
-        <Query query={DOMAIN_QUERY("1-root")}>
+        <Query query={DOMAIN_QUERY("1-root", "1")}>
           {({ loading, error, data }) => {
             if (loading) return <h4>Loading...</h4>;
-            if (error) console.log(error);
+            /* if (error) {
+              console.log(error);
+              return <h4>Connection Error: Is NEo4j Running?</h4>;
+            } */
             // console.log(data);
-            return (
-              <Fragment>
-                <h1 className="display-4 my-3">
-                  Plan For: {data.PlanRoot[0].label}
-                </h1>
-                <p>Plan Class: {data.PlanRoot[0].plan_class}</p>
-                {data.PlanRoot[0].has_category.map(category => (
-                  <Category key={category.id} category={category} />
-                ))}
-              </Fragment>
-            );
+            if (data.PlanRoot) {
+              return (
+                <Fragment>
+                  <h2 className="display-4 my-0">
+                    <small className="text-muted">Plan for: </small>
+                    {data.PlanRoot[0].label}
+                  </h2>
+                  <p>Plan Class: {data.PlanRoot[0].plan_class}</p>
+                  {data.PlanRoot[0].has_category.map(category => (
+                    <Category key={category.id} category={category} />
+                  ))}
+                </Fragment>
+              );
+            }
           }}
         </Query>
       </div>

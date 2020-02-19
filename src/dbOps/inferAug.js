@@ -21,12 +21,13 @@ const driver = neo4j.driver(
 const typeDefs = fs
   .readFileSync(
     process.env.GRAPHQL_SCHEMA ||
-      path.join("./generatedSchemas/inferredTypes.graphql")
+      path.join("./generatedSchemas/modTypes.graphql")
   )
   .toString("utf-8");
 console.log(typeDefs);
-const schema = makeAugmentedSchema({ typeDefs });
 
+const schema = makeAugmentedSchema({ typeDefs });
+fs.writeFileSync("./generatedSchemas/augmentedSchema.graphql", schema);
 var tempvar = schema;
 console.log(tempvar);
 

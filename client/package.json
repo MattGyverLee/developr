@@ -7,12 +7,14 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "apollo-boost": "^0.4.7",
+    "bootstrap": "^4.4.1",
     "concurrently": "^5.1.0",
     "graphql": "^14.6.0",
     "react": "^16.12.0",
     "react-apollo": "^3.1.3",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "reactstrap": "^8.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,7 +38,7 @@
     ]
   },
   "beautify.ignore": [
-    "**/*.js",
+    "**/*.js", "**/**/*.js",
     "**/*.jsx"
   ]
 }

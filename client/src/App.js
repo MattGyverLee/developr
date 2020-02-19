@@ -8,7 +8,7 @@ const client = new ApolloClient({ uri: "http://localhost:4001/graphql" });
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="container">
+      <div className="div mx-3" maxWidth="100%" minWidth="98%">
         <h1>Developer</h1>
         <Plan />
       </div>

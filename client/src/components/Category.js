@@ -1,15 +1,23 @@
 import React, { Fragment } from "react";
-import CompetencyDetails from "./CompetencyDetails";
+import CompetencyDetailsForm from "./CompetencyDetailsForm";
+import GroupDetail from "./CompetencyGroup";
 
 export default function Category(props) {
-  // console.log(props.category);
+  //console.log(props.category);
+  // TODO: Load Colors into form
   return (
     <Fragment>
-      <h3>{props.category.label}</h3>
-      <hr />
-      {props.category.category_has_competencies_of.map(competency => (
-        <CompetencyDetails key={competency.id} competency={competency} />
-      ))}
+      <div className="card border-success mb-3">
+        <h4 bgcolog={props.category.color} className="ml-3">
+          {props.category.label}
+        </h4>
+        {props.category.category_has_competencies_of.map(competency => (
+          <CompetencyDetailsForm key={competency.id} competency={competency} />
+        ))}
+        {props.category.has_group.map(group => (
+          <GroupDetail key={group.id} group={group} />
+        ))}
+      </div>
     </Fragment>
   );
 }

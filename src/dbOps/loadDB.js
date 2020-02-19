@@ -52,7 +52,7 @@ for (let index = 0; index < 2; index++) {
   );
   const cypher = new Cypher({ driver }).query;
 
-  //Clear Database, only funs first time.
+  //Clear Database, only runs first time.
   if (index == 0) {
     q.push(cypher`
       MATCH (n) DETACH DELETE n
@@ -118,7 +118,8 @@ for (let index = 0; index < 2; index++) {
       SET cc.smartsheet_id = CompGroup.SSId, 
       cc.parent_id = CompGroup.parentSSId, 
       cc.label = CompGroup.name, 
-      cc.level = CompGroup.level 
+      cc.level = CompGroup.level,
+      cc.color = CompGroup.color 
       RETURN count(cc), ${domain}, "Create Categories"
       
   `);
@@ -406,6 +407,65 @@ for (let index = 0; index < 2; index++) {
     WHERE NOT EXISTS(r.startDate)
     SET r.startDate = ${myNow}
 `);
+  if (index == 1) {
+    q.push(cypher`
+      MERGE (u:User {id: "1"})
+      SET u.Name = "Matthew",
+        u.primaryOrg = "SIL",
+        u.primaryDomain = "LT",
+        u.activePlan = "1"
+      MERGE (pr:ProgressRoot {userId: "1"})
+      MERGE (u)-[:HAS_PROGRESS_ROOT]->(pr)
+  `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (ckb:Competency {id: "LT-5028854683199364" })
+      MERGE (pkb:Progress {competency_ref: "LT-5028854683199364"})
+      SET pkb.currentLevel = 3
+      MERGE (pkb)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
+      MERGE (ckb)-[:HAS_USER_PROGRESS {userId: "1"}]->(pkb)
+    `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (ccomp:Competency {id: "LT-4184429753067396" })
+      MERGE (pcomp:Progress {competency_ref: "LT-4184429753067396"})
+      SET pcomp.currentLevel = 4
+      MERGE (pcomp)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
+      MERGE (ccomp)-[:HAS_USER_PROGRESS {userId: "1"}]->(pcomp)
+      `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (cfon:Competency {id: "LT-525255055828868" })
+      MERGE (pfon:Progress {competency_ref: "LT-525255055828868"})
+      SET pfon.currentLevel = 4
+      MERGE (pfon)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
+      MERGE (cfon)-[:HAS_USER_PROGRESS {userId: "1"}]->(pfon)
+      `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (cmal:Competency {id: "LT-2777054869514116" })
+      MERGE (pmal:Progress {competency_ref: "LT-2777054869514116"})
+      SET pmal.currentLevel = 3
+      MERGE (pmal)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
+      MERGE (cmal)-[:HAS_USER_PROGRESS {userId: "1"}]->(pmal)
+      `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (cos:Competency {id: "LT-8688029380437892" })
+      MERGE (pos:Progress {competency_ref: "LT-8688029380437892"})
+      SET pos.currentLevel = 4
+      MERGE (pos)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
+      MERGE (cos)-[:HAS_USER_PROGRESS {userId: "1"}]->(pos)
+      `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (clang:Competency {id: "LT-6436229566752644" })
+      MERGE (plang:Progress {competency_ref: "LT-6436229566752644"})
+      SET plang.currentLevel = 4
+      MERGE (plang)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
+      MERGE (clang)-[:HAS_USER_PROGRESS {userId: "1"}]->(plang)
+  `);
+  }
 }
 
 console.log(q.length);

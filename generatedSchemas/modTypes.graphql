@@ -14,6 +14,10 @@ type PlanRoot {
     @relation(name: "IS_CATEGORY_OF", direction: "IN")
 }
 
+type String {
+  label: String
+}
+
 type Competency {
   _id: Long!
   default_expiration: String!
@@ -22,37 +26,81 @@ type Competency {
   label: String!
   parent_id: String!
   smartsheet_id: String!
-  has_target_competency: [TargetCompetency]
-    @relation(name: "HAS_TARGET_COMPETENCY", direction: "OUT")
-  HAS_TARGET_COMPETENCY_rel: [HAS_TARGET_COMPETENCY]
-  has_assessment_criteria: [AssessmentCriteria]
-    @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "OUT")
-  HAS_ASSESSMENT_CRITERIA_rel: [HAS_ASSESSMENT_CRITERIA]
-  has_short_name: [ShortName]
-    @relation(name: "HAS_SHORT_NAME", direction: "OUT")
-  HAS_SHORT_NAME_rel: [HAS_SHORT_NAME]
-  has_lv0_activities: [Lv0Activities]
-    @relation(name: "HAS_LV0_ACTIVITIES", direction: "OUT")
-  HAS_LV0_ACTIVITIES_rel: [HAS_LV0_ACTIVITIES]
-  has_lv1_activities: [Lv1Activities]
-    @relation(name: "HAS_LV1_ACTIVITIES", direction: "OUT")
-  HAS_LV1_ACTIVITIES_rel: [HAS_LV1_ACTIVITIES]
-  has_lv2_activities: [Lv2Activities]
-    @relation(name: "HAS_LV2_ACTIVITIES", direction: "OUT")
-  HAS_LV2_ACTIVITIES_rel: [HAS_LV2_ACTIVITIES]
-  has_lv3_activities: [Lv3Activities]
-    @relation(name: "HAS_LV3_ACTIVITIES", direction: "OUT")
-  HAS_LV3_ACTIVITIES_rel: [HAS_LV3_ACTIVITIES]
-  has_lv4_activities: [Lv4Activities]
-    @relation(name: "HAS_LV4_ACTIVITIES", direction: "OUT")
-  HAS_LV4_ACTIVITIES_rel: [HAS_LV4_ACTIVITIES]
-  has_lv5_activities: [Lv5Activities]
-    @relation(name: "HAS_LV5_ACTIVITIES", direction: "OUT")
-  HAS_LV5_ACTIVITIES_rel: [HAS_LV5_ACTIVITIES]
+  is_in_group: [CompetencyCategory]
+    @relation(name: "IS_IN_GROUP", direction: "OUT")
+  IS_IN_GROUP_rel: [IS_IN_GROUP]
+  target_competency: [TargetCompetency]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_TARGET_COMPETENCY]->(tc:TargetCompetency)
+      WHERE NOT EXISTS(r.to) RETURN tc LIMIT 1
+      """
+    )
+  assessment_criteria: [AssessmentCriteria]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_ASSESSMENT_CRITERIA]->(ac:AssessmentCriteria)
+      WHERE NOT EXISTS(r.to) RETURN ac LIMIT 1
+      """
+    )
+  short_name: [ShortName]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_SHORT_NAME]->(sn:ShortName)
+      WHERE NOT EXISTS(r.to) RETURN sn LIMIT 1
+      """
+    )
+  lv0_activity: [Lv0Activities]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_LV0_ACTIVITIES]->(l0:Lv0Activities)
+      WHERE NOT EXISTS(r.to) RETURN l0 LIMIT 1
+      """
+    )
+  lv1_activity: [Lv1Activities]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_LV1_ACTIVITIES]->(l1:Lv1Activities)
+      WHERE NOT EXISTS(r.to) RETURN l1 LIMIT 1
+      """
+    )
+  lv2_activity: [Lv2Activities]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_LV0_ACTIVITIES]->(l2:Lv0Activities)
+      WHERE NOT EXISTS(r.to) RETURN l2 LIMIT 1
+      """
+    )
+  lv3_activity: [Lv3Activities]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_LV3_ACTIVITIES]->(l3:Lv3Activities)
+      WHERE NOT EXISTS(r.to) RETURN l3 LIMIT 1
+      """
+    )
+  lv4_activity: [Lv4Activities]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_LV4_ACTIVITIES]->(l4:Lv4Activities)
+      WHERE NOT EXISTS(r.to) RETURN l4 LIMIT 1
+      """
+    )
+  lv5_activity: [Lv5Activities]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_LV5_ACTIVITIES]->(l5:Lv5Activities)
+      WHERE NOT EXISTS(r.to) RETURN l5 LIMIT 1
+      """
+    )
   has_user_progress: [Progress]
-    @relation(name: "HAS_USER_PROGRESS", direction: "OUT")
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_USER_PROGRESS]->(up:Progress)
+      WHERE NOT EXISTS(r.to) RETURN up, r.userId LIMIT 1
+      """
+    )
   HAS_USER_PROGRESS_rel: [HAS_USER_PROGRESS]
-  competencycategorys: [CompetencyCategory]
+  competencycategories: [CompetencyCategory]
     @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "IN")
   competencygroups: [CompetencyGroup]
     @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
@@ -73,6 +121,7 @@ type CompetencyCategory {
     @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "OUT")
   CATEGORY_HAS_COMPETENCIES_OF_rel: [CATEGORY_HAS_COMPETENCIES_OF]
   planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
+  competencys: [Competency] @relation(name: "IS_IN_GROUP", direction: "IN")
 }
 
 type CompetencyGroup {
@@ -275,6 +324,14 @@ type HAS_CATEGORY @relation(name: "HAS_CATEGORY") {
 type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
   from: CompetencyCategory!
   to: PlanRoot!
+  order: String!
+  planId: String!
+  startDate: String!
+}
+
+type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
+  from: Competency!
+  to: CompetencyCategory!
   order: String!
   planId: String!
   startDate: String!

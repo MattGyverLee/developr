@@ -6,7 +6,6 @@ import path from "path";
 
 export const typeDefs = fs
   .readFileSync(
-    process.env.GRAPHQL_SCHEMA ||
-      path.join("generatedSchemas/inferredTypes.graphql")
+    process.env.GRAPHQL_SCHEMA || path.join("generatedSchemas/modTypes.graphql")
   )
   .toString("utf-8");
