@@ -1,261 +1,246 @@
 type PlanRoot {
-  _id: Long!
-  id: String!
-  label: String!
-  label_fr: String
-  plan_class: String!
-  has_primary_domain: [Domain]
-    @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
-  HAS_PRIMARY_DOMAIN_rel: [HAS_PRIMARY_DOMAIN]
-  has_category: [CompetencyCategory]
-    @relation(name: "HAS_CATEGORY", direction: "OUT")
-  HAS_CATEGORY_rel: [HAS_CATEGORY]
-  competencycategorys: [CompetencyCategory]
-    @relation(name: "IS_CATEGORY_OF", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_fr: String
+   plan_class: String!
+   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
+   HAS_PRIMARY_DOMAIN_rel: [HAS_PRIMARY_DOMAIN]
+   has_category: [CompetencyCategory] @relation(name: "HAS_CATEGORY", direction: "OUT")
+   HAS_CATEGORY_rel: [HAS_CATEGORY]
+   competencycategorys: [CompetencyCategory] @relation(name: "IS_CATEGORY_OF", direction: "IN")
 }
 
 type Competency {
-  _id: Long!
-  default_expiration: String!
-  default_weight: String!
-  id: String!
-  label: String!
-  parent_id: String!
-  smartsheet_id: String!
-  has_target_competency: [TargetCompetency]
-    @relation(name: "HAS_TARGET_COMPETENCY", direction: "OUT")
-  HAS_TARGET_COMPETENCY_rel: [HAS_TARGET_COMPETENCY]
-  has_assessment_criteria: [AssessmentCriteria]
-    @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "OUT")
-  HAS_ASSESSMENT_CRITERIA_rel: [HAS_ASSESSMENT_CRITERIA]
-  has_short_name: [ShortName]
-    @relation(name: "HAS_SHORT_NAME", direction: "OUT")
-  HAS_SHORT_NAME_rel: [HAS_SHORT_NAME]
-  has_lv0_activities: [Lv0Activities]
-    @relation(name: "HAS_LV0_ACTIVITIES", direction: "OUT")
-  HAS_LV0_ACTIVITIES_rel: [HAS_LV0_ACTIVITIES]
-  has_lv1_activities: [Lv1Activities]
-    @relation(name: "HAS_LV1_ACTIVITIES", direction: "OUT")
-  HAS_LV1_ACTIVITIES_rel: [HAS_LV1_ACTIVITIES]
-  has_lv2_activities: [Lv2Activities]
-    @relation(name: "HAS_LV2_ACTIVITIES", direction: "OUT")
-  HAS_LV2_ACTIVITIES_rel: [HAS_LV2_ACTIVITIES]
-  has_lv3_activities: [Lv3Activities]
-    @relation(name: "HAS_LV3_ACTIVITIES", direction: "OUT")
-  HAS_LV3_ACTIVITIES_rel: [HAS_LV3_ACTIVITIES]
-  has_lv4_activities: [Lv4Activities]
-    @relation(name: "HAS_LV4_ACTIVITIES", direction: "OUT")
-  HAS_LV4_ACTIVITIES_rel: [HAS_LV4_ACTIVITIES]
-  has_lv5_activities: [Lv5Activities]
-    @relation(name: "HAS_LV5_ACTIVITIES", direction: "OUT")
-  HAS_LV5_ACTIVITIES_rel: [HAS_LV5_ACTIVITIES]
-  has_user_progress: [Progress]
-    @relation(name: "HAS_USER_PROGRESS", direction: "OUT")
-  HAS_USER_PROGRESS_rel: [HAS_USER_PROGRESS]
-  competencycategorys: [CompetencyCategory]
-    @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "IN")
-  competencygroups: [CompetencyGroup]
-    @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
+   _id: Long!
+   default_expiration: String!
+   default_weight: String!
+   id: String!
+   label: String!
+   parent_id: String!
+   smartsheet_id: String!
+   is_in_group: [CompetencyCategory] @relation(name: "IS_IN_GROUP", direction: "OUT")
+   IS_IN_GROUP_rel: [IS_IN_GROUP]
+   has_target_competency: [TargetCompetency] @relation(name: "HAS_TARGET_COMPETENCY", direction: "OUT")
+   HAS_TARGET_COMPETENCY_rel: [HAS_TARGET_COMPETENCY]
+   has_assessment_criteria: [AssessmentCriteria] @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "OUT")
+   HAS_ASSESSMENT_CRITERIA_rel: [HAS_ASSESSMENT_CRITERIA]
+   has_short_name: [ShortName] @relation(name: "HAS_SHORT_NAME", direction: "OUT")
+   HAS_SHORT_NAME_rel: [HAS_SHORT_NAME]
+   has_lv0_activities: [Lv0Activities] @relation(name: "HAS_LV0_ACTIVITIES", direction: "OUT")
+   HAS_LV0_ACTIVITIES_rel: [HAS_LV0_ACTIVITIES]
+   has_lv1_activities: [Lv1Activities] @relation(name: "HAS_LV1_ACTIVITIES", direction: "OUT")
+   HAS_LV1_ACTIVITIES_rel: [HAS_LV1_ACTIVITIES]
+   has_lv2_activities: [Lv2Activities] @relation(name: "HAS_LV2_ACTIVITIES", direction: "OUT")
+   HAS_LV2_ACTIVITIES_rel: [HAS_LV2_ACTIVITIES]
+   has_lv3_activities: [Lv3Activities] @relation(name: "HAS_LV3_ACTIVITIES", direction: "OUT")
+   HAS_LV3_ACTIVITIES_rel: [HAS_LV3_ACTIVITIES]
+   has_lv4_activities: [Lv4Activities] @relation(name: "HAS_LV4_ACTIVITIES", direction: "OUT")
+   HAS_LV4_ACTIVITIES_rel: [HAS_LV4_ACTIVITIES]
+   has_lv5_activities: [Lv5Activities] @relation(name: "HAS_LV5_ACTIVITIES", direction: "OUT")
+   HAS_LV5_ACTIVITIES_rel: [HAS_LV5_ACTIVITIES]
+   has_user_progress: [Progress] @relation(name: "HAS_USER_PROGRESS", direction: "OUT")
+   HAS_USER_PROGRESS_rel: [HAS_USER_PROGRESS]
+   competencycategorys: [CompetencyCategory] @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "IN")
+   competencygroups: [CompetencyGroup] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
 }
 
 type CompetencyCategory {
-  _id: Long!
-  color: String
-  id: String!
-  label: String!
-  level: String!
-  parent_id: String!
-  smartsheet_id: String!
-  is_category_of: [PlanRoot] @relation(name: "IS_CATEGORY_OF", direction: "OUT")
-  IS_CATEGORY_OF_rel: [IS_CATEGORY_OF]
-  has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
-  category_has_competencies_of: [Competency]
-    @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "OUT")
-  CATEGORY_HAS_COMPETENCIES_OF_rel: [CATEGORY_HAS_COMPETENCIES_OF]
-  planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
+   _id: Long!
+   color: String
+   id: String!
+   label: String!
+   level: String!
+   parent_id: String!
+   smartsheet_id: String!
+   is_category_of: [PlanRoot] @relation(name: "IS_CATEGORY_OF", direction: "OUT")
+   IS_CATEGORY_OF_rel: [IS_CATEGORY_OF]
+   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
+   category_has_competencies_of: [Competency] @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "OUT")
+   CATEGORY_HAS_COMPETENCIES_OF_rel: [CATEGORY_HAS_COMPETENCIES_OF]
+   target_value_is: [Milestone] @relation(name: "TARGET_VALUE_IS", direction: "OUT")
+   TARGET_VALUE_IS_rel: [TARGET_VALUE_IS]
+   planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
+   competencys: [Competency] @relation(name: "IS_IN_GROUP", direction: "IN")
 }
 
 type CompetencyGroup {
-  _id: Long!
-  id: String!
-  label: String!
-  level: String!
-  parent_id: String!
-  smartsheet_id: String!
-  has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
-  group_has_competencies_of: [Competency]
-    @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
-  GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]
+   _id: Long!
+   id: String!
+   label: String!
+   level: String!
+   parent_id: String!
+   smartsheet_id: String!
+   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
+   group_has_competencies_of: [Competency] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
+   GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]
 }
 
 type TargetCompetency {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_TARGET_COMPETENCY", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_TARGET_COMPETENCY", direction: "IN")
 }
 
 type AssessmentCriteria {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "IN")
 }
 
 type ShortName {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency] @relation(name: "HAS_SHORT_NAME", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_SHORT_NAME", direction: "IN")
 }
 
 type Lv0Activities {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_LV0_ACTIVITIES", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_LV0_ACTIVITIES", direction: "IN")
 }
 
 type Lv1Activities {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_LV1_ACTIVITIES", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_LV1_ACTIVITIES", direction: "IN")
 }
 
 type Lv2Activities {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_LV2_ACTIVITIES", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_LV2_ACTIVITIES", direction: "IN")
 }
 
 type Lv3Activities {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_LV3_ACTIVITIES", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_LV3_ACTIVITIES", direction: "IN")
 }
 
 type Lv4Activities {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_LV4_ACTIVITIES", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_LV4_ACTIVITIES", direction: "IN")
 }
 
 type Lv5Activities {
-  _id: Long!
-  id: String!
-  label: String!
-  label_created: String!
-  label_es_created: String
-  label_es_modified: String
-  label_fr: String
-  label_fr_created: String
-  label_fr_modified: String
-  label_modified: String!
-  competencys: [Competency]
-    @relation(name: "HAS_LV5_ACTIVITIES", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_created: String!
+   label_es_created: String
+   label_es_modified: String
+   label_fr: String
+   label_fr_created: String
+   label_fr_modified: String
+   label_modified: String!
+   competencys: [Competency] @relation(name: "HAS_LV5_ACTIVITIES", direction: "IN")
 }
 
 type User {
-  _id: Long!
-  Name: String!
-  activePlan: String!
-  id: String!
-  primaryDomain: String!
-  primaryOrg: String!
-  has_progress_root: [ProgressRoot]
-    @relation(name: "HAS_PROGRESS_ROOT", direction: "OUT")
+   _id: Long!
+   Name: String!
+   activePlan: String!
+   id: String!
+   primaryDomain: String!
+   primaryOrg: String!
+   has_progress_root: [ProgressRoot] @relation(name: "HAS_PROGRESS_ROOT", direction: "OUT")
 }
 
 type ProgressRoot {
-  _id: Long!
-  userId: String!
-  users: [User] @relation(name: "HAS_PROGRESS_ROOT", direction: "IN")
-  progresss: [Progress] @relation(name: "IS_PROGRESS_OF", direction: "IN")
+   _id: Long!
+   userId: String!
+   users: [User] @relation(name: "HAS_PROGRESS_ROOT", direction: "IN")
+   progresss: [Progress] @relation(name: "IS_PROGRESS_OF", direction: "IN")
 }
 
 type Progress {
-  _id: Long!
-  competency_ref: String!
-  currentLevel: Int!
-  is_progress_of: [ProgressRoot]
-    @relation(name: "IS_PROGRESS_OF", direction: "OUT")
-  competencys: [Competency]
-    @relation(name: "HAS_USER_PROGRESS", direction: "IN")
+   _id: Long!
+   competency_ref: String!
+   currentLevel: Int!
+   is_progress_of: [ProgressRoot] @relation(name: "IS_PROGRESS_OF", direction: "OUT")
+   IS_PROGRESS_OF_rel: [IS_PROGRESS_OF]
+   competencys: [Competency] @relation(name: "HAS_USER_PROGRESS", direction: "IN")
+}
+
+type Milestone {
+   _id: Long!
+   ms: String!
+   planId: String!
+   competencycategorys: [CompetencyCategory] @relation(name: "TARGET_VALUE_IS", direction: "IN")
 }
 
 type Domain {
-  _id: Long!
-  id: String!
-  label: String!
-  label_fr: String!
-  planroots: [PlanRoot] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "IN")
+   _id: Long!
+   id: String!
+   label: String!
+   label_fr: String!
+   planroots: [PlanRoot] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "IN")
 }
 
 type HAS_PRIMARY_DOMAIN @relation(name: "HAS_PRIMARY_DOMAIN") {
@@ -280,8 +265,16 @@ type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
   startDate: String!
 }
 
-type CATEGORY_HAS_COMPETENCIES_OF
-  @relation(name: "CATEGORY_HAS_COMPETENCIES_OF") {
+type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
+  from: Competency!
+  to: CompetencyCategory!
+  order: String!
+  planId: String!
+  startDate: String!
+}
+
+
+type CATEGORY_HAS_COMPETENCIES_OF @relation(name: "CATEGORY_HAS_COMPETENCIES_OF") {
   from: CompetencyCategory!
   to: Competency!
   order: String!
@@ -351,8 +344,24 @@ type HAS_LV5_ACTIVITIES @relation(name: "HAS_LV5_ACTIVITIES") {
   startDate: String!
 }
 
+
+type IS_PROGRESS_OF @relation(name: "IS_PROGRESS_OF") {
+  from: Progress!
+  to: ProgressRoot!
+  userId: String!
+}
+
 type HAS_USER_PROGRESS @relation(name: "HAS_USER_PROGRESS") {
   from: Competency!
   to: Progress!
   userId: String!
 }
+
+type TARGET_VALUE_IS @relation(name: "TARGET_VALUE_IS") {
+  from: CompetencyCategory!
+  to: Milestone!
+  min: Int!
+  planId: String!
+}
+
+

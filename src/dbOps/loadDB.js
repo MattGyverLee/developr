@@ -408,6 +408,7 @@ for (let index = 0; index < 2; index++) {
     SET r.startDate = ${myNow}
 `);
   if (index == 1) {
+    // ================Adding User=======================
     q.push(cypher`
       MERGE (u:User {id: "1"})
       SET u.Name = "Matthew",
@@ -464,7 +465,73 @@ for (let index = 0; index < 2; index++) {
       SET plang.currentLevel = 4
       MERGE (plang)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
       MERGE (clang)-[:HAS_USER_PROGRESS {userId: "1"}]->(plang)
-  `);
+    `);
+
+    // Defining Milestones
+    q.push(cypher`
+      Match (ct:CompetencyCategory {id: "LT-1932629939382148"})
+      Match (dc:CompetencyCategory {id: "LT-7280654496884612"})
+      Match (pc:CompetencyCategory {id: "LT-6823257659729796"})
+      MATCH (cc:CompetencyCategory {id: "LT-2882607985780612"})
+      MATCH (prof:CompetencyCategory {id: "LT-2882607985780612"})
+      MATCH (ed:CompetencyCategory {id: "LT-4852932822755204"})
+
+      MERGE (m1:Milestone {planId: "1", ms: "LTSpec1"})
+      MERGE (m2:Milestone {planId: "1", ms: "LTSpec2"})
+      MERGE (m3:Milestone {planId: "1", ms: "LTCons1"})
+      MERGE (m4:Milestone {planId: "1", ms: "LTCons2"})
+      MERGE (m5:Milestone {planId: "1", ms: "LTCons3"})
+
+      // Core Tech
+      
+      Merge (m1)<-[:TARGET_VALUE_IS {min: 3, planId: "1"}]-(ct)
+      Merge (m2)<-[:TARGET_VALUE_IS {min: 6, planId: "1"}]-(ct)
+      Merge (m3)<-[:TARGET_VALUE_IS {min: 9, planId: "1"}]-(ct)
+      Merge (m4)<-[:TARGET_VALUE_IS {min: 12, planId: "1"}]-(ct)
+      Merge (m5)<-[:TARGET_VALUE_IS {min: 14, planId: "1"}]-(ct)
+
+      // Domain Comp
+     
+      Merge (m1)<-[:TARGET_VALUE_IS {min: 3, planId: "1"}]-(dc)
+      Merge (m2)<-[:TARGET_VALUE_IS {min: 5, planId: "1"}]-(dc)
+      Merge (m3)<-[:TARGET_VALUE_IS {min: 10, planId: "1"}]-(dc)
+      Merge (m4)<-[:TARGET_VALUE_IS {min: 20, planId: "1"}]-(dc)
+      Merge (m5)<-[:TARGET_VALUE_IS {min: 40, planId: "1"}]-(dc)
+
+      // Practical Comp
+      
+      Merge (m1)<-[:TARGET_VALUE_IS {min: 2, planId: "1"}]-(pc)
+      Merge (m2)<-[:TARGET_VALUE_IS {min: 5, planId: "1"}]-(pc)
+      Merge (m3)<-[:TARGET_VALUE_IS {min: 8, planId: "1"}]-(pc)
+      Merge (m4)<-[:TARGET_VALUE_IS {min: 11, planId: "1"}]-(pc)
+      Merge (m5)<-[:TARGET_VALUE_IS {min: 14, planId: "1"}]-(pc)
+
+      // Consultant Comp
+     
+      Merge (m1)<-[:TARGET_VALUE_IS {min: 1, planId: "1"}]-(cc)
+      Merge (m2)<-[:TARGET_VALUE_IS {min: 2, planId: "1"}]-(cc)
+      Merge (m3)<-[:TARGET_VALUE_IS {min: 3, planId: "1"}]-(cc)
+      Merge (m4)<-[:TARGET_VALUE_IS {min: 5, planId: "1"}]-(cc)
+      Merge (m5)<-[:TARGET_VALUE_IS {min: 10, planId: "1"}]-(cc)
+
+      // Professional Comp
+      
+      Merge (m1)<-[:TARGET_VALUE_IS {min: 1, planId: "1"}]-(prof)
+      Merge (m2)<-[:TARGET_VALUE_IS {min: 2, planId: "1"}]-(prof)
+      Merge (m3)<-[:TARGET_VALUE_IS {min: 4, planId: "1"}]-(prof)
+      Merge (m4)<-[:TARGET_VALUE_IS {min: 5, planId: "1"}]-(prof)
+      Merge (m5)<-[:TARGET_VALUE_IS {min: 6, planId: "1"}]-(prof)
+
+      //Education
+      
+      Merge (m1)<-[:TARGET_VALUE_IS {min: 0, planId: "1"}]-(ed)
+      Merge (m2)<-[:TARGET_VALUE_IS {min: 0, planId: "1"}]-(ed)
+      Merge (m3)<-[:TARGET_VALUE_IS {min: 1, planId: "1"}]-(ed)
+      Merge (m4)<-[:TARGET_VALUE_IS {min: 1, planId: "1"}]-(ed)
+      Merge (m5)<-[:TARGET_VALUE_IS {min: 2, planId: "1"}]-(ed)
+
+      return "Added Ltmins"
+    `);
   }
 }
 
