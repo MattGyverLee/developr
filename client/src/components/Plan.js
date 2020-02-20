@@ -41,11 +41,6 @@ const DOMAIN_QUERY = (rootId, userId) => gql`
           lv5_activity {
             label
           }
-          HAS_USER_PROGRESS_rel(filter: { userId: "1" }) {
-            Progress {
-              currentLevel
-            }
-          }
         }
         has_group {
           id
@@ -78,11 +73,6 @@ const DOMAIN_QUERY = (rootId, userId) => gql`
             }
             lv5_activity {
               label
-            }
-            HAS_USER_PROGRESS_rel(filter: { userId: "1" }) {
-              Progress {
-                currentLevel
-              }
             }
           }
           has_group {
@@ -117,11 +107,6 @@ const DOMAIN_QUERY = (rootId, userId) => gql`
               lv5_activity {
                 label
               }
-              HAS_USER_PROGRESS_rel(filter: { userId: "1" }) {
-                Progress {
-                  currentLevel
-                }
-              }
             }
           }
         }
@@ -138,10 +123,10 @@ export class Plan extends Component {
         <Query query={DOMAIN_QUERY("1-root", "1")}>
           {({ loading, error, data }) => {
             if (loading) return <h4>Loading...</h4>;
-            /* if (error) {
+            if (error) {
               console.log(error);
               return <h4>Connection Error: Is NEo4j Running?</h4>;
-            } */
+            }
             // console.log(data);
             if (data.PlanRoot) {
               return (

@@ -14,10 +14,6 @@ type PlanRoot {
     @relation(name: "IS_CATEGORY_OF", direction: "IN")
 }
 
-type String {
-  label: String
-}
-
 type Competency {
   _id: Long!
   default_expiration: String!
@@ -26,9 +22,8 @@ type Competency {
   label: String!
   parent_id: String!
   smartsheet_id: String!
-  is_in_group: [CompetencyCategory]
-    @relation(name: "IS_IN_GROUP", direction: "OUT")
-  IS_IN_GROUP_rel: [IS_IN_GROUP]
+  is_in_group: [CompetencyGroup] @relation(name: "IS_IN_GROUP", direction: "OUT")
+# Start Custom
   target_competency: [TargetCompetency]
     @cypher(
       statement: """
@@ -92,18 +87,12 @@ type Competency {
       WHERE NOT EXISTS(r.to) RETURN l5 LIMIT 1
       """
     )
-  has_user_progress: [Progress]
-    @cypher(
-      statement: """
-      MATCH (this)-[r:HAS_USER_PROGRESS]->(up:Progress)
-      WHERE NOT EXISTS(r.to) RETURN up, r.userId LIMIT 1
-      """
-    )
-  HAS_USER_PROGRESS_rel: [HAS_USER_PROGRESS]
-  competencycategories: [CompetencyCategory]
+# End Custom
+  competencycategorys: [CompetencyCategory]
     @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "IN")
   competencygroups: [CompetencyGroup]
     @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
+  progresss: [Progress] @relation(name: "COMPETENCY_PROGRESS", direction: "IN")
 }
 
 type CompetencyCategory {
@@ -120,10 +109,32 @@ type CompetencyCategory {
   category_has_competencies_of: [Competency]
     @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "OUT")
   CATEGORY_HAS_COMPETENCIES_OF_rel: [CATEGORY_HAS_COMPETENCIES_OF]
-   target_value_is: [Milestone] @relation(name: "TARGET_VALUE_IS", direction: "OUT")
-   TARGET_VALUE_IS_rel: [TARGET_VALUE_IS]
+  target_value_is: [Milestone]
+    @relation(name: "TARGET_VALUE_IS", direction: "OUT")
+  TARGET_VALUE_IS_rel: [TARGET_VALUE_IS]
   planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
-  competencys: [Competency] @relation(name: "IS_IN_GROUP", direction: "IN")
+# Begin Custom
+  childComps: [Competency]
+    @cypher(
+      statement: """
+      MATCH (this)-[:CATEGORY_HAS_COMPETENCIES_OF]->(comp:Competency)
+      return comp
+      """
+    )
+  ancestorComps: [Competency]
+    @cypher(
+      statement: """
+      MATCH (this)-[:CATEGORY_HAS_COMPETENCIES_OF]->(c1:Competency)
+      Return c1 as ancestors
+      UNION
+      MATCH (this)-[:HAS_GROUP]->(:CompetencyGroup)-[:GROUP_HAS_COMPETENCIES_OF]->(c2:Competency)
+      Return c2 as ancestors
+      UNION
+      MATCH (this)-[:HAS_GROUP]->(:CompetencyGroup)-[:HAS_GROUP]->(:CompetencyGroup)-[:GROUP_HAS_COMPETENCIES_OF]->(c3:Competency)
+      Return c3 as ancestors
+      """
+    )
+# End Custom
 }
 
 type CompetencyGroup {
@@ -133,10 +144,29 @@ type CompetencyGroup {
   level: String!
   parent_id: String!
   smartsheet_id: String!
+   is_in_group: [CompetencyGroup] @relation(name: "IS_IN_GROUP", direction: "OUT")
   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
-  group_has_competencies_of: [Competency]
-    @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
+   group_has_competencies_of: [Competency] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
   GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]
+#Begin Custom  
+childComps: [Competency]
+    @cypher(
+      statement: """
+      MATCH (this)-[:GROUP_HAS_COMPETENCIES_OF]->(comp:Competency)
+      return comp
+      """
+    )
+  ancestorComps: [Competency]
+    @cypher(
+      statement: """
+      MATCH (this)-[:GROUP_HAS_COMPETENCIES_OF]->(c1:Competency)
+      Return c1 as ancestors
+      UNION
+      MATCH (this)-[:HAS_GROUP]->(:CompetencyGroup)-[:GROUP_HAS_COMPETENCIES_OF]->(c2:Competency)
+      Return c2 as ancestors
+      """
+    )
+#End Custom
 }
 
 type TargetCompetency {
@@ -287,25 +317,26 @@ type User {
 type ProgressRoot {
   _id: Long!
   userId: String!
+   child_progress: [Progress] @relation(name: "CHILD_PROGRESS", direction: "OUT")
+   CHILD_PROGRESS_rel: [CHILD_PROGRESS]
   users: [User] @relation(name: "HAS_PROGRESS_ROOT", direction: "IN")
-  progresss: [Progress] @relation(name: "IS_PROGRESS_OF", direction: "IN")
 }
 
 type Progress {
   _id: Long!
   competency_ref: String!
   currentLevel: Int!
-  is_progress_of: [ProgressRoot]
-    @relation(name: "IS_PROGRESS_OF", direction: "OUT")
-  competencys: [Competency]
-    @relation(name: "HAS_USER_PROGRESS", direction: "IN")
+   competency_progress: [Competency] @relation(name: "COMPETENCY_PROGRESS", direction: "OUT")
+   COMPETENCY_PROGRESS_rel: [COMPETENCY_PROGRESS]
+   progressroots: [ProgressRoot] @relation(name: "CHILD_PROGRESS", direction: "IN")
 }
 
 type Milestone {
-   _id: Long!
-   ms: String!
-   planId: String!
-   competencycategorys: [CompetencyCategory] @relation(name: "TARGET_VALUE_IS", direction: "IN")
+  _id: Long!
+  ms: String!
+  planId: String!
+  competencycategories: [CompetencyCategory]
+    @relation(name: "TARGET_VALUE_IS", direction: "IN")
 }
 
 type Domain {
@@ -338,13 +369,7 @@ type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
   startDate: String!
 }
 
-type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
-  from: Competency!
-  to: CompetencyCategory!
-  order: String!
-  planId: String!
-  startDate: String!
-}
+
 
 type CATEGORY_HAS_COMPETENCIES_OF
   @relation(name: "CATEGORY_HAS_COMPETENCIES_OF") {
@@ -418,18 +443,6 @@ type HAS_LV5_ACTIVITIES @relation(name: "HAS_LV5_ACTIVITIES") {
 }
 
 
-type IS_PROGRESS_OF @relation(name: "IS_PROGRESS_OF") {
-  from: Progress!
-  to: ProgressRoot!
-  userId: String!
-}
-
-type HAS_USER_PROGRESS @relation(name: "HAS_USER_PROGRESS") {
-  from: Competency!
-  to: Progress!
-  userId: String!
-}
-
 type TARGET_VALUE_IS @relation(name: "TARGET_VALUE_IS") {
   from: CompetencyCategory!
   to: Milestone!
@@ -437,4 +450,14 @@ type TARGET_VALUE_IS @relation(name: "TARGET_VALUE_IS") {
   planId: String!
 }
 
+type CHILD_PROGRESS @relation(name: "CHILD_PROGRESS") {
+  from: ProgressRoot!
+  to: Progress!
+  userId: String!
+}
 
+type COMPETENCY_PROGRESS @relation(name: "COMPETENCY_PROGRESS") {
+  from: Progress!
+  to: Competency!
+  userId: String!
+}

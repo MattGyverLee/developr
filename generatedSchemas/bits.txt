@@ -1,29 +1,24 @@
-lv1: [String] @cypher(statement: """
-    MATCH (this)-[r:HAS_LV1_ACTIVITIES]->(l1:Lv1Activities)
-    WHERE NOT EXISTS(r.to)
-    RETURN l1.label LIMIT 1
-    """
-  
-  lv2: [String] @cypher(statement: """
-    MATCH (this)-[r:HAS_LV2_ACTIVITIES]->(l2:Lv2Activities)
-    WHERE NOT EXISTS(r.to)
-    RETURN l2.label LIMIT 1
-    """
-  
-  lv3: [String] @cypher(statement: """
-    MATCH (this)-[r:HAS_LV3_ACTIVITIES]->(l3:Lv0Activities)
-    WHERE NOT EXISTS(r.to)
-    RETURN l3.label LIMIT 1
-    """
-  
-  lv4: [String] @cypher(statement: """
-    MATCH (this)-[r:HAS_LV4_ACTIVITIES]->(l4:Lv4Activities)
-    WHERE NOT EXISTS(r.to)
-    RETURN l4.label LIMIT 1
-    """
-  
-  lv5: [String] @cypher(
-    statement: """MATCH (this)-[r:HAS_LV5_ACTIVITIES]->(l5:Lv0Activities)
-    WHERE NOT EXISTS(r.to)
-    RETURN l5.label LIMIT 1
-    """
+  sumOfChildComps: Int
+    @cypher(
+      statement: """
+      MATCH (this)-[:CATEGORY_HAS_COMPETENCIES_OF]->(comp:Competency)-[up:HAS_USER_PROGRESS]-(p1:Progress)
+      WHERE up.userId = '1'
+      RETURN sum(p1.currentLevel)
+      """
+    )
+  sumOfGrandchildComps: Int
+    @cypher(
+      statement: """
+      MATCH (this)-[:HAS_GROUP]->(cg:CompetencyGroup)-[:GROUP_HAS_COMPETENCIES_OF]->(:Competency)-[up:HAS_USER_PROGRESS]-(p1:Progress)
+      WHERE up.userId = '1'
+      RETURN sum(p1.currentLevel)
+      """
+    )
+  sumOfGreatgrandchildComps: Int
+    @cypher(
+      statement: """
+      MATCH (this)-[:HAS_GROUP]->(cg:CompetencyGroup)-[:HAS_GROUP]->(cg1:CompetencyGroup)-[:GROUP_HAS_COMPETENCIES_OF]->(:Competency)-[up:HAS_USER_PROGRESS]-(p1:Progress)
+      WHERE up.userId = '1'
+      RETURN sum(p1.currentLevel)
+      """
+    )

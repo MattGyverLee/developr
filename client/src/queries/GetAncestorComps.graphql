@@ -1,0 +1,14 @@
+{
+  CompetencyCategory {
+    id
+    label
+    childComps {
+      id
+      label
+    }
+    ancestorComps {
+      id
+      label
+    }
+  }
+}

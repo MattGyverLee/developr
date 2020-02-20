@@ -1,7 +1,7 @@
 import React from "react";
 
 const checkLoc = (local, ref) => {
-  console.log(local, ref);
+  // console.log(local, ref);
   if (local == ref) {
     return <span class="sr-only">(current)</span>;
   }

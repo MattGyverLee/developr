@@ -69,8 +69,8 @@ export default function CompetencyDetailsForm(props) {
         }
         break;
       case 5:
-        if (props.competency.lv3_activity.length > 0) {
-          return props.competency.lv4_activity[0].label;
+        if (props.competency.lv5_activity.length > 0) {
+          return props.competency.lv5_activity[0].label;
         } else {
           return "Undefined";
         }
@@ -117,10 +117,7 @@ export default function CompetencyDetailsForm(props) {
                 <FormGroup className="my-0 mx-0">
                   <Label for="ProgDrop">Progress: </Label>
                   <br />
-                  <select
-                    id="ProgDrop"
-                    name="progress"
-                    defaultValue={getProgress()}>
+                  <select id="ProgDrop" name="progress" defaultValue="3">
                     <option value="0">Not Selected</option>
                     <option value="1">Learner</option>
                     <option value="2">Practitioner</option>

@@ -423,48 +423,42 @@ for (let index = 0; index < 2; index++) {
       MATCH (ckb:Competency {id: "LT-5028854683199364" })
       MERGE (pkb:Progress {competency_ref: "LT-5028854683199364"})
       SET pkb.currentLevel = 3
-      MERGE (pkb)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
-      MERGE (ckb)-[:HAS_USER_PROGRESS {userId: "1"}]->(pkb)
+      MERGE (ckb)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(pkb)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
     `);
     q.push(cypher`
       MATCH (pr:ProgressRoot {userId: "1"})
       MATCH (ccomp:Competency {id: "LT-4184429753067396" })
       MERGE (pcomp:Progress {competency_ref: "LT-4184429753067396"})
       SET pcomp.currentLevel = 4
-      MERGE (pcomp)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
-      MERGE (ccomp)-[:HAS_USER_PROGRESS {userId: "1"}]->(pcomp)
+      MERGE (ccomp)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(pcomp)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
       `);
     q.push(cypher`
       MATCH (pr:ProgressRoot {userId: "1"})
       MATCH (cfon:Competency {id: "LT-525255055828868" })
       MERGE (pfon:Progress {competency_ref: "LT-525255055828868"})
       SET pfon.currentLevel = 4
-      MERGE (pfon)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
-      MERGE (cfon)-[:HAS_USER_PROGRESS {userId: "1"}]->(pfon)
+      MERGE (cfon)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(pfon)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
       `);
     q.push(cypher`
       MATCH (pr:ProgressRoot {userId: "1"})
       MATCH (cmal:Competency {id: "LT-2777054869514116" })
       MERGE (pmal:Progress {competency_ref: "LT-2777054869514116"})
       SET pmal.currentLevel = 3
-      MERGE (pmal)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
-      MERGE (cmal)-[:HAS_USER_PROGRESS {userId: "1"}]->(pmal)
+      MERGE (cmal)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(pmal)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
       `);
     q.push(cypher`
       MATCH (pr:ProgressRoot {userId: "1"})
       MATCH (cos:Competency {id: "LT-8688029380437892" })
       MERGE (pos:Progress {competency_ref: "LT-8688029380437892"})
       SET pos.currentLevel = 4
-      MERGE (pos)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
-      MERGE (cos)-[:HAS_USER_PROGRESS {userId: "1"}]->(pos)
+      MERGE (cos)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(pos)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
       `);
     q.push(cypher`
       MATCH (pr:ProgressRoot {userId: "1"})
       MATCH (clang:Competency {id: "LT-6436229566752644" })
       MERGE (plang:Progress {competency_ref: "LT-6436229566752644"})
       SET plang.currentLevel = 4
-      MERGE (plang)-[:IS_PROGRESS_OF {userId: "1"}]->(pr)
-      MERGE (clang)-[:HAS_USER_PROGRESS {userId: "1"}]->(plang)
+      MERGE (clang)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(plang)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
     `);
 
     // Defining Milestones
@@ -477,10 +471,15 @@ for (let index = 0; index < 2; index++) {
       MATCH (ed:CompetencyCategory {id: "LT-4852932822755204"})
 
       MERGE (m1:Milestone {planId: "1", ms: "LTSpec1"})
+      MERGE (m1)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Specialist (Level 1)"})
       MERGE (m2:Milestone {planId: "1", ms: "LTSpec2"})
+      MERGE (m2)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Specialist (Level 2)"})
       MERGE (m3:Milestone {planId: "1", ms: "LTCons1"})
+      MERGE (m3)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Consultant (Level 1)"})
       MERGE (m4:Milestone {planId: "1", ms: "LTCons2"})
+      MERGE (m1)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Consultant (Level 3)"})
       MERGE (m5:Milestone {planId: "1", ms: "LTCons3"})
+      MERGE (m5)-[:HAS_SHORT_NAME]-(:ShortName {label: "Senior Consultant"})
 
       // Core Tech
       
