@@ -1,6 +1,6 @@
-import Plan from "./components/Plan";
+import Plan from "./Plan";
 import React, { Fragment } from "react";
-import NavBar from "./components/NavBar";
+import NavBar from "./NavBar";
 
 function MyPlan() {
   return (

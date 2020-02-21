@@ -19,7 +19,6 @@ type Competency {
    label: String!
    parent_id: String!
    smartsheet_id: String!
-   is_in_group: [CompetencyGroup] @relation(name: "IS_IN_GROUP", direction: "OUT")
    has_target_competency: [TargetCompetency] @relation(name: "HAS_TARGET_COMPETENCY", direction: "OUT")
    HAS_TARGET_COMPETENCY_rel: [HAS_TARGET_COMPETENCY]
    has_assessment_criteria: [AssessmentCriteria] @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "OUT")
@@ -68,7 +67,6 @@ type CompetencyGroup {
    level: String!
    parent_id: String!
    smartsheet_id: String!
-   is_in_group: [CompetencyGroup] @relation(name: "IS_IN_GROUP", direction: "OUT")
    has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
    group_has_competencies_of: [Competency] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
    GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]

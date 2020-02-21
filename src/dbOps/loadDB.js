@@ -460,6 +460,13 @@ for (let index = 0; index < 2; index++) {
       SET plang.currentLevel = 4
       MERGE (clang)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(plang)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
     `);
+    q.push(cypher`
+      MATCH (pr:ProgressRoot {userId: "1"})
+      MATCH (clwc:Competency {id: "LT-7949157566572420" })
+      MERGE (plwc:Progress {competency_ref: "LT-7949157566572420"})
+      SET plwc.currentLevel = 4
+      MERGE (clwc)<-[:COMPETENCY_PROGRESS {userId: "1"}]-(plwc)<-[:CHILD_PROGRESS {userId: "1"}]-(pr)
+    `);
 
     // Defining Milestones
     q.push(cypher`
@@ -467,8 +474,8 @@ for (let index = 0; index < 2; index++) {
       Match (dc:CompetencyCategory {id: "LT-7280654496884612"})
       Match (pc:CompetencyCategory {id: "LT-6823257659729796"})
       MATCH (cc:CompetencyCategory {id: "LT-2882607985780612"})
-      MATCH (prof:CompetencyCategory {id: "LT-2882607985780612"})
-      MATCH (ed:CompetencyCategory {id: "LT-4852932822755204"})
+      MATCH (prof:CompetencyCategory {id: "LT-4852932822755204"})
+      MATCH (ed:CompetencyCategory {id: "LT-5978832729597828"})
 
       MERGE (m1:Milestone {planId: "1", ms: "LTSpec1"})
       MERGE (m1)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Specialist (Level 1)"})
