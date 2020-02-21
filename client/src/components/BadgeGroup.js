@@ -17,6 +17,9 @@ export default function BadgeGroup(props) {
             competency={competency}
             user={props.user}
             milestone={props.milestone}
+            target={props.target}
+            details={props.details}
+            planId={props.planId}
           />
         ))}
       </div>

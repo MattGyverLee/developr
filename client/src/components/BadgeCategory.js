@@ -1,12 +1,7 @@
 import React, { Fragment } from "react";
-import BadgeCompetency from "./BadgeCompetency";
-import BadgeGroup from "./BadgeGroup";
 
-const processCatGroups = groupList => {
-  try {
-    groupList.map(group => <BadgeGroup key={group.id} group={group} />);
-  } catch (error) {}
-};
+import BadgeSubDetails from "./BadgeSubDetails";
+
 var acc = 0;
 
 const displayTarget = (category, progresses, inTarget) => {
@@ -79,7 +74,7 @@ const displayTarget = (category, progresses, inTarget) => {
 };
 
 export default function BadgeCategory(props) {
-  console.log(props);
+  // console.log(props);
 
   // Figure Out Target Value
   const thisComp = props.milestone.competencycategories.filter(
@@ -88,7 +83,7 @@ export default function BadgeCategory(props) {
   var thisTarget = -1;
   try {
     thisTarget = thisComp.TARGET_VALUE_IS_rel.filter(
-      target => target.Milestone.ms === "LTCons1" && target.planId === "1"
+      target => target.Milestone.ms === props.target && target.planId === "1"
     )[0].min;
     // TODO: Make PlanId a variable
     console.log(thisTarget);
@@ -107,24 +102,15 @@ export default function BadgeCategory(props) {
             thisTarget
           )}
         </h4>
-
-        {props.category.category_has_competencies_of.map(competency => (
-          <BadgeCompetency
-            key={competency.id}
-            competency={competency}
-            user={props.user}
-            milestone={props.milestone}
-          />
-        ))}
-        {props.category.has_group.map(group => (
-          <BadgeGroup
-            key={group.id}
-            group={group}
-            user={props.user}
-            milestone={props.milestone}
-          />
-        ))}
-        {processCatGroups(props.category.has_group)}
+        <BadgeSubDetails
+          display={true}
+          category={props.category}
+          user={props.user}
+          milestone={props.milestone}
+          planId={props.planId}
+          target={props.target}
+          details={props.details}
+        />
       </div>
     </Fragment>
   );

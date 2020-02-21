@@ -8,7 +8,7 @@ export default function Category(props) {
   return (
     <Fragment>
       <div className="card border-success mb-3">
-        <h4 bgcolog={props.category.color} className="ml-3">
+        <h4 bgcolor={props.category.color} className="ml-3">
           {props.category.label}
         </h4>
         {props.category.category_has_competencies_of.map(competency => (
