@@ -1,6 +1,6 @@
-import Milestone from "./Milestone";
+import Milestone from "./components/Milestone";
 import React, { Fragment } from "react";
-import NavBar from "./NavBar";
+import NavBar from "./components/NavBar";
 
 function MyMilestone() {
   return (

@@ -2,9 +2,9 @@ import React from "react";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 
-import MyPlan from "./components/myPlan";
-import MyMilestones from "./components/myMilestones";
-import Home from "./components/home";
+import MyPlan from "./pages/myPlan";
+import MyMilestones from "./pages/myMilestones";
+import Home from "./pages/home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const client = new ApolloClient({ uri: "http://localhost:4001/graphql" });
