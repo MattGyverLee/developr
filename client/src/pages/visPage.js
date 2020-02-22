@@ -1,9 +1,6 @@
-import Plan from "./components/Plan";
 import React, { Fragment } from "react";
 import NavBar from "./components/NavBar";
 import Graph from "./components/Graph";
-
-var ReactDOM = require("react-dom");
 
 function VisPage() {
   return (

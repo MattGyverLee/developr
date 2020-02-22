@@ -8,14 +8,11 @@ export class Graph extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataset: []
+      graph: null
     };
   }
 
   componentDidMount() {
-    var dataset = this.state.dataset;
-    this.setState({ loading: true });
-
     // TODO: Offload this lookup to backend server.
     const driver = neo4j.driver(
       process.env.REACT_APP_NEO4J_URI || "bolt://localhost:7687",

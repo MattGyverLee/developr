@@ -6,7 +6,7 @@ function MyMilestone() {
   return (
     <Fragment>
       {NavBar("myMilestones")}
-      <div className="mx-3" maxwidth="100%" minWidth="98%">
+      <div className="mx-3">
         <Milestone
           userId="1"
           planRoot="1-root"

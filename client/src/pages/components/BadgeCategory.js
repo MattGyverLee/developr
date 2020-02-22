@@ -15,7 +15,6 @@ const displayTarget = (category, progresses, inTarget) => {
       );
       countComps += 1;
       if (relevantProgress.length > 0) {
-        console.log(relevantProgress);
         acc =
           acc +
           relevantProgress[0].currentLevel *
@@ -46,7 +45,6 @@ const displayTarget = (category, progresses, inTarget) => {
           );
           countComps += 1;
           if (relevantProgress.length > 0) {
-            console.log(relevantProgress);
             acc =
               acc +
               relevantProgress[0].currentLevel *
@@ -86,7 +84,6 @@ export default function BadgeCategory(props) {
       target => target.Milestone.ms === props.target && target.planId === "1"
     )[0].min;
     // TODO: Make PlanId a variable
-    console.log(thisTarget);
   } catch (error) {}
 
   // TODO: Load Colors into form

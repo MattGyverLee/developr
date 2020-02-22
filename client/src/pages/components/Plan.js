@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Category from "./Category";
