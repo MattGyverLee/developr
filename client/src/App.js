@@ -1,7 +1,7 @@
 import React from "react";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
-
+import VisPage from "./pages/visPage";
 import MyPlan from "./pages/myPlan";
 import MyMilestones from "./pages/myMilestones";
 import Home from "./pages/home";
@@ -27,6 +27,10 @@ function App() {
             <Route path="/myPlan">
               {/* This is the main growth plan workspace. */}
               <MyPlan />
+            </Route>
+            <Route path="/graph">
+              {/* This is the graph vis page. */}
+              <VisPage />
             </Route>
             <Route path="/">
               {/* This is the home page. */}

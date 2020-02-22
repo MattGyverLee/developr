@@ -40,6 +40,11 @@ const NavBar = local => {
               My Milestones {checkLoc(local, "myMilestones")}
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/graph">
+              Visualize Plan {checkLoc(local, "graph")}
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
