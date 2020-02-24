@@ -21,6 +21,8 @@ var dom = "";
 var plan = "";
 var comp = "";
 var planrt = "";
+var domNum = "";
+var planNum = "";
 //Parameters
 for (let index = 0; index < 2; index++) {
   switch (index) {
@@ -30,6 +32,8 @@ for (let index = 0; index < 2; index++) {
       comp = process.env.LTCOMP;
       planrt = process.env.LTROOT;
       domain = process.env.LTPREFIX;
+      domNum = process.env.LTDOMNUM;
+      planNum = process.env.LTPLANNUM;
       break;
 
     case 1:
@@ -38,6 +42,8 @@ for (let index = 0; index < 2; index++) {
       comp = process.env.GCCOMP;
       planrt = process.env.GCROOT;
       domain = process.env.GCPREFIX;
+      domNum = process.env.GCDOMNUM;
+      planNum = process.env.GCPLANNUM;
   }
 
   console.log;
@@ -90,17 +96,16 @@ for (let index = 0; index < 2; index++) {
   //Competency Details
   q.push(cypher`
     CALL apoc.load.xml(${comp},'//CompetencyDetails/Competency',{},true) YIELD value as Competency
+      CALL apoc.load.xml(${dom},'',{},true) YIELD value as DomainDetails
+      MATCH (d:Domain {id: DomainDetails.id})
       MERGE (c:Competency {id: Competency.id}) 
       SET c.default_weight = Competency.defaultWeight,
       c.default_expiration = Competency.defaultExpiration,
       c.label = Competency.label
+      MERGE (c)-[:HAS_PRIMARY_DOMAIN]->(d)
+      MERGE (d)-[:PRIMARY_DOMAIN_OF]->(c)
       return count(c), "Competency Details"
 `);
-  // Todo: Decide if Domain is Necessary
-  /*  MERGE (d2:Domain {id: Competency.domainId })
-                                                  MERGE (c)-[:HAS_PRIMARY_DOMAIN]->(d2)
-                                                  MERGE (d2)-[:PRIMARY_DOMAIN_OF]->(c)
-                                                  */
 
   // Import Plan and Connect Plan to Domain
   q.push(cypher`

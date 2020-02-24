@@ -45,6 +45,11 @@ const NavBar = local => {
               Visualize Plan {checkLoc(local, "graph")}
             </a>
           </li>
+          <li className="nav-item">
+            <a className="nav-link" href="./edComp">
+              Edit Competencies {checkLoc(local, "edComp")}
+            </a>
+          </li>
         </ul>
       </div>
     </nav>

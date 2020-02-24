@@ -7,9 +7,7 @@ const neo4j = require("neo4j-driver").v1;
 export class Graph extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      graph: null
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -24,7 +22,8 @@ export class Graph extends Component {
 
     const session = driver.session();
     const start = new Date();
-    const planId = "1";
+    const planId = this.props.planId || "0";
+    // TODO: Un-hardcode the planID
     session
       .run(
         `

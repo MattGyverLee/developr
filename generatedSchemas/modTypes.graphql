@@ -4,11 +4,8 @@ type PlanRoot {
   label: String!
   label_fr: String
   plan_class: String!
-  has_primary_domain: [Domain]
-    @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
-  HAS_PRIMARY_DOMAIN_rel: [HAS_PRIMARY_DOMAIN]
-  has_category: [CompetencyCategory]
-    @relation(name: "HAS_CATEGORY", direction: "OUT")
+   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
+   has_category: [CompetencyCategory] @relation(name: "HAS_CATEGORY", direction: "OUT")
   HAS_CATEGORY_rel: [HAS_CATEGORY]
   competencycategorys: [CompetencyCategory]
     @relation(name: "IS_CATEGORY_OF", direction: "IN")
@@ -22,7 +19,9 @@ type Competency {
   label: String!
   parent_id: String!
   smartsheet_id: String!
-  is_in_group: [CompetencyGroup] @relation(name: "IS_IN_GROUP", direction: "OUT")
+   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
+   is_in_group: [CompetencyCategory] @relation(name: "IS_IN_GROUP", direction: "OUT")
+   IS_IN_GROUP_rel: [IS_IN_GROUP]
 # Start Custom
   target_competency: [TargetCompetency]
     @cypher(
@@ -93,6 +92,7 @@ type Competency {
   competencygroups: [CompetencyGroup]
     @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
   progresss: [Progress] @relation(name: "COMPETENCY_PROGRESS", direction: "IN")
+   domains: [Domain] @relation(name: "PRIMARY_DOMAIN_OF", direction: "IN")
 }
 
 type CompetencyCategory {
@@ -144,7 +144,6 @@ type CompetencyGroup {
   level: String!
   parent_id: String!
   smartsheet_id: String!
-   is_in_group: [CompetencyGroup] @relation(name: "IS_IN_GROUP", direction: "OUT")
   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
    group_has_competencies_of: [Competency] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
   GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]
@@ -344,14 +343,10 @@ type Domain {
   id: String!
   label: String!
   label_fr: String!
-  planroots: [PlanRoot] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "IN")
+   primary_domain_of: [Competency] @relation(name: "PRIMARY_DOMAIN_OF", direction: "OUT")
+   PRIMARY_DOMAIN_OF_rel: [PRIMARY_DOMAIN_OF]
 }
 
-type HAS_PRIMARY_DOMAIN @relation(name: "HAS_PRIMARY_DOMAIN") {
-  from: PlanRoot!
-  to: Domain!
-  startDate: String!
-}
 
 type HAS_CATEGORY @relation(name: "HAS_CATEGORY") {
   from: PlanRoot!
@@ -369,6 +364,13 @@ type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
   startDate: String!
 }
 
+type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
+  from: Competency!
+  to: CompetencyCategory!
+  order: String!
+  planId: String!
+  startDate: String!
+}
 
 
 type CATEGORY_HAS_COMPETENCIES_OF
@@ -461,3 +463,11 @@ type COMPETENCY_PROGRESS @relation(name: "COMPETENCY_PROGRESS") {
   to: Competency!
   userId: String!
 }
+
+type PRIMARY_DOMAIN_OF @relation(name: "PRIMARY_DOMAIN_OF") {
+  from: Domain!
+  to: Competency!
+  startDate: String!
+}
+
+

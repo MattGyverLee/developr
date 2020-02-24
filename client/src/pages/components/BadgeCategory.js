@@ -55,11 +55,42 @@ const displayTarget = (category, progresses, inTarget) => {
     });
 
     if (inTarget > 0) {
+      if (acc >= inTarget) {
+        const randnum = Math.floor(Math.random() * 14) + 1;
+        const imagePath = "./images/badges/badge" + randnum.toString() + ".jpg";
+
+        return (
+          <Fragment>
+            <img
+              className="float-right mr-5 mt-2"
+              width="100px"
+              src={imagePath}
+            />
+            <br />
+            <big>
+              {acc} out of {inTarget} points,{" "}
+              <span style={{ color: "#009900" }}>
+                {Math.round((acc / inTarget) * 100)}% Completion
+              </span>
+            </big>
+          </Fragment>
+        );
+      }
+
       return (
-        <big>
-          {acc} out of {inTarget}, {Math.round((acc / inTarget) * 100)}%
-          Completion
-        </big>
+        <Fragment>
+          <img
+            className="float-right mr-5 mt-2"
+            width="100px"
+            src="./images/badges/badge0.png"
+          />
+          <big>
+            {acc} out of {inTarget},{" "}
+            <span style={{ color: "#cc9900" }}>
+              {Math.round((acc / inTarget) * 100)}% Completion
+            </span>
+          </big>
+        </Fragment>
       );
     } else {
       return (
@@ -91,14 +122,16 @@ export default function BadgeCategory(props) {
     <Fragment>
       <div className="card border-success mb-3">
         <h4 className="ml-3">
-          {props.category.label} -
-          <small className="muted-text"> {props.category.id} </small>{" "}
+          {props.category.label} -{" "}
           {displayTarget(
             props.category,
             props.user[0].has_progress_root[0].child_progress,
             thisTarget
           )}
+          <br />
+          <small className="muted-text"> {props.category.id} </small>{" "}
         </h4>
+
         <BadgeSubDetails
           display={true}
           category={props.category}

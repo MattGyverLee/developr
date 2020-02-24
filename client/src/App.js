@@ -5,6 +5,7 @@ import VisPage from "./pages/visPage";
 import MyPlan from "./pages/myPlan";
 import MyMilestones from "./pages/myMilestones";
 import Home from "./pages/home";
+import EditCompetency from "./pages/editCompetency";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const client = new ApolloClient({ uri: "http://localhost:4001/graphql" });
@@ -31,6 +32,10 @@ function App() {
             <Route path="/graph">
               {/* This is the graph vis page. */}
               <VisPage />
+            </Route>
+            <Route path="/edcomp">
+              {/* This is the graph vis page. */}
+              <EditCompetency />
             </Route>
             <Route path="/">
               {/* This is the home page. */}
