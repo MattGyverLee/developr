@@ -20,7 +20,6 @@ const displayTarget = (category, progresses, inTarget) => {
           relevantProgress[0].currentLevel *
             parseFloat(competency.default_weight);
         // Todo: Handle non-default weight
-        //todo: Figure out why Group 6 has none and 3 is wrong
       }
     });
     // Get totals from child groups

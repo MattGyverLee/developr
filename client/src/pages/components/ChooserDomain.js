@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import ChooserCompetency from "./ChooserCompetency";
+import ChooserPlan from "./ChooserPlan";
 
 const GET_DOMAINS = gql`
   query listCompetencies {
@@ -27,34 +28,37 @@ function ChooserDomain(props) {
     }
   });
   // const [loading, setLoading] = React.useState(true);
-  if (props.child == "chooseComp") {
-    return (
-      <div>
-        {loading && !error && <p>Loading...</p>}
-        {error && !loading && <p>Error</p>}
-        {data && !loading && !error && (
-          <Fragment>
-            <div>Choose a Domain:</div>
-            <select
-              id="DomDrop"
-              name="progress"
-              value={selectedDomain}
-              onChange={e => setSelectedDomain(e.currentTarget.value)}>
-              <option key="-1" value="-1">
-                Not Selected
+  return (
+    <div>
+      {loading && !error && <p>Loading...</p>}
+      {error && !loading && <p>Error</p>}
+      {data && !loading && !error && (
+        <Fragment>
+          <div>Choose a Domain:</div>
+          <select
+            id="DomDrop"
+            name="progress"
+            value={selectedDomain}
+            onChange={e => setSelectedDomain(e.currentTarget.value)}>
+            <option key="-1" value="-1">
+              Not Selected
+            </option>
+            {data.Domain.map(dom => (
+              <option key={dom.id} value={dom.id}>
+                {dom.label}
               </option>
-              {data.Domain.map(dom => (
-                <option key={dom.id} value={dom.id}>
-                  {dom.label}
-                </option>
-              ))}
-            </select>
+            ))}
+          </select>
+          {selectedDomain >= 0 && props.subElement == "chooseComp" && (
             <ChooserCompetency domainId={selectedDomain} />
-          </Fragment>
-        )}
-      </div>
-    );
-  }
+          )}
+          {selectedDomain >= 0 && props.subElement == "choosePlan" && (
+            <ChooserPlan subElement="none" domainId={selectedDomain} />
+          )}
+        </Fragment>
+      )}
+    </div>
+  );
 }
 
 export default ChooserDomain;

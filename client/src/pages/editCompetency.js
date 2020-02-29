@@ -7,7 +7,7 @@ function EditCompetency() {
     <Fragment>
       {NavBar("editPlan")}
       <div className="mx-3">
-        <ChooserDomain type="compEdit" child="chooseComp" />
+        <ChooserDomain type="compEdit" subElement="chooseComp" />
       </div>
     </Fragment>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import ChooserDomain from "./ChooserDomain";
 
 const checkLoc = (local, ref) => {
   // console.log(local, ref);
@@ -51,6 +52,10 @@ const NavBar = local => {
             </a>
           </li>
         </ul>
+        <div className="float-right">
+          <span className="text-muted">Choose Plan: </span>
+          <ChooserDomain subElement="choosePlan" />
+        </div>
       </div>
     </nav>
   );

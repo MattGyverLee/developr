@@ -26,35 +26,38 @@ function ChooserPlan(props) {
       orderBy: orderBy + "_" + order */
     }
   });
-  // const [loading, setLoading] = React.useState(true);
-  if (props.child == "graph") {
-    return (
-      <div>
-        {loading && !error && <p>Loading...</p>}
-        {error && !loading && <p>Error</p>}
-        {data && !loading && !error && (
-          <Fragment>
-            <select
-              id="PlanDrop"
-              name="progress"
-              value={selectedPlan}
-              onChange={e => setSelectedPlan(e.currentTarget.value)}>
-              <option key="-1" value="-1">
-                Not Selected
+
+  return (
+    <div>
+      {loading && !error && <p>Loading...</p>}
+      {error && !loading && <p>Error</p>}
+      {data && !loading && !error && (
+        <Fragment>
+          <select
+            id="PlanDrop"
+            name="progress"
+            value={selectedPlan}
+            onChange={e => setSelectedPlan(e.currentTarget.value)}>
+            <option key="-1" value="-1">
+              Not Selected
+            </option>
+            {data.PlanRoot.map(plan => (
+              <option key={plan.id} value={plan.id}>
+                {plan.label}
               </option>
-              {data.PlanRoot.map(plan => (
-                <option key={plan.id} value={plan.id}>
-                  {plan.label}
-                </option>
-              ))}
-            </select>
-            {selectedPlan === "1-root" && <Graph planId="1" userId="1" />}
-            {selectedPlan === "0-root" && <Graph planId="0" userId="1" />}
-          </Fragment>
-        )}
-      </div>
-    );
-  } else return;
+            ))}
+          </select>
+          {props.subElement == "graph" && selectedPlan === "1-root" && (
+            <Graph planId="1" userId="1" />
+          )}
+          {props.subElement == "graph" && selectedPlan === "0-root" && (
+            <Graph planId="0" userId="1" />
+          )}
+          {<div>None</div>}
+        </Fragment>
+      )}
+    </div>
+  );
 }
 
 export default ChooserPlan;
