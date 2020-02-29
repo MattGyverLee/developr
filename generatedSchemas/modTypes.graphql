@@ -4,8 +4,10 @@ type PlanRoot {
   label: String!
   label_fr: String
   plan_class: String!
-   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
-   has_category: [CompetencyCategory] @relation(name: "HAS_CATEGORY", direction: "OUT")
+  has_primary_domain: [Domain]
+    @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
+  has_category: [CompetencyCategory]
+    @relation(name: "HAS_CATEGORY", direction: "OUT")
   HAS_CATEGORY_rel: [HAS_CATEGORY]
   competencycategorys: [CompetencyCategory]
     @relation(name: "IS_CATEGORY_OF", direction: "IN")
@@ -19,10 +21,12 @@ type Competency {
   label: String!
   parent_id: String!
   smartsheet_id: String!
-   has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
-   is_in_group: [CompetencyCategory] @relation(name: "IS_IN_GROUP", direction: "OUT")
-   IS_IN_GROUP_rel: [IS_IN_GROUP]
-# Start Custom
+  has_primary_domain: [Domain]
+    @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
+  is_in_group: [CompetencyCategory]
+    @relation(name: "IS_IN_GROUP", direction: "OUT")
+  IS_IN_GROUP_rel: [IS_IN_GROUP]
+  # Start Custom
   target_competency: [TargetCompetency]
     @cypher(
       statement: """
@@ -61,7 +65,7 @@ type Competency {
   lv2_activity: [Lv2Activities]
     @cypher(
       statement: """
-      MATCH (this)-[r:HAS_LV0_ACTIVITIES]->(l2:Lv0Activities)
+      MATCH (this)-[r:HAS_LV2_ACTIVITIES]->(l2:Lv2Activities)
       WHERE NOT EXISTS(r.to) RETURN l2 LIMIT 1
       """
     )
@@ -86,13 +90,13 @@ type Competency {
       WHERE NOT EXISTS(r.to) RETURN l5 LIMIT 1
       """
     )
-# End Custom
+  # End Custom
   competencycategorys: [CompetencyCategory]
     @relation(name: "CATEGORY_HAS_COMPETENCIES_OF", direction: "IN")
   competencygroups: [CompetencyGroup]
     @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
   progresss: [Progress] @relation(name: "COMPETENCY_PROGRESS", direction: "IN")
-   domains: [Domain] @relation(name: "PRIMARY_DOMAIN_OF", direction: "IN")
+  domains: [Domain] @relation(name: "PRIMARY_DOMAIN_OF", direction: "IN")
 }
 
 type CompetencyCategory {
@@ -113,7 +117,7 @@ type CompetencyCategory {
     @relation(name: "TARGET_VALUE_IS", direction: "OUT")
   TARGET_VALUE_IS_rel: [TARGET_VALUE_IS]
   planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
-# Begin Custom
+  # Begin Custom
   childComps: [Competency]
     @cypher(
       statement: """
@@ -134,7 +138,7 @@ type CompetencyCategory {
       Return c3 as ancestors
       """
     )
-# End Custom
+  # End Custom
 }
 
 type CompetencyGroup {
@@ -145,10 +149,11 @@ type CompetencyGroup {
   parent_id: String!
   smartsheet_id: String!
   has_group: [CompetencyGroup] @relation(name: "HAS_GROUP", direction: "OUT")
-   group_has_competencies_of: [Competency] @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
+  group_has_competencies_of: [Competency]
+    @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "OUT")
   GROUP_HAS_COMPETENCIES_OF_rel: [GROUP_HAS_COMPETENCIES_OF]
-#Begin Custom  
-childComps: [Competency]
+  #Begin Custom
+  childComps: [Competency]
     @cypher(
       statement: """
       MATCH (this)-[:GROUP_HAS_COMPETENCIES_OF]->(comp:Competency)
@@ -165,7 +170,7 @@ childComps: [Competency]
       Return c2 as ancestors
       """
     )
-#End Custom
+  #End Custom
 }
 
 type TargetCompetency {
@@ -316,8 +321,8 @@ type User {
 type ProgressRoot {
   _id: Long!
   userId: String!
-   child_progress: [Progress] @relation(name: "CHILD_PROGRESS", direction: "OUT")
-   CHILD_PROGRESS_rel: [CHILD_PROGRESS]
+  child_progress: [Progress] @relation(name: "CHILD_PROGRESS", direction: "OUT")
+  CHILD_PROGRESS_rel: [CHILD_PROGRESS]
   users: [User] @relation(name: "HAS_PROGRESS_ROOT", direction: "IN")
 }
 
@@ -325,9 +330,11 @@ type Progress {
   _id: Long!
   competency_ref: String!
   currentLevel: Int!
-   competency_progress: [Competency] @relation(name: "COMPETENCY_PROGRESS", direction: "OUT")
-   COMPETENCY_PROGRESS_rel: [COMPETENCY_PROGRESS]
-   progressroots: [ProgressRoot] @relation(name: "CHILD_PROGRESS", direction: "IN")
+  competency_progress: [Competency]
+    @relation(name: "COMPETENCY_PROGRESS", direction: "OUT")
+  COMPETENCY_PROGRESS_rel: [COMPETENCY_PROGRESS]
+  progressroots: [ProgressRoot]
+    @relation(name: "CHILD_PROGRESS", direction: "IN")
 }
 
 type Milestone {
@@ -343,10 +350,10 @@ type Domain {
   id: String!
   label: String!
   label_fr: String!
-   primary_domain_of: [Competency] @relation(name: "PRIMARY_DOMAIN_OF", direction: "OUT")
-   PRIMARY_DOMAIN_OF_rel: [PRIMARY_DOMAIN_OF]
+  primary_domain_of: [Competency]
+    @relation(name: "PRIMARY_DOMAIN_OF", direction: "OUT")
+  PRIMARY_DOMAIN_OF_rel: [PRIMARY_DOMAIN_OF]
 }
-
 
 type HAS_CATEGORY @relation(name: "HAS_CATEGORY") {
   from: PlanRoot!
@@ -371,7 +378,6 @@ type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
   planId: String!
   startDate: String!
 }
-
 
 type CATEGORY_HAS_COMPETENCIES_OF
   @relation(name: "CATEGORY_HAS_COMPETENCIES_OF") {
@@ -444,7 +450,6 @@ type HAS_LV5_ACTIVITIES @relation(name: "HAS_LV5_ACTIVITIES") {
   startDate: String!
 }
 
-
 type TARGET_VALUE_IS @relation(name: "TARGET_VALUE_IS") {
   from: CompetencyCategory!
   to: Milestone!
@@ -469,5 +474,3 @@ type PRIMARY_DOMAIN_OF @relation(name: "PRIMARY_DOMAIN_OF") {
   to: Competency!
   startDate: String!
 }
-
-

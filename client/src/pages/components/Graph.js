@@ -64,7 +64,6 @@ export class Graph extends Component {
     if (this.state.graph) {
       return (
         <div>
-          {/* <h2>Data</h2> */}
           <ForceGraph3D
             graphData={this.state.graph}
             nodeAutoColorBy="label"

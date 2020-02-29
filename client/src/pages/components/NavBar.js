@@ -47,7 +47,7 @@ const NavBar = local => {
           </li>
           <li className="nav-item">
             <a className="nav-link" href="./edComp">
-              Edit Competencies {checkLoc(local, "edComp")}
+              Competencies {checkLoc(local, "edComp")}
             </a>
           </li>
         </ul>

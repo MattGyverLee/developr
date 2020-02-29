@@ -9,7 +9,7 @@ export default function BadgeGroup(props) {
       <div className="card border-warning mb-1 mx-3">
         <h4 className="ml-3">
           {props.group.label} -
-          <small className="muted-text"> {props.group.id}</small>
+          <small className="text-muted"> {props.group.id}</small>
         </h4>
         {props.group.group_has_competencies_of.map(competency => (
           <BadgeCompetency

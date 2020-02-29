@@ -129,7 +129,7 @@ export default function BadgeCategory(props) {
             thisTarget
           )}
           <br />
-          <small className="muted-text"> {props.category.id} </small>{" "}
+          <small className="text-muted"> {props.category.id} </small>{" "}
         </h4>
 
         <BadgeSubDetails

@@ -1,12 +1,11 @@
-import React, { setState, Component, Fragment } from "react";
-import { graphql } from "react-apollo";
+import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import LoadEditCompetency from "./LoadEditCompetency";
 
-const GET_COMPETENCIES = gql`
+const GET_COMPETENCIES = domainId => gql`
   query listDomainCompetencies {
-    Domain(id: "1") {
+    Domain(id: "${domainId}") {
       primary_domain_of {
         id
         label
@@ -16,21 +15,22 @@ const GET_COMPETENCIES = gql`
 `;
 
 function ChooserCompetency(props) {
-  const [order, setOrder] = React.useState("asc");
+  /*   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   const [selectedCompetency, setSelectedCompetency] = React.useState("-1");
+  const domainId = props.domainId || -1;
 
-  const { loading, data, error } = useQuery(GET_COMPETENCIES, {
+  const { loading, data, error } = useQuery(GET_COMPETENCIES(domainId), {
     variables: {
-      first: rowsPerPage,
+      /*       first: rowsPerPage,
       offset: rowsPerPage * page,
-      orderBy: orderBy + "_" + order
+      orderBy: orderBy + "_" + order */
     }
   });
   // const [loading, setLoading] = React.useState(true);
-  if (parseInt(props.domain) >= 0)
+  if (parseInt(domainId) >= 0)
     return (
       <div>
         {loading && !error && <p>Loading...</p>}
@@ -41,7 +41,6 @@ function ChooserCompetency(props) {
             <select
               id="CompDrop"
               name="progress"
-              defaultValue="-1"
               value={selectedCompetency}
               onChange={e => setSelectedCompetency(e.currentTarget.value)}>
               <option key="-1" value="-1">
@@ -54,10 +53,12 @@ function ChooserCompetency(props) {
                       {comp.label}
                     </option>
                   );
-                }
+                } else return;
               })}
             </select>
-            <LoadEditCompetency competencyId={selectedCompetency} />
+            {parseInt(domainId) >= 0 && (
+              <LoadEditCompetency competencyId={selectedCompetency} />
+            )}
           </Fragment>
         )}
       </div>

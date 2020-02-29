@@ -26,7 +26,7 @@ export default function BadgeCompetency(props) {
       <div className="card border-warning mb-3">
         <h4 className="ml-3 py-0">
           {props.competency.label} -
-          <small className="muted-text"> {props.competency.id} </small>
+          <small className="text-muted"> {props.competency.id} </small>
           {displayScore(props.competency, props.user)}
         </h4>
       </div>
