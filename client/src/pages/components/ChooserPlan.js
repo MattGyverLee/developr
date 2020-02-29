@@ -35,7 +35,6 @@ function ChooserPlan(props) {
       {error && !loading && <p>Error</p>}
       {data && !loading && !error && (
         <Fragment>
-          <h1>Data Loaded</h1>
           <select
             id="PlanDrop"
             name="progress"
@@ -52,8 +51,8 @@ function ChooserPlan(props) {
             ))}
           </select>
           <div>{console.log(data)}</div>
-          {selectedPlan === "1-root" && <Graph planID="1" userId="1" />}
-          {selectedPlan === "0-root" && <Graph planID="0" userId="1" />}
+          {selectedPlan === "1-root" && <Graph planId="1" userId="1" />}
+          {selectedPlan === "0-root" && <Graph planId="0" userId="1" />}
         </Fragment>
       )}
     </div>

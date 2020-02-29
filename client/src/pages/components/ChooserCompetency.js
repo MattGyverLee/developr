@@ -38,7 +38,6 @@ function ChooserCompetency(props) {
         {data && !loading && !error && (
           <Fragment>
             <div>Choose a competency below:</div>
-            {console.log(data)}
             <select
               id="CompDrop"
               name="progress"

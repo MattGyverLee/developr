@@ -35,7 +35,6 @@ function ChooserDomain(props) {
       {error && !loading && <p>Error</p>}
       {data && !loading && !error && (
         <Fragment>
-          <h1>Data Loaded</h1>
           <select
             id="DomDrop"
             name="progress"
@@ -51,7 +50,6 @@ function ChooserDomain(props) {
               </option>
             ))}
           </select>
-          <div>{console.log(data)}</div>
           <ChooserCompetency domain={selectedDomain} />
         </Fragment>
       )}

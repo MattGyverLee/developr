@@ -22,19 +22,21 @@ export class Graph extends Component {
 
     const session = driver.session();
     const start = new Date();
-    const planId = this.props.planId || "0";
+    const userId = this.props.userId || "1";
+    const planId = this.props.planId || "1";
     // TODO: Un-hardcode the planID
     session
       .run(
         `
         MATCH p=(s)-[r:IS_IN_GROUP {planId: "${planId}"}]->(t)
-        RETURN { id: id(s), label:head(labels(s)), caption:s.label, level:s.currentLevel } as source, { id: id(t), label:head(labels(t)), caption:t.label, level:t.currentLevel } as target
+        RETURN { id: id(s), label:head(labels(s)), caption:s.label, level:s.currentLevel } as source, { id: id(t), label:head(labels(t)), caption:t.label } as target
         UNION
-        MATCH p=(s)-[:COMPETENCY_PROGRESS]->(t)
-        RETURN { id: id(s), label:head(labels(s)), caption:s.label, level:s.currentLevel } as source, { id: id(t), label:head(labels(t)), caption:t.label, level:t.currentLevel } as target 
+        MATCH p=(s:Progress)-[:COMPETENCY_PROGRESS {userId: "${userId}"} ]->(t:Competency)-[r:IS_IN_GROUP {planId: "${planId}"}]->(u)
+        WHERE exists(t.label) and NOT t.label = ""
+        RETURN { id: id(s), label:head(labels(s)), caption:s.label, level:s.currentLevel } as source, { id: id(t), label:head(labels(t)), caption:t.label } as target 
         UNION
-        MATCH p=(s)-[r:HAS_CATEGORY {planId: "${planId}"}]->(t)
-        RETURN { id: id(s), label:head(labels(s)), caption:s.label, level:s.currentLevel } as source, { id: id(t), label:head(labels(t)), caption:t.label, level:t.currentLevel } as target
+        MATCH p=(s:PlanRoot)-[r:HAS_CATEGORY {planId: "${planId}"}]->(t:CompetencyCategory)
+        RETURN { id: id(s), label:head(labels(s)), caption:s.label} as source, { id: id(t), label:head(labels(t)), caption:t.label } as target
         LIMIT 2500
       `
       )
@@ -62,14 +64,23 @@ export class Graph extends Component {
     if (this.state.graph) {
       return (
         <div>
-          <h2>Data</h2>
+          {/* <h2>Data</h2> */}
           <ForceGraph3D
             graphData={this.state.graph}
             nodeAutoColorBy="label"
+            onNodeDragEnd={node => {
+              node.fx = node.x;
+              node.fy = node.y;
+              node.fz = node.z;
+            }}
+            linkColor={link => (link.color ? "red" : "green")}
+            linkOpacity={1}
             nodeThreeObject={node => {
+              if (parseInt(node.level) > 0) node.caption = node.level;
               const sprite = new SpriteText(node.caption);
               sprite.color = node.color;
               sprite.textHeight = 8;
+              sprite.textWeight = 800;
               return sprite;
             }}
           />
