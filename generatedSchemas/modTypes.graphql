@@ -353,6 +353,13 @@ type Domain {
   primary_domain_of: [Competency]
     @relation(name: "PRIMARY_DOMAIN_OF", direction: "OUT")
   PRIMARY_DOMAIN_OF_rel: [PRIMARY_DOMAIN_OF]
+  childPlans: [PlanRoot]
+    @cypher(
+      statement: """
+      MATCH (p:PlanRoot)-[:HAS_PRIMARY_DOMAIN]->(this)
+      return p
+      """
+    )
 }
 
 type HAS_CATEGORY @relation(name: "HAS_CATEGORY") {

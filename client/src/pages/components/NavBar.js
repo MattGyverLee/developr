@@ -53,7 +53,6 @@ const NavBar = local => {
           </li>
         </ul>
         <div className="float-right">
-          <span className="text-muted">Choose Plan: </span>
           <ChooserDomain subElement="choosePlan" />
         </div>
       </div>

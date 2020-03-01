@@ -100,7 +100,7 @@ const Milestone = props => {
               </Fragment>
             );
           }
-          if (data) {
+          if (data.PlanRoot && data.PlanRoot.length > 0) {
             return (
               <Fragment>
                 <div className="container">
@@ -126,7 +126,10 @@ const Milestone = props => {
                 </div>
               </Fragment>
             );
-          }
+          } else
+            return (
+              <div>Please choose a Domain, Plan, and Milestone above.</div>
+            );
         }}
       </Query>
     </div>

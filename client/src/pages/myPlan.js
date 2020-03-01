@@ -1,13 +1,18 @@
 import Plan from "./components/Plan";
-import React, { Fragment } from "react";
-import NavBar from "./components/NavBar";
+import { SelectionContext } from "./components/SelectionContext";
+import React, { Fragment, useContext } from "react";
 
 function MyPlan() {
+  const { state } = useContext(SelectionContext);
   return (
     <Fragment>
-      {NavBar("myPlan")}
       <div className="mx-3">
-        <Plan userId="1" planRoot="1-root" planId="1" />
+        {state.planId !== "-1" && (
+          <Plan userId="1" planRoot={state.planId} planId="1" />
+        )}
+        {state.planId === "-1" && (
+          <div>Please choose a domain and plan from the options above.</div>
+        )}
       </div>
     </Fragment>
   );

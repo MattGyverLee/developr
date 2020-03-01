@@ -1,25 +1,22 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, setState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import Graph from "./Graph";
 
-const GET_PLANS = gql`
-  query listPlans {
-    PlanRoot {
-      id
-      label
-    }
-  }
-`;
+import { SelectionContext } from "./SelectionContext";
 
 function ChooserPlan(props) {
   /*   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
-  const [selectedPlan, setSelectedPlan] = React.useState("-1");
-
-  const { loading, data, error } = useQuery(GET_PLANS, {
+  const { state, setLocalState } = useContext(SelectionContext);
+  /* const userId = selections.userId; */
+  const GET_PLANS = domainId => gql`
+  query listPlans  {
+    Domain(id: "${domainId}") {childPlans {id label}}
+  }
+`;
+  const { loading, data, error } = useQuery(GET_PLANS(state.domainId || "-1"), {
     variables: {
       /*       first: rowsPerPage,
       offset: rowsPerPage * page,
@@ -27,6 +24,14 @@ function ChooserPlan(props) {
     }
   });
 
+  const updateSelectedPlan = plan => {
+    localStorage.setItem("SelectedPlan", plan);
+    setLocalState({
+      ...state,
+      planId: plan
+    });
+  };
+  if (!state.planId) updateSelectedPlan("-1");
   return (
     <div>
       {loading && !error && <p>Loading...</p>}
@@ -36,24 +41,22 @@ function ChooserPlan(props) {
           <select
             id="PlanDrop"
             name="progress"
-            value={selectedPlan}
-            onChange={e => setSelectedPlan(e.currentTarget.value)}>
-            <option key="-1" value="-1">
+            value={state.planId}
+            onChange={e => updateSelectedPlan(e.currentTarget.value)}>
+            {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}
+            <option key="-1" Value="-1">
               Not Selected
             </option>
-            {data.PlanRoot.map(plan => (
-              <option key={plan.id} value={plan.id}>
-                {plan.label}
-              </option>
-            ))}
+            {data.Domain &&
+              data.Domain.length > 0 &&
+              data.Domain[0].childPlans &&
+              data.Domain[0].childPlans.length > 0 &&
+              data.Domain[0].childPlans.map(plan => (
+                <option key={plan.id} value={plan.id}>
+                  {plan.label}
+                </option>
+              ))}
           </select>
-          {props.subElement == "graph" && selectedPlan === "1-root" && (
-            <Graph planId="1" userId="1" />
-          )}
-          {props.subElement == "graph" && selectedPlan === "0-root" && (
-            <Graph planId="0" userId="1" />
-          )}
-          {<div>None</div>}
         </Fragment>
       )}
     </div>
