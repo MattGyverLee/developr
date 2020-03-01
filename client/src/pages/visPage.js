@@ -1,8 +1,8 @@
-import React, { Fragment, useContext, setState } from "react";
+import React, { Fragment, useContext } from "react";
 import { SelectionContext } from "./components/SelectionContext";
 import Graph from "./components/Graph";
 function VisPage() {
-  const { state, setState } = useContext(SelectionContext);
+  const { state } = useContext(SelectionContext);
   return (
     <Fragment>
       <div className="mx-3">

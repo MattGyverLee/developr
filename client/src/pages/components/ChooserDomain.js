@@ -1,4 +1,4 @@
-import React, { Fragment, setState, useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import ChooserCompetency from "./ChooserCompetency";
@@ -47,29 +47,30 @@ function ChooserDomain(props) {
       {error && !loading && <p>Error</p>}
       {data && !loading && !error && (
         <Fragment>
-          <div>Choose Domain & Plan:</div>
-          <select
-            id="DomDrop"
-            name="progress"
-            value={state.domainId}
-            onChange={e => updateSelectedDomain(e.currentTarget.value)}>
-            <option key="-1" value="-1">
-              Not Selected
-            </option>
-            {data.Domain.map(dom => (
-              <option key={dom.id} value={dom.id}>
-                {dom.label}
+          <div className="gravity-right">
+            <select
+              id="DomDrop"
+              name="progress"
+              value={state.domainId}
+              onChange={e => updateSelectedDomain(e.currentTarget.value)}>
+              <option key="-1" value="-1">
+                Not Selected
               </option>
-            ))}
-          </select>
-          {parseInt(state.domainId) >= 0 &&
-            props.subElement == "chooseComp" && (
-              <ChooserCompetency domainId={state.domainId} />
-            )}
-          {parseInt(state.domainId) >= 0 &&
-            props.subElement == "choosePlan" && (
-              <ChooserPlan subElement="none" domainId={state.domainId} />
-            )}
+              {data.Domain.map(dom => (
+                <option key={dom.id} value={dom.id}>
+                  {dom.label}
+                </option>
+              ))}
+            </select>
+            {parseInt(state.domainId) >= 0 &&
+              props.subElement === "chooseComp" && (
+                <ChooserCompetency domainId={state.domainId} />
+              )}
+            {parseInt(state.domainId) >= 0 &&
+              props.subElement === "choosePlan" && (
+                <ChooserPlan subElement="none" domainId={state.domainId} />
+              )}
+          </div>
         </Fragment>
       )}
     </div>

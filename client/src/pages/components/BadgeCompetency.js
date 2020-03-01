@@ -6,7 +6,7 @@ const displayScore = (competency, progresses) => {
       progress => progress.competency_progress[0].id === competency.id
     );
     if (relevantProgress.length > 0) {
-      console.log(relevantProgress);
+      /*       console.log(relevantProgress); */
       return (
         <big>
           {relevantProgress[0].currentLevel *

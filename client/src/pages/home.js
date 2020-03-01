@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import NavBar from "./components/NavBar";
 
 function Home() {
   return (

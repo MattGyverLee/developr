@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import VisPage from "./pages/visPage";
@@ -15,7 +15,8 @@ function App() {
   const [state, setLocalState] = useState({
     domainId: localStorage.getItem("SelectedDomain") || "-1",
     userId: "1",
-    planId: localStorage.getItem("SelectedPlan") || "-1"
+    planId: localStorage.getItem("SelectedPlan") || "-1",
+    milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
   });
 
   return (
@@ -26,15 +27,15 @@ function App() {
         <NavBar />
         <Router>
           {/* React-Router makes a single-page react app modular. */}
-        <div>
-          {/* A <Switch> looks through its children <Route>s and
+          <div>
+            {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/myMilestones">
-              {/* This Shows a progress table for a specific Milestone */}
-              <MyMilestones />
-            </Route>
-            <Route path="/myPlan">
+            <Switch>
+              <Route path="/myMilestones">
+                {/* This Shows a progress table for a specific Milestone */}
+                <MyMilestones />
+              </Route>
+              <Route path="/myPlan">
                 {/* This is the main growth plan workspace. */}
                 <MyPlan />
               </Route>

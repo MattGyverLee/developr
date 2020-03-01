@@ -3,36 +3,43 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
 import { SelectionContext } from "./SelectionContext";
-import ChooserMilestone from "./ChooserMilestone";
 
-function ChooserPlan(props) {
+const ChooserMilestone = props => {
   /*   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   const { state, setLocalState } = useContext(SelectionContext);
   /* const userId = selections.userId; */
-  const GET_PLANS = domainId => gql`
-  query listPlans  {
-    Domain(id: "${domainId}") {childPlans {id label}}
+  const GET_MILESTONES = planId => gql`
+  query listMilestones {
+    PlanRoot(id:"${planId}") {
+      has_milestone {
+        ms
+        short_name {label}
+      }
+    }
   }
 `;
-  const { loading, data, error } = useQuery(GET_PLANS(state.domainId || "-1"), {
-    variables: {
-      /*       first: rowsPerPage,
+  const { loading, data, error } = useQuery(
+    GET_MILESTONES(state.planId || "-1"),
+    {
+      variables: {
+        /*       first: rowsPerPage,
       offset: rowsPerPage * page,
       orderBy: orderBy + "_" + order */
+      }
     }
-  });
+  );
 
-  const updateSelectedPlan = plan => {
-    localStorage.setItem("SelectedPlan", plan);
+  const updateSelectedMilestone = milestone => {
+    localStorage.setItem("SelectedMilestone", milestone);
     setLocalState({
       ...state,
-      planId: plan
+      milestoneId: milestone
     });
   };
-  if (!state.planId) updateSelectedPlan("-1");
+
   return (
     <div>
       {loading && !error && <p>Loading...</p>}
@@ -40,29 +47,27 @@ function ChooserPlan(props) {
       {data && !loading && !error && (
         <Fragment>
           <select
-            id="PlanDrop"
-            name="progress"
-            value={state.planId}
-            onChange={e => updateSelectedPlan(e.currentTarget.value)}>
+            id="MilestoneDrop"
+            name="milestones"
+            defaultValue={state.milestoneId}
+            onChange={e => updateSelectedMilestone(e.currentTarget.value)}>
             {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}
             <option key="-1" value="-1">
               Not Selected
             </option>
-            {data.Domain &&
-              data.Domain.length > 0 &&
-              data.Domain[0].childPlans &&
-              data.Domain[0].childPlans.length > 0 &&
-              data.Domain[0].childPlans.map(plan => (
-                <option key={plan.id} value={plan.id}>
-                  {plan.label}
+            {data.PlanRoot &&
+              data.PlanRoot.length > 0 &&
+              data.PlanRoot[0].has_milestone.length > 0 &&
+              data.PlanRoot[0].has_milestone.map(milestone => (
+                <option key={milestone.ms} value={milestone.ms}>
+                  {milestone.short_name[0].label}
                 </option>
               ))}
           </select>
-          {state.planId !== "-1" && <ChooserMilestone />}
         </Fragment>
       )}
     </div>
   );
-}
+};
 
-export default ChooserPlan;
+export default ChooserMilestone;

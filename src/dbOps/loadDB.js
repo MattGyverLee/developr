@@ -481,16 +481,17 @@ for (let index = 0; index < 2; index++) {
       MATCH (cc:CompetencyCategory {id: "LT-2882607985780612"})
       MATCH (prof:CompetencyCategory {id: "LT-4852932822755204"})
       MATCH (ed:CompetencyCategory {id: "LT-5978832729597828"})
+      MATCH (pr:PlanRoot {id: "1-root"})
 
-      MERGE (m1:Milestone {planId: "1", ms: "LTSpec1"})
+      MERGE (m1:Milestone {ms: "LTSpec1"})<-[:HAS_MILESTONE]-(pr)
       MERGE (m1)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Specialist (Level 1)"})
-      MERGE (m2:Milestone {planId: "1", ms: "LTSpec2"})
+      MERGE (m2:Milestone {ms: "LTSpec2"})<-[:HAS_MILESTONE]-(pr)
       MERGE (m2)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Specialist (Level 2)"})
-      MERGE (m3:Milestone {planId: "1", ms: "LTCons1"})
+      MERGE (m3:Milestone {ms: "LTCons1"})<-[:HAS_MILESTONE]-(pr)
       MERGE (m3)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Consultant (Level 1)"})
-      MERGE (m4:Milestone {planId: "1", ms: "LTCons2"})
-      MERGE (m1)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Consultant (Level 3)"})
-      MERGE (m5:Milestone {planId: "1", ms: "LTCons3"})
+      MERGE (m4:Milestone {ms: "LTCons2"})<-[:HAS_MILESTONE]-(pr)
+      MERGE (m4)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Consultant (Level 2)"})
+      MERGE (m5:Milestone {ms: "LTCons3"})<-[:HAS_MILESTONE]-(pr)
       MERGE (m5)-[:HAS_SHORT_NAME]-(:ShortName {label: "Senior Consultant"})
 
       // Core Tech

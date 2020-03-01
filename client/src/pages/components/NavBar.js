@@ -9,9 +9,11 @@ const checkLoc = (local, ref) => {
 };
 const NavBar = local => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a className="navbar-brand" href="#">
-        Developer
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary py-1">
+      <a className="navbar-brand text-center">
+        <span className="navbar-brand logo my-n1">level.up</span>
+        <br />
+        <div className="mb-n1 mt-n2">Growth Tracking</div>
       </a>
       <button
         className="navbar-toggler"

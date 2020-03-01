@@ -7,6 +7,7 @@ type PlanRoot {
    has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
    has_category: [CompetencyCategory] @relation(name: "HAS_CATEGORY", direction: "OUT")
    HAS_CATEGORY_rel: [HAS_CATEGORY]
+   has_milestone: [Milestone] @relation(name: "HAS_MILESTONE", direction: "OUT")
    competencycategorys: [CompetencyCategory] @relation(name: "IS_CATEGORY_OF", direction: "IN")
 }
 
@@ -19,8 +20,6 @@ type Competency {
    parent_id: String!
    smartsheet_id: String!
    has_primary_domain: [Domain] @relation(name: "HAS_PRIMARY_DOMAIN", direction: "OUT")
-   is_in_group: [CompetencyCategory] @relation(name: "IS_IN_GROUP", direction: "OUT")
-   IS_IN_GROUP_rel: [IS_IN_GROUP]
    has_target_competency: [TargetCompetency] @relation(name: "HAS_TARGET_COMPETENCY", direction: "OUT")
    HAS_TARGET_COMPETENCY_rel: [HAS_TARGET_COMPETENCY]
    has_assessment_criteria: [AssessmentCriteria] @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "OUT")
@@ -61,7 +60,6 @@ type CompetencyCategory {
    target_value_is: [Milestone] @relation(name: "TARGET_VALUE_IS", direction: "OUT")
    TARGET_VALUE_IS_rel: [TARGET_VALUE_IS]
    planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
-   competencys: [Competency] @relation(name: "IS_IN_GROUP", direction: "IN")
 }
 
 type CompetencyGroup {
@@ -232,8 +230,8 @@ type Progress {
 type Milestone {
    _id: Long!
    ms: String!
-   planId: String!
    competencycategorys: [CompetencyCategory] @relation(name: "TARGET_VALUE_IS", direction: "IN")
+   planroots: [PlanRoot] @relation(name: "HAS_MILESTONE", direction: "IN")
 }
 
 type Domain {
@@ -262,13 +260,6 @@ type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
   startDate: String!
 }
 
-type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
-  from: Competency!
-  to: CompetencyCategory!
-  order: String!
-  planId: String!
-  startDate: String!
-}
 
 
 type CATEGORY_HAS_COMPETENCIES_OF @relation(name: "CATEGORY_HAS_COMPETENCIES_OF") {
@@ -366,5 +357,6 @@ type PRIMARY_DOMAIN_OF @relation(name: "PRIMARY_DOMAIN_OF") {
   to: Competency!
   startDate: String!
 }
+
 
 

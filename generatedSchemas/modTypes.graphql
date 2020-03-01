@@ -9,7 +9,8 @@ type PlanRoot {
   has_category: [CompetencyCategory]
     @relation(name: "HAS_CATEGORY", direction: "OUT")
   HAS_CATEGORY_rel: [HAS_CATEGORY]
-  competencycategorys: [CompetencyCategory]
+  has_milestone: [Milestone] @relation(name: "HAS_MILESTONE", direction: "OUT")
+  competencycategories: [CompetencyCategory]
     @relation(name: "IS_CATEGORY_OF", direction: "IN")
 }
 
@@ -183,7 +184,7 @@ type TargetCompetency {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_TARGET_COMPETENCY", direction: "IN")
 }
@@ -198,7 +199,7 @@ type AssessmentCriteria {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_ASSESSMENT_CRITERIA", direction: "IN")
 }
@@ -207,13 +208,13 @@ type ShortName {
   _id: Long!
   id: String!
   label: String!
-  label_created: String!
+  label_created: String
   label_es_created: String
   label_es_modified: String
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency] @relation(name: "HAS_SHORT_NAME", direction: "IN")
 }
 
@@ -227,7 +228,7 @@ type Lv0Activities {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_LV0_ACTIVITIES", direction: "IN")
 }
@@ -242,7 +243,7 @@ type Lv1Activities {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_LV1_ACTIVITIES", direction: "IN")
 }
@@ -257,7 +258,7 @@ type Lv2Activities {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_LV2_ACTIVITIES", direction: "IN")
 }
@@ -272,7 +273,7 @@ type Lv3Activities {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_LV3_ACTIVITIES", direction: "IN")
 }
@@ -287,7 +288,7 @@ type Lv4Activities {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_LV4_ACTIVITIES", direction: "IN")
 }
@@ -302,7 +303,7 @@ type Lv5Activities {
   label_fr: String
   label_fr_created: String
   label_fr_modified: String
-  label_modified: String!
+  label_modified: String
   competencys: [Competency]
     @relation(name: "HAS_LV5_ACTIVITIES", direction: "IN")
 }
@@ -340,9 +341,15 @@ type Progress {
 type Milestone {
   _id: Long!
   ms: String!
-  planId: String!
   competencycategories: [CompetencyCategory]
     @relation(name: "TARGET_VALUE_IS", direction: "IN")
+  short_name: [ShortName]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_SHORT_NAME]->(sn:ShortName)
+      WHERE NOT EXISTS(r.to) RETURN sn LIMIT 1
+      """
+    )
 }
 
 type Domain {
@@ -367,7 +374,7 @@ type HAS_CATEGORY @relation(name: "HAS_CATEGORY") {
   to: CompetencyCategory!
   order: String!
   planId: String!
-  startDate: String!
+  startDate: String
 }
 
 type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
@@ -375,7 +382,7 @@ type IS_CATEGORY_OF @relation(name: "IS_CATEGORY_OF") {
   to: PlanRoot!
   order: String!
   planId: String!
-  startDate: String!
+  startDate: String
 }
 
 type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
@@ -383,7 +390,7 @@ type IS_IN_GROUP @relation(name: "IS_IN_GROUP") {
   to: CompetencyCategory!
   order: String!
   planId: String!
-  startDate: String!
+  startDate: String
 }
 
 type CATEGORY_HAS_COMPETENCIES_OF
@@ -392,7 +399,7 @@ type CATEGORY_HAS_COMPETENCIES_OF
   to: Competency!
   order: String!
   planId: String!
-  startDate: String!
+  startDate: String
 }
 
 type GROUP_HAS_COMPETENCIES_OF @relation(name: "GROUP_HAS_COMPETENCIES_OF") {
@@ -400,25 +407,25 @@ type GROUP_HAS_COMPETENCIES_OF @relation(name: "GROUP_HAS_COMPETENCIES_OF") {
   to: Competency!
   order: String!
   planId: String!
-  startDate: String!
+  startDate: String
 }
 
 type HAS_TARGET_COMPETENCY @relation(name: "HAS_TARGET_COMPETENCY") {
   from: Competency!
   to: TargetCompetency!
-  startDate: String!
+  startDate: String
 }
 
 type HAS_ASSESSMENT_CRITERIA @relation(name: "HAS_ASSESSMENT_CRITERIA") {
   from: Competency!
   to: AssessmentCriteria!
-  startDate: String!
+  startDate: String
 }
 
 type HAS_SHORT_NAME @relation(name: "HAS_SHORT_NAME") {
   from: Competency!
   to: ShortName!
-  startDate: String!
+  startDate: String
 }
 
 type HAS_LV0_ACTIVITIES @relation(name: "HAS_LV0_ACTIVITIES") {

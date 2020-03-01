@@ -1,13 +1,18 @@
-import React, { Fragment } from "react";
-import NavBar from "./components/NavBar";
-import ChooserDomain from "./components/ChooserDomain";
+import React, { Fragment, useContext } from "react";
+import ChooserCompetency from "./components/ChooserCompetency";
+import { SelectionContext } from "./components/SelectionContext";
 
-function EditCompetency() {
+function EditCompetency(props) {
+  const { state } = useContext(SelectionContext);
   return (
     <Fragment>
-      {NavBar("editPlan")}
-      <div className="mx-3">
-        <ChooserDomain type="compEdit" subElement="chooseComp" />
+      <div className="container">
+        {parseInt(state.domainId) >= 0 && (
+          <ChooserCompetency domainId={state.domainId} />
+        )}
+        {parseInt(state.domainId) === "-1" && (
+          <div>Please choose a domain above to edit competencies.</div>
+        )}
       </div>
     </Fragment>
   );
