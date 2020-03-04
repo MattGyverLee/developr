@@ -1,36 +1,28 @@
 import React, { Fragment, useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import ChooserCompetency from "./ChooserCompetency";
 import ChooserPlan from "./ChooserPlan";
-import { SelectionContext } from "./SelectionContext";
+import { SITREP, GET_DOMAINS } from "../queries";
+import { useQuery } from "@apollo/react-hooks";
 
 function ChooserDomain(props) {
   /*   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
-  const { state, setLocalState } = useContext(SelectionContext);
-  const GET_DOMAINS = gql`
-    query listDomains {
-      Domain {
-        id
-        label
-      }
-    }
-  `;
+
+  const { domainId } = useQuery(SITREP);
 
   const updateSelectedDomain = domain => {
     localStorage.setItem("SelectedPlan", "-1");
     localStorage.setItem("SelectedDomain", domain);
-    setLocalState({
-      ...state,
-      planId: "-1"
-    });
-    setLocalState({
-      ...state,
-      domainId: domain
-    });
+    // FIXME: Write this as a mutation.
+    /* cache.writeData({
+      data: {
+        planId: "-1",
+        domainId: domain,
+        milestoneId: "-1"
+      }
+    }); */
   };
 
   const { loading, data, error } = useQuery(GET_DOMAINS, {
@@ -51,7 +43,7 @@ function ChooserDomain(props) {
             <select
               id="DomDrop"
               name="progress"
-              value={state.domainId}
+              value={domainId}
               onChange={e => updateSelectedDomain(e.currentTarget.value)}>
               <option key="-1" value="-1">
                 Not Selected
@@ -62,14 +54,12 @@ function ChooserDomain(props) {
                 </option>
               ))}
             </select>
-            {parseInt(state.domainId) >= 0 &&
-              props.subElement === "chooseComp" && (
-                <ChooserCompetency domainId={state.domainId} />
-              )}
-            {parseInt(state.domainId) >= 0 &&
-              props.subElement === "choosePlan" && (
-                <ChooserPlan subElement="none" domainId={state.domainId} />
-              )}
+            {parseInt(domainId) >= 0 && props.subElement === "chooseComp" && (
+              <ChooserCompetency domainId={domainId} />
+            )}
+            {parseInt(domainId) >= 0 && props.subElement === "choosePlan" && (
+              <ChooserPlan subElement="none" domainId={domainId} />
+            )}
           </div>
         </Fragment>
       )}

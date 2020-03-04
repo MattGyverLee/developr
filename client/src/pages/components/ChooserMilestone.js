@@ -1,43 +1,32 @@
 import React, { Fragment, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-
-import { SelectionContext } from "./SelectionContext";
+import { SITREP, GET_MILESTONES } from "../queries";
 
 const ChooserMilestone = props => {
   /*   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
-  const { state, setLocalState } = useContext(SelectionContext);
+
+  var { planId, milestoneId } = useQuery(SITREP);
   /* const userId = selections.userId; */
-  const GET_MILESTONES = planId => gql`
-  query listMilestones {
-    PlanRoot(id:"${planId}") {
-      has_milestone {
-        ms
-        short_name {label}
-      }
-    }
-  }
-`;
-  const { loading, data, error } = useQuery(
-    GET_MILESTONES(state.planId || "-1"),
-    {
-      variables: {
-        /*       first: rowsPerPage,
+
+  const { loading, data, error } = useQuery(GET_MILESTONES(planId || "-1"), {
+    variables: {
+      /*       first: rowsPerPage,
       offset: rowsPerPage * page,
       orderBy: orderBy + "_" + order */
-      }
     }
-  );
+  });
 
   const updateSelectedMilestone = milestone => {
     localStorage.setItem("SelectedMilestone", milestone);
-    setLocalState({
-      ...state,
-      milestoneId: milestone
-    });
+    // fixme: Make this a mutation
+    /*  cache.writeData({
+      data: {
+        milestoneId: milestone
+      }
+    }); */
   };
 
   return (
@@ -49,7 +38,7 @@ const ChooserMilestone = props => {
           <select
             id="MilestoneDrop"
             name="milestones"
-            defaultValue={state.milestoneId}
+            defaultValue={milestoneId}
             onChange={e => updateSelectedMilestone(e.currentTarget.value)}>
             {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}
             <option key="-1" value="-1">

@@ -1,8 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-
-import { SelectionContext } from "./SelectionContext";
+import { SITREP, LIST_PLANS } from "../queries";
 import ChooserMilestone from "./ChooserMilestone";
 
 function ChooserPlan(props) {
@@ -10,14 +8,11 @@ function ChooserPlan(props) {
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
-  const { state, setLocalState } = useContext(SelectionContext);
   /* const userId = selections.userId; */
-  const GET_PLANS = domainId => gql`
-  query listPlans  {
-    Domain(id: "${domainId}") {childPlans {id label}}
-  }
-`;
-  const { loading, data, error } = useQuery(GET_PLANS(state.domainId || "-1"), {
+
+  const { domainId } = useQuery(SITREP);
+
+  const { loading, data, error } = useQuery(LIST_PLANS(domainId || "-1"), {
     variables: {
       /*       first: rowsPerPage,
       offset: rowsPerPage * page,
@@ -27,12 +22,17 @@ function ChooserPlan(props) {
 
   const updateSelectedPlan = plan => {
     localStorage.setItem("SelectedPlan", plan);
-    setLocalState({
-      ...state,
-      planId: plan
-    });
+    // fixme: Write this as mutation
+    /* cache.writeData({
+      data: {
+        planId: plan,
+        milestoneId: "-1"
+      }
+    }); */
   };
-  if (!state.planId) updateSelectedPlan("-1");
+
+  var { planId } = useQuery(SITREP);
+  if (!planId) updateSelectedPlan("-1");
   return (
     <div>
       {loading && !error && <p>Loading...</p>}
@@ -42,7 +42,7 @@ function ChooserPlan(props) {
           <select
             id="PlanDrop"
             name="progress"
-            value={state.planId}
+            value={planId}
             onChange={e => updateSelectedPlan(e.currentTarget.value)}>
             {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}
             <option key="-1" value="-1">
@@ -58,7 +58,7 @@ function ChooserPlan(props) {
                 </option>
               ))}
           </select>
-          {state.planId !== "-1" && <ChooserMilestone />}
+          {planId !== "-1" && <ChooserMilestone />}
         </Fragment>
       )}
     </div>

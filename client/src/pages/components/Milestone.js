@@ -1,90 +1,16 @@
 import React, { Fragment, useContext } from "react";
-import gql from "graphql-tag";
+import { SITREP, GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
 import BadgeCategory from "./BadgeCategory";
-import { SelectionContext } from "./SelectionContext";
+import { useQuery } from "@apollo/react-hooks";
 
 const Milestone = props => {
-  const { state } = useContext(SelectionContext);
-  const MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
-  query MilestoneQuery {
-    PlanRoot(id: "${planId}") {
-      id
-      label
-      plan_class
-      has_category {
-        id
-        label
-        category_has_competencies_of {
-          id
-          label
-          default_weight
-          default_expiration
-          short_name {
-            label
-          }
-        }
-        has_group {
-          id
-          group_has_competencies_of {
-            id 
-            label
-            default_weight
-            default_expiration
-            short_name {
-              label
-            }
-          }
-          has_group {
-            id
-            group_has_competencies_of {
-              id
-              label
-              default_weight
-              default_expiration
-              short_name {
-                label
-              }
-            }
-          }
-        }
-      }
-    }
-    User(id: "${userId}") {
-      id
-      has_progress_root {
-        child_progress {
-          currentLevel
-          competency_progress {
-            id
-            label
-          }
-        }
-      }
-    }
-    Milestone(ms: "${milestoneId}"){
-      ms
-      short_name {label}
-      competencycategories {
-        id
-        TARGET_VALUE_IS_rel {
-          min
-          planId
-          Milestone {ms}
-        }
-      }
-    }
-  }
-`;
+  const { planId, milestoneId, userId, domainId } = useQuery(SITREP);
+
   return (
     <div>
-      {state.planId !== "-1" && state.milestoneId !== "-1" && (
-        <Query
-          query={MILESTONE_QUERY(
-            state.planId,
-            state.userId,
-            state.milestoneId
-          )}>
+      {planId !== "-1" && milestoneId !== "-1" && (
+        <Query query={GET_MILESTONE_QUERY(planId, userId, milestoneId)}>
           {({ loading, error, data }) => {
             if (loading) return <h4>Loading...</h4>;
             if (error) {
@@ -120,9 +46,9 @@ const Milestone = props => {
                         category={category}
                         user={data.User}
                         milestone={data.Milestone[0]}
-                        target={state.milestoneId}
+                        target={milestoneId}
                         details={props.details}
-                        planId={state.planId}
+                        planId={planId}
                       />
                     ))}
                     {/* TODO: Make LTCons1 a variable passed in. */}

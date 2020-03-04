@@ -1,126 +1,16 @@
 import React, { Fragment } from "react";
-import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Category from "./Category";
 import DisplayError from "./QueryError";
-
-const DOMAIN_QUERY = (rootId, userId) => gql`
-  query DomainQuery {
-    PlanRoot(id: "${rootId}") {
-      id
-      label
-      plan_class
-      has_category {
-        id
-        label
-        category_has_competencies_of {
-          id
-          label
-          default_weight
-          default_expiration
-          short_name {
-            label
-          }
-          target_competency {
-            label
-          }
-          assessment_criteria {
-            label
-          }
-          lv1_activity {
-            label
-          }
-          lv2_activity {
-            label
-          }
-          lv3_activity {
-            label
-          }
-          lv4_activity {
-            label
-          }
-          lv5_activity {
-            label
-          }
-        }
-        has_group {
-          id
-          label
-          group_has_competencies_of {
-            id
-            label
-            default_weight
-            default_expiration
-            short_name {
-              label
-            }
-            target_competency {
-              label
-            }
-            assessment_criteria {
-              label
-            }
-            lv1_activity {
-              label
-            }
-            lv2_activity {
-              label
-            }
-            lv3_activity {
-              label
-            }
-            lv4_activity {
-              label
-            }
-            lv5_activity {
-              label
-            }
-          }
-          has_group {
-            id
-            label
-            group_has_competencies_of {
-              id
-              label
-              default_weight
-              default_expiration
-              short_name {
-                label
-              }
-              target_competency {
-                label
-              }
-              assessment_criteria {
-                label
-              }
-              lv1_activity {
-                label
-              }
-              lv2_activity {
-                label
-              }
-              lv3_activity {
-                label
-              }
-              lv4_activity {
-                label
-              }
-              lv5_activity {
-                label
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+import { SITREP, DOMAIN_QUERY } from "../queries";
+import { useQuery } from "@apollo/react-hooks";
 
 //todo: Sub string for userId variable
 export const Plan = props => {
+  const { planId, userId } = useQuery(SITREP);
   return (
     <div>
-      <Query query={DOMAIN_QUERY(props.planRoot, props.userId)}>
+      <Query query={DOMAIN_QUERY(planId, userId)}>
         {({ loading, error, data }) => {
           if (loading)
             return (
@@ -130,7 +20,7 @@ export const Plan = props => {
             );
           if (error) return <DisplayError error={error} />;
           // console.log(data);
-          if (data.PlanRoot) {
+          if (data.PlanRoot[0]) {
             return (
               <Fragment>
                 <h2 className="display-4 my-0">
@@ -143,7 +33,7 @@ export const Plan = props => {
                 ))}
               </Fragment>
             );
-          }
+          } else return <div>No Plan Selected</div>;
         }}
       </Query>
     </div>
