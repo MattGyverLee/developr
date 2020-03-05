@@ -419,7 +419,10 @@ for (let index = 0; index < 2; index++) {
       SET u.Name = "Matthew",
         u.primaryOrg = "SIL",
         u.primaryDomain = "LT",
-        u.activePlan = "1"
+        u.activePlan = "1",
+        u.chosenDomain = "-1",
+        u.chosenPlan = "-1",
+        u.chosenMilestone = "-1"
       MERGE (pr:ProgressRoot {userId: "1"})
       MERGE (u)-[:HAS_PROGRESS_ROOT]->(pr)
   `);

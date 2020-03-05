@@ -310,8 +310,11 @@ type Lv5Activities {
 
 type User {
   _id: Long!
-  Name: String!
+  Name: String
   activePlan: String!
+  chosenDomain: String!
+  chosenMilestone: String!
+  chosenPlan: String!
   id: String!
   primaryDomain: String!
   primaryOrg: String!

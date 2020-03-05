@@ -1,6 +1,17 @@
 // import queries from "./queries"
 import gql from "graphql-tag";
 
+// FIXME: Remove hardcoded user
+export const SITREP2 = gql`
+  query StatusUpdate {
+    User(id: "1") {
+      chosenPlan
+      chosenMilestone
+      chosenDomain
+    }
+  }
+`;
+
 export const SITREP = gql`
   query StatusUpdate {
     isLoggedIn @client
@@ -267,36 +278,63 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
   }
 `;
 
-export const SET_DOMAIN = domainId => gql`
-  mutation setDomain {
-    setDomain(domainId: "${domainId}")
-    
+export const SET_DOMAIN = gql`
+  mutation UpdateDomain(
+    $user: String!
+    $chosenDomain: String!
+    $Name: String!
+  ) {
+    UpdateUser(
+      id: $user
+      chosenDomain: $chosenDomain
+      chosenPlan: "-1"
+      chosenMilestone: "-1"
+      Name: $Name
+    ) {
+      chosenDomain
+    }
   }
 `;
 
-/* setPlan(planId: "-1")
-    setMilestone(milestoneId: "-1") */
+export const SET_LOCAL_DOMAIN = gql`
+  mutation SetDomain($domainId: String!) {
+    setDomain(domainId: $domainId) @client
+    setPlan(planId: "-1") @client
+    setMilestone(milestoneId: "-1") @client
+  }
+`;
 
-/* export const SET_DOMAIN = domainId => gql`
-  mutation setDomain($domainId: String!) {
-    setDomain(domainId: "1") {
-      domainId
-    }
-    setPlan(planId: "-1") {
-      planId
-    }
-    setMilestone(milestoneId: "-1") {
-      milestoneId
+export const SET_PLAN = gql`
+  mutation UpdatePlan($user: String!, $chosenPlan: String!, $Name: String!) {
+    UpdateUser(
+      id: $user
+      chosenPlan: $chosenPlan
+      chosenMilestone: "-1"
+      Name: $Name
+    ) {
+      chosenPlan
     }
   }
-`; */
+`;
 
-/* setPlan(planId: "-1") {
-  planId
-}
-setMilestone(milestoneId: "-1") {
-  milestoneId
-} */
+export const SET_LOCAL_PLAN = gql`
+  mutation SetDomain($planId: String!) {
+    setPlan(planId: $planId) @client
+    setMilestone(milestoneId: "-1") @client
+  }
+`;
+
+export const SET_MILESTONE = gql`
+  mutation UpdatePlan(
+    $user: String!
+    $chosenMilestone: String!
+    $Name: String!
+  ) {
+    UpdateUser(id: $user, chosenMilestone: $chosenMilestone, Name: $Name) {
+      chosenPlan
+    }
+  }
+`;
 
 export const GET_ANCESTOR_COMPS = gql`
   query AncestorComps {

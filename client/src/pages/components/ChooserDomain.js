@@ -1,41 +1,36 @@
 import React, { Fragment, useContext } from "react";
 import ChooserCompetency from "./ChooserCompetency";
 import ChooserPlan from "./ChooserPlan";
-import { SITREP, GET_DOMAINS, SET_DOMAIN } from "../queries";
+import { SITREP, GET_DOMAINS, SET_DOMAIN, SET_LOCAL_DOMAIN } from "../queries";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
-function UpdateSelectedDomain(domain) {
-  const [result] = useMutation(SET_DOMAIN(domain));
-  localStorage.setItem("SelectedPlan", "-1");
-  localStorage.setItem("SelectedDomain", domain);
-  localStorage.setItem("SelectedMilestone", "-1");
-  // FIXME: Write this as a mutation.
-
-  /* cache.writeData({
-    data: {
-      planId: "-1",
-      domainId: domain,
-      milestoneId: "-1"
-    }
-  }); */
-}
-
-function ChooserDomain(props) {
-  /*   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10); */
-
+const ChooserDomain = props => {
   const { domainId } = useQuery(SITREP);
 
   const { loading, data, error } = useQuery(GET_DOMAINS, {
-    variables: {
-      /*       first: rowsPerPage,
-      offset: rowsPerPage * page,
-      orderBy: orderBy + "_" + order */
-    }
+    variables: {}
   });
-  // const [loading, setLoading] = React.useState(true);
+
+  const [setDomain] = useMutation(SET_LOCAL_DOMAIN);
+
+  const UpdateSelectedDomain = domain => {
+    localStorage.setItem("SelectedPlan", "-1");
+    localStorage.setItem("SelectedDomain", domain);
+    localStorage.setItem("SelectedMilestone", "-1");
+
+    // FIXME: Write this as a mutation.
+    setDomain({
+      variables: { domainId: domain }
+    });
+    /*     setDomain({
+      variables: {
+        user: "1",
+        Name: "Matthew",
+        chosenDomain: domain
+      }
+    }); */
+  };
+
   return (
     <div>
       {loading && !error && <p>Loading...</p>}
@@ -58,16 +53,21 @@ function ChooserDomain(props) {
               ))}
             </select>
             {parseInt(domainId) >= 0 && props.subElement === "chooseComp" && (
-              <ChooserCompetency domainId={domainId} />
+              <ChooserCompetency
+                domainId={localStorage.getItem("SelectedDomain")}
+              />
             )}
             {parseInt(domainId) >= 0 && props.subElement === "choosePlan" && (
-              <ChooserPlan subElement="none" domainId={domainId} />
+              <ChooserPlan
+                subElement="none"
+                domainId={localStorage.getItem("SelectedDomain")}
+              />
             )}
           </div>
         </Fragment>
       )}
     </div>
   );
-}
+};
 
 export default ChooserDomain;

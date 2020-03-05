@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { SITREP, GET_MILESTONES } from "../queries";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { SITREP, GET_MILESTONES, SET_MILESTONE } from "../queries";
 
 const ChooserMilestone = props => {
   /*   const [order, setOrder] = React.useState("asc");
@@ -18,15 +18,18 @@ const ChooserMilestone = props => {
       orderBy: orderBy + "_" + order */
     }
   });
+  const [setMilestone] = useMutation(SET_MILESTONE);
 
   const updateSelectedMilestone = milestone => {
     localStorage.setItem("SelectedMilestone", milestone);
     // fixme: Make this a mutation
-    /*  cache.writeData({
-      data: {
-        milestoneId: milestone
+    setMilestone({
+      variables: {
+        user: "1",
+        Name: "Matthew",
+        chosenMilestone: milestone
       }
-    }); */
+    });
   };
 
   return (
