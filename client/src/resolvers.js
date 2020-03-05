@@ -6,7 +6,7 @@ export const typeDefs = gql`
     userId: Int!
     planId: String
     domainId: String
-    milestoneID: String
+    milestoneId: String
   }
 
   type Session {

@@ -4,8 +4,12 @@ import ChooserPlan from "./ChooserPlan";
 import { SITREP, GET_DOMAINS, SET_DOMAIN, SET_LOCAL_DOMAIN } from "../queries";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
+var domainId = "-1";
+
 const ChooserDomain = props => {
-  const { domainId } = useQuery(SITREP);
+  /* var { milestoneId, domainId } = useQuery(SITREP); */
+  const sitrep = useQuery(SITREP);
+  domainId = sitrep.domainId;
 
   const { loading, data, error } = useQuery(GET_DOMAINS, {
     variables: {}

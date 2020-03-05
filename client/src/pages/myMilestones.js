@@ -4,11 +4,11 @@ import { SITREP } from "./queries";
 import { useQuery } from "@apollo/react-hooks";
 
 function MyMilestone() {
-  const { planId, milestoneID, domainId } = useQuery(SITREP);
+  const { planId, milestoneId, domainId } = useQuery(SITREP);
   return (
     <Fragment>
       <div className="mx-3">
-        {planId !== "-1" && milestoneID !== "-1" && domainId !== "-1" && (
+        {planId !== "-1" && milestoneId !== "-1" && domainId !== "-1" && (
           <Milestone planId="1" details={true} />
         )}
         {planId === "-1" && (

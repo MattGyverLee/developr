@@ -14,7 +14,6 @@ export const SITREP2 = gql`
 
 export const SITREP = gql`
   query StatusUpdate {
-    isLoggedIn @client
     planId @client
     userId @client
     milestoneId @client
@@ -333,6 +332,12 @@ export const SET_MILESTONE = gql`
     UpdateUser(id: $user, chosenMilestone: $chosenMilestone, Name: $Name) {
       chosenPlan
     }
+  }
+`;
+
+export const SET_LOCAL_MILESTONE = gql`
+  mutation SetMilestone($milestoneId: String!) {
+    setMilestone(planId: $milestoneId) @client
   }
 `;
 

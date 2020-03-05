@@ -10,7 +10,7 @@ function ChooserPlan(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   /* const userId = selections.userId; */
 
-  const { domainId } = useQuery(SITREP);
+  var { domainId } = useQuery(SITREP);
 
   const { loading, data, error } = useQuery(LIST_PLANS(domainId || "-1"), {
     variables: {
