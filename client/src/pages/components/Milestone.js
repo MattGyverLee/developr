@@ -1,86 +1,16 @@
 import React, { Fragment, useContext } from "react";
-import gql from "graphql-tag";
+import { SITREP, GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
 import BadgeCategory from "./BadgeCategory";
 import { SelectionContext } from "./SelectionContext";
 
 const Milestone = props => {
   const { state } = useContext(SelectionContext);
-  const MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
-  query MilestoneQuery {
-    PlanRoot(id: "${planId}") {
-      id
-      label
-      plan_class
-      has_category {
-        id
-        label
-        category_has_competencies_of {
-          id
-          label
-          default_weight
-          default_expiration
-          short_name {
-            label
-          }
-        }
-        has_group {
-          id
-          group_has_competencies_of {
-            id 
-            label
-            default_weight
-            default_expiration
-            short_name {
-              label
-            }
-          }
-          has_group {
-            id
-            group_has_competencies_of {
-              id
-              label
-              default_weight
-              default_expiration
-              short_name {
-                label
-              }
-            }
-          }
-        }
-      }
-    }
-    User(id: "${userId}") {
-      id
-      has_progress_root {
-        child_progress {
-          currentLevel
-          competency_progress {
-            id
-            label
-          }
-        }
-      }
-    }
-    Milestone(ms: "${milestoneId}"){
-      ms
-      short_name {label}
-      competencycategories {
-        id
-        TARGET_VALUE_IS_rel {
-          min
-          planId
-          Milestone {ms}
-        }
-      }
-    }
-  }
-`;
   return (
     <div>
       {state.planId !== "-1" && state.milestoneId !== "-1" && (
         <Query
-          query={MILESTONE_QUERY(
+          query={GET_MILESTONE_QUERY(
             state.planId,
             state.userId,
             state.milestoneId

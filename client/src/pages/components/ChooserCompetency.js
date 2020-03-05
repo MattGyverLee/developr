@@ -1,18 +1,7 @@
 import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import { GET_COMPETENCIES } from "../queries";
 import LoadEditCompetency from "./LoadEditCompetency";
-
-const GET_COMPETENCIES = domainId => gql`
-  query listDomainCompetencies {
-    Domain(id: "${domainId}") {
-      primary_domain_of {
-        id
-        label
-      }
-    }
-  }
-`;
 
 function ChooserCompetency(props) {
   /*   const [order, setOrder] = React.useState("asc");
@@ -20,7 +9,9 @@ function ChooserCompetency(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   const [selectedCompetency, setSelectedCompetency] = React.useState("-1");
+  // fixme: query this.
   const domainId = props.domainId || -1;
+  // fixme: query this.
 
   const { loading, data, error } = useQuery(GET_COMPETENCIES(domainId), {
     variables: {

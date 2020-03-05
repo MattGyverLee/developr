@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import { GET_COMPETENCY } from "../queries";
 
 function LoadEditCompetency(props) {
   /*   const [order, setOrder] = React.useState("asc");
@@ -8,42 +8,6 @@ function LoadEditCompetency(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   // const [selectedCompetency, setSelectedCompetency] = React.useState("-1");
-
-  const GET_COMPETENCY = competencyId => gql`
-    query EditCompetency {
-      Competency(id: "${competencyId}") {
-          id
-          label
-          default_weight
-          default_expiration
-          short_name {
-            label
-          }
-          target_competency {
-            label
-          }
-          assessment_criteria {
-            label
-          }
-          lv1_activity {
-            label
-          }
-          lv2_activity {
-            label
-          }
-          lv3_activity {
-            label
-          }
-          lv4_activity {
-            label
-          }
-          lv5_activity {
-            label
-          }
-        }
-      }
-    
-  `;
 
   const { loading, data, error } = useQuery(
     GET_COMPETENCY(props.competencyId),

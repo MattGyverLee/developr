@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import { SITREP, GET_MILESTONES, SET_MILESTONE } from "../queries";
 
 import { SelectionContext } from "./SelectionContext";
 
@@ -11,16 +11,7 @@ const ChooserMilestone = props => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   const { state, setLocalState } = useContext(SelectionContext);
   /* const userId = selections.userId; */
-  const GET_MILESTONES = planId => gql`
-  query listMilestones {
-    PlanRoot(id:"${planId}") {
-      has_milestone {
-        ms
-        short_name {label}
-      }
-    }
-  }
-`;
+
   const { loading, data, error } = useQuery(
     GET_MILESTONES(state.planId || "-1"),
     {

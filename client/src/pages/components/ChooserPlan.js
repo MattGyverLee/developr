@@ -1,23 +1,16 @@
 import React, { Fragment, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
+import { SITREP, LIST_PLANS } from "../queries";
 
 import { SelectionContext } from "./SelectionContext";
 import ChooserMilestone from "./ChooserMilestone";
 
 function ChooserPlan(props) {
-  /*   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10); */
+
   const { state, setLocalState } = useContext(SelectionContext);
-  /* const userId = selections.userId; */
-  const GET_PLANS = domainId => gql`
-  query listPlans  {
-    Domain(id: "${domainId}") {childPlans {id label}}
-  }
-`;
-  const { loading, data, error } = useQuery(GET_PLANS(state.domainId || "-1"), {
+
+
+  const { loading, data, error } = useQuery(LIST_PLANS(state.domainId || "-1"), {
     variables: {
       /*       first: rowsPerPage,
       offset: rowsPerPage * page,

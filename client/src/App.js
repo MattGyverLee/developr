@@ -9,7 +9,28 @@ import EditCompetency from "./pages/editCompetency";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { SelectionContext } from "./pages/components/SelectionContext";
 import NavBar from "./pages/components/NavBar";
-const client = new ApolloClient({ uri: "http://localhost:4001/graphql" });
+import { resolvers, typeDefs } from "./resolvers";
+import { useQuery } from "@apollo/react-hooks";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { SITREP } from "./pages/queries";
+
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+  cache,
+  uri: "http://localhost:4001/graphql",
+  typeDefs,
+  resolvers
+});
+
+cache.writeData({
+  data: {
+    planId: localStorage.getItem("SelectedPlan") || "-1",
+    userId: localStorage.getItem("SelectedDomain") || "1",
+    domainId: localStorage.getItem("SelectedDomain") || "-1",
+    milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
+  }
+});
 
 function App() {
   const [state, setLocalState] = useState({
@@ -19,12 +40,34 @@ function App() {
     milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
   });
 
+  const DebugInfo = () => {
+    const { data, loading, error } = useQuery(SITREP);
+    return (
+      <div>
+        <div>
+          Cache: Plan: {data.planId} milestone: {data.milestoneId} domain:
+          {data.domainId}{" "}
+        </div>
+        <div>
+          LocS: Plan: {localStorage.getItem("SelectedPlan")} milestone:{" "}
+          {localStorage.getItem("SelectedMilestone")} domain:
+          {localStorage.getItem("SelectedDomain")}
+        </div>
+        <div>
+          State - Plan: {state.planId}, milestoneId: {state.milestoneId},
+          domainId: {state.domainId} userId: {state.userId}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <ApolloProvider client={client}>
       {/* Appolo provides a GraphQL communication layer between 
       server (Apollo_Server) and client (Apollo_Client) */}
       <SelectionContext.Provider value={{ state, setLocalState }}>
         <NavBar />
+        <DebugInfo />
         <Router>
           {/* React-Router makes a single-page react app modular. */}
           <div>
