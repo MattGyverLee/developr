@@ -54,8 +54,8 @@ function App() {
           {localStorage.getItem("SelectedDomain")}
         </div>
         <div>
-          State - Plan: {state.planId}, milestoneId: {state.milestoneId},
-          domainId: {state.domainId} userId: {state.userId}
+          State - Plan: {state.planId}, milestone: {state.milestoneId}, domain:{" "}
+          {state.domainId} userId: {state.userId}
         </div>
       </div>
     );

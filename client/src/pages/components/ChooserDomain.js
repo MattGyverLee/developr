@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import ChooserCompetency from "./ChooserCompetency";
 import ChooserPlan from "./ChooserPlan";
@@ -8,23 +8,25 @@ import { SelectionContext } from "./SelectionContext";
 
 function ChooserDomain(props) {
   const { state, setLocalState } = useContext(SelectionContext);
- 
+  const [setDomain] = useMutation(SET_LOCAL_DOMAIN);
+
   const UpdateSelectedDomain = domain => {
-    localStorage.setItem("SelectedPlan", "-1");
-    localStorage.setItem("SelectedDomain", domain);
-    setLocalState({
-      ...state,
-      planId: "-1"
+    setDomain({
+      variables: { domainId: domain }
     });
+    localStorage.setItem("SelectedDomain", domain);
+    localStorage.setItem("SelectedPlan", "-1");
+    localStorage.setItem("SelectedMilestone", "-1");
     setLocalState({
       ...state,
-      domainId: domain
+      domainId: domain,
+      planId: "-1",
+      milestoneId: "-1"
     });
   };
 
   const { loading, data, error } = useQuery(GET_DOMAINS, {
-    variables: {
-    }
+    variables: {}
   });
   // const [loading, setLoading] = React.useState(true);
   return (
