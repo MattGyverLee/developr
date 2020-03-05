@@ -7,6 +7,7 @@ export const SITREP = gql`
     planId @client
     userId @client
     milestoneId @client
+    domainId @client
   }
 `;
 
@@ -265,6 +266,37 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
     }
   }
 `;
+
+export const SET_DOMAIN = domainId => gql`
+  mutation setDomain {
+    setDomain(domainId: "${domainId}")
+    
+  }
+`;
+
+/* setPlan(planId: "-1")
+    setMilestone(milestoneId: "-1") */
+
+/* export const SET_DOMAIN = domainId => gql`
+  mutation setDomain($domainId: String!) {
+    setDomain(domainId: "1") {
+      domainId
+    }
+    setPlan(planId: "-1") {
+      planId
+    }
+    setMilestone(milestoneId: "-1") {
+      milestoneId
+    }
+  }
+`; */
+
+/* setPlan(planId: "-1") {
+  planId
+}
+setMilestone(milestoneId: "-1") {
+  milestoneId
+} */
 
 export const GET_ANCESTOR_COMPS = gql`
   query AncestorComps {

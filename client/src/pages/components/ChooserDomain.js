@@ -1,8 +1,24 @@
 import React, { Fragment, useContext } from "react";
 import ChooserCompetency from "./ChooserCompetency";
 import ChooserPlan from "./ChooserPlan";
-import { SITREP, GET_DOMAINS } from "../queries";
-import { useQuery } from "@apollo/react-hooks";
+import { SITREP, GET_DOMAINS, SET_DOMAIN } from "../queries";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+
+function UpdateSelectedDomain(domain) {
+  const [result] = useMutation(SET_DOMAIN(domain));
+  localStorage.setItem("SelectedPlan", "-1");
+  localStorage.setItem("SelectedDomain", domain);
+  localStorage.setItem("SelectedMilestone", "-1");
+  // FIXME: Write this as a mutation.
+
+  /* cache.writeData({
+    data: {
+      planId: "-1",
+      domainId: domain,
+      milestoneId: "-1"
+    }
+  }); */
+}
 
 function ChooserDomain(props) {
   /*   const [order, setOrder] = React.useState("asc");
@@ -11,19 +27,6 @@ function ChooserDomain(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
 
   const { domainId } = useQuery(SITREP);
-
-  const updateSelectedDomain = domain => {
-    localStorage.setItem("SelectedPlan", "-1");
-    localStorage.setItem("SelectedDomain", domain);
-    // FIXME: Write this as a mutation.
-    /* cache.writeData({
-      data: {
-        planId: "-1",
-        domainId: domain,
-        milestoneId: "-1"
-      }
-    }); */
-  };
 
   const { loading, data, error } = useQuery(GET_DOMAINS, {
     variables: {
@@ -44,7 +47,7 @@ function ChooserDomain(props) {
               id="DomDrop"
               name="progress"
               value={domainId}
-              onChange={e => updateSelectedDomain(e.currentTarget.value)}>
+              onChange={e => UpdateSelectedDomain(e.currentTarget.value)}>
               <option key="-1" value="-1">
                 Not Selected
               </option>

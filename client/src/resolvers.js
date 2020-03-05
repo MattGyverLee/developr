@@ -10,17 +10,16 @@ export const typeDefs = gql`
   }
 
   type Session {
-    userId: Int!
+    userId: Int
     planId: String
     domainId: String
-    milestoneID: String
+    milestoneId: String
   }
 
   extend type Mutation {
-    setPlan(id: ID!): String!
-    setDomain(id: ID!): String!
-    setMilestone(id: ID!): String!
-    setMilestone(id: ID!): String!
+    setPlan(planId: String!): String!
+    setDomain(domainId: String!): String!
+    setMilestone(milestoneId: String!): String!
   }
 `;
 
