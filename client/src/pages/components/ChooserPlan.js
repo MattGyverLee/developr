@@ -1,28 +1,34 @@
 import React, { Fragment, useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { SITREP, LIST_PLANS } from "../queries";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { SET_LOCAL_PLAN, LIST_PLANS } from "../queries";
 
 import { SelectionContext } from "./SelectionContext";
 import ChooserMilestone from "./ChooserMilestone";
 
 function ChooserPlan(props) {
-
   const { state, setLocalState } = useContext(SelectionContext);
-
-
-  const { loading, data, error } = useQuery(LIST_PLANS(state.domainId || "-1"), {
-    variables: {
-      /*       first: rowsPerPage,
+  const [setPlan] = useMutation(SET_LOCAL_PLAN);
+  const { loading, data, error } = useQuery(
+    LIST_PLANS(state.domainId || "-1"),
+    {
+      variables: {
+        /*       first: rowsPerPage,
       offset: rowsPerPage * page,
       orderBy: orderBy + "_" + order */
+      }
     }
-  });
+  );
 
   const updateSelectedPlan = plan => {
+    setPlan({
+      variables: { planId: plan }
+    });
     localStorage.setItem("SelectedPlan", plan);
+    localStorage.setItem("SelectedMilestone", "-1");
     setLocalState({
       ...state,
-      planId: plan
+      planId: plan,
+      milestoneId: "-1"
     });
   };
   if (!state.planId) updateSelectedPlan("-1");

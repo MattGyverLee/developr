@@ -9,11 +9,9 @@ import { SelectionContext } from "./SelectionContext";
 function ChooserDomain(props) {
   const { state, setLocalState } = useContext(SelectionContext);
   const [setDomain] = useMutation(SET_LOCAL_DOMAIN);
+  const { domainId } = useQuery(SITREP);
 
   const UpdateSelectedDomain = domain => {
-    setDomain({
-      variables: { domainId: domain }
-    });
     localStorage.setItem("SelectedDomain", domain);
     localStorage.setItem("SelectedPlan", "-1");
     localStorage.setItem("SelectedMilestone", "-1");
@@ -22,6 +20,9 @@ function ChooserDomain(props) {
       domainId: domain,
       planId: "-1",
       milestoneId: "-1"
+    });
+    setDomain({
+      variables: { domainId: domain }
     });
   };
 
@@ -39,7 +40,7 @@ function ChooserDomain(props) {
             <select
               id="DomDrop"
               name="progress"
-              value={state.domainId}
+              value={domainId}
               onChange={e => UpdateSelectedDomain(e.currentTarget.value)}>
               <option key="-1" value="-1">
                 Not Selected

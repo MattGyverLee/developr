@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { SITREP, GET_MILESTONES, SET_MILESTONE } from "../queries";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { SITREP, GET_MILESTONES, SET_LOCAL_MILESTONE } from "../queries";
 
 import { SelectionContext } from "./SelectionContext";
 
@@ -11,7 +11,7 @@ const ChooserMilestone = props => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10); */
   const { state, setLocalState } = useContext(SelectionContext);
   /* const userId = selections.userId; */
-
+  const [setMilestone] = useMutation(SET_LOCAL_MILESTONE);
   const { loading, data, error } = useQuery(
     GET_MILESTONES(state.planId || "-1"),
     {
@@ -28,6 +28,9 @@ const ChooserMilestone = props => {
     setLocalState({
       ...state,
       milestoneId: milestone
+    });
+    setMilestone({
+      variables: { milestoneId: milestone }
     });
   };
 

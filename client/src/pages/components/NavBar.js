@@ -15,7 +15,7 @@ const NavBar = local => {
         <br />
         <div className="mb-n1 mt-n2">Growth Tracking</div>
       </a>
-      <button
+      {/* <button
         className="navbar-toggler"
         type="button"
         data-toggle="collapse"
@@ -24,7 +24,7 @@ const NavBar = local => {
         aria-expanded="false"
         aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
-      </button>
+      </button> */}
 
       <div className="collapse navbar-collapse" id="navbarColor01">
         <ul className="navbar-nav mr-auto">
