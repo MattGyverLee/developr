@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import BadgeCompetency from "./BadgeCompetency";
 import BadgeGroup from "./BadgeGroup";
+import { findSortOrder } from "./sort";
 
 const processCatGroups = groupList => {
   try {
@@ -16,17 +17,19 @@ export default function BadgeSubDetails(props) {
   if (props.details) {
     return (
       <Fragment>
-        {props.category.category_has_competencies_of.map(competency => (
-          <BadgeCompetency
-            key={competency.id}
-            competency={competency}
-            user={props.user}
-            milestone={props.milestone}
-            target={props.target}
-            planId={props.planId}
-          />
-        ))}
-        {props.category.has_group.map(group => (
+        {findSortOrder(props.category.category_has_competencies_of).map(
+          competency => (
+            <BadgeCompetency
+              key={competency.id}
+              competency={competency}
+              user={props.user}
+              milestone={props.milestone}
+              target={props.target}
+              planId={props.planId}
+            />
+          )
+        )}
+        {findSortOrder(props.category.has_group).map(group => (
           <BadgeGroup
             key={group.id}
             group={group}

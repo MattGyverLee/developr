@@ -98,6 +98,18 @@ type Competency {
     @relation(name: "GROUP_HAS_COMPETENCIES_OF", direction: "IN")
   progresss: [Progress] @relation(name: "COMPETENCY_PROGRESS", direction: "IN")
   domains: [Domain] @relation(name: "PRIMARY_DOMAIN_OF", direction: "IN")
+  orders: [OrderType]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:IS_IN_GROUP]->()
+      RETURN {order: r.order, planId: r.planId}
+      """
+    )
+}
+
+type OrderType {
+  order: Int
+  planId: Int
 }
 
 type CompetencyCategory {
@@ -139,6 +151,13 @@ type CompetencyCategory {
       Return c3 as ancestors
       """
     )
+  orders: [OrderType]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:IS_CATEGORY_OF]->()
+      RETURN {order: r.order, planId: r.planId}
+      """
+    )
   # End Custom
 }
 
@@ -169,6 +188,13 @@ type CompetencyGroup {
       UNION
       MATCH (this)-[:HAS_GROUP]->(:CompetencyGroup)-[:GROUP_HAS_COMPETENCIES_OF]->(c2:Competency)
       Return c2 as ancestors
+      """
+    )
+  orders: [OrderType]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:IS_IN_GROUP]->()
+      RETURN {order: r.order, planId: r.planId}
       """
     )
   #End Custom

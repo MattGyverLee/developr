@@ -25,8 +25,8 @@ const client = new ApolloClient({
 
 cache.writeData({
   data: {
-    planId: localStorage.getItem("SelectedPlan") || "-1",
     userId: localStorage.getItem("SelectedDomain") || "1",
+    planId: localStorage.getItem("SelectedPlan") || "-1",
     domainId: localStorage.getItem("SelectedDomain") || "-1",
     milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
   }
@@ -45,8 +45,8 @@ function App() {
     return (
       <div>
         <div>
-          Cache: Plan: {data.planId} milestone: {data.milestoneId} domain:
-          {data.domainId}{" "}
+          Cache: Plan: {data.planId} milestone: {data.milestoneId} domain:{" "}
+          {data.domainId}
         </div>
         <div>
           LocS: Plan: {localStorage.getItem("SelectedPlan")} milestone:{" "}

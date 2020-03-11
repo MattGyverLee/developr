@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import BadgeCompetency from "./BadgeCompetency";
+import { findSortOrder } from "./sort";
 
 export default function BadgeGroup(props) {
   console.log(props);
@@ -11,17 +12,19 @@ export default function BadgeGroup(props) {
           {props.group.label} -
           <small className="text-muted"> {props.group.id}</small>
         </h4>
-        {props.group.group_has_competencies_of.map(competency => (
-          <BadgeCompetency
-            key={competency.id}
-            competency={competency}
-            user={props.user}
-            milestone={props.milestone}
-            target={props.target}
-            details={props.details}
-            planId={props.planId}
-          />
-        ))}
+        {findSortOrder(props.group.group_has_competencies_of).map(
+          competency => (
+            <BadgeCompetency
+              key={competency.id}
+              competency={competency}
+              user={props.user}
+              milestone={props.milestone}
+              target={props.target}
+              details={props.details}
+              planId={props.planId}
+            />
+          )
+        )}
       </div>
     </Fragment>
   );

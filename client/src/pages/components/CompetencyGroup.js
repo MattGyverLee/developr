@@ -1,11 +1,12 @@
 import React, { Fragment } from "react";
 import CompetencyDetailsForm from "./CompetencyDetailsForm";
 import GroupDetail from "./CompetencyGroup";
+import { findSortOrder } from "./sort";
 
 export default function GroupDetails(props) {
   const showCompDetailsForm = input => {
     if (input && input.length > 0) {
-      return input.map(competency => (
+      return findSortOrder(input).map(competency => (
         <CompetencyDetailsForm key={competency.id} competency={competency} />
       ));
     }
@@ -13,7 +14,9 @@ export default function GroupDetails(props) {
 
   const showGroupDetails = input => {
     if (input && input.length > 0) {
-      return input.map(group => <GroupDetail key={group.id} group={group} />);
+      return findSortOrder(input).map(group => (
+        <GroupDetail key={group.id} group={group} />
+      ));
     }
   };
   /* {showCompDetails(props.group.group_has_competencies_of)} */

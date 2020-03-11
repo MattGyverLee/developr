@@ -4,6 +4,7 @@ import Category from "./Category";
 import DisplayError from "./QueryError";
 import { SITREP, DOMAIN_QUERY } from "../queries";
 import { useQuery } from "@apollo/react-hooks";
+import { findSortOrder } from "./sort";
 
 //todo: Sub string for userId variable
 export const Plan = props => {
@@ -27,7 +28,7 @@ export const Plan = props => {
                   {data.PlanRoot[0].label}
                 </h2>
                 <p>Plan Class: {data.PlanRoot[0].plan_class}</p>
-                {data.PlanRoot[0].has_category.map(category => (
+                {findSortOrder(data.PlanRoot[0].has_category).map(category => (
                   <Category key={category.id} category={category} />
                 ))}
               </Fragment>

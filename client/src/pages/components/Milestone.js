@@ -3,6 +3,7 @@ import { SITREP, GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
 import BadgeCategory from "./BadgeCategory";
 import { SelectionContext } from "./SelectionContext";
+import { findSortOrder } from "./sort";
 
 const Milestone = props => {
   const { state } = useContext(SelectionContext);
@@ -44,17 +45,19 @@ const Milestone = props => {
                     </h2>
                     <br />
                     {/* TODO: Get Full Name for Milestone */}
-                    {data.PlanRoot[0].has_category.map(category => (
-                      <BadgeCategory
-                        key={category.id}
-                        category={category}
-                        user={data.User}
-                        milestone={data.Milestone[0]}
-                        target={state.milestoneId}
-                        details={props.details}
-                        planId={state.planId}
-                      />
-                    ))}
+                    {findSortOrder(data.PlanRoot[0].has_category).map(
+                      category => (
+                        <BadgeCategory
+                          key={category.id}
+                          category={category}
+                          user={data.User}
+                          milestone={data.Milestone[0]}
+                          target={state.milestoneId}
+                          details={props.details}
+                          planId={state.planId}
+                        />
+                      )
+                    )}
                     {/* TODO: Make LTCons1 a variable passed in. */}
                   </div>
                 </Fragment>

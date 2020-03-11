@@ -131,7 +131,7 @@ export default function CompetencyDetailsForm(props) {
                 <FormGroup className="my-0 mx-0">
                   <Label for="Progress">Comments:</Label>
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     id="comments"
                     rows="3"></textarea>
                 </FormGroup>

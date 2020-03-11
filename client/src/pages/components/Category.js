@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import CompetencyDetailsForm from "./CompetencyDetailsForm";
 import GroupDetail from "./CompetencyGroup";
+import { findSortOrder } from "./sort";
 
 export default function Category(props) {
   //console.log(props.category);
@@ -11,10 +12,15 @@ export default function Category(props) {
         <h4 bgcolor={props.category.color} className="ml-3">
           {props.category.label}
         </h4>
-        {props.category.category_has_competencies_of.map(competency => (
-          <CompetencyDetailsForm key={competency.id} competency={competency} />
-        ))}
-        {props.category.has_group.map(group => (
+        {findSortOrder(props.category.category_has_competencies_of).map(
+          competency => (
+            <CompetencyDetailsForm
+              key={competency.id}
+              competency={competency}
+            />
+          )
+        )}
+        {findSortOrder(props.category.has_group).map(group => (
           <GroupDetail key={group.id} group={group} />
         ))}
       </div>

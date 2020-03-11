@@ -86,9 +86,17 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
       has_category {
         id
         label
+        orders {
+          order
+          planId
+        }
         category_has_competencies_of {
           id
           label
+          orders {
+            order
+            planId
+          }
           default_weight
           default_expiration
           short_name {
@@ -119,9 +127,17 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
         has_group {
           id
           label
+          orders {
+            order
+            planId
+          }
           group_has_competencies_of {
             id
             label
+            orders {
+              order
+              planId
+            }
             default_weight
             default_expiration
             short_name {
@@ -152,6 +168,10 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
           has_group {
             id
             label
+            orders {
+              order
+              planId
+            }
             group_has_competencies_of {
               id
               label
@@ -215,9 +235,17 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
       has_category {
         id
         label
+        orders {
+          order
+          planId
+        }
         category_has_competencies_of {
           id
           label
+          orders {
+            order
+            planId
+          }
           default_weight
           default_expiration
           short_name {
@@ -226,9 +254,18 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
         }
         has_group {
           id
+          label
+          orders {
+            order
+            planId
+          }
           group_has_competencies_of {
             id 
             label
+            orders {
+              order
+              planId
+            }
             default_weight
             default_expiration
             short_name {
@@ -237,6 +274,11 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
           }
           has_group {
             id
+            label
+            orders {
+              order
+              planId
+            }
             group_has_competencies_of {
               id
               label
@@ -290,16 +332,26 @@ export const SET_DOMAIN = gql`
       chosenMilestone: "-1"
       Name: $Name
     ) {
+      id
       chosenDomain
+      chosenPlan
+      chosenMilestone
+      Name
     }
   }
 `;
 
 export const SET_LOCAL_DOMAIN = gql`
   mutation SetDomain($domainId: String!) {
-    setDomain(domainId: $domainId) @client
-    setPlan(planId: "-1") @client
-    setMilestone(milestoneId: "-1") @client
+    setDomain(domainId: $domainId) @client {
+      domainId
+    }
+    setPlan(planId: "-1") @client {
+      planId
+    }
+    setMilestone(milestoneId: "-1") @client {
+      milestoneId
+    }
   }
 `;
 
@@ -318,8 +370,12 @@ export const SET_PLAN = gql`
 
 export const SET_LOCAL_PLAN = gql`
   mutation SetDomain($planId: String!) {
-    setPlan(planId: $planId) @client
-    setMilestone(milestoneId: "-1") @client
+    setPlan(planId: $planId) @client {
+      planId
+    }
+    setMilestone(milestoneId: "-1") @client {
+      milestoneId
+    }
   }
 `;
 
@@ -337,7 +393,9 @@ export const SET_MILESTONE = gql`
 
 export const SET_LOCAL_MILESTONE = gql`
   mutation SetMilestone($milestoneId: String!) {
-    setMilestone(planId: $milestoneId) @client
+    setMilestone(milestoneId: $milestoneId) @client {
+      milestoneId
+    }
   }
 `;
 
