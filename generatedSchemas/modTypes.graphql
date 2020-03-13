@@ -16,7 +16,7 @@ type PlanRoot {
 
 type Competency {
   _id: Long!
-  default_expiration: String!
+  default_expiration: String
   default_weight: String!
   id: String!
   label: String!

@@ -8,7 +8,7 @@ export default function CompetencyDetailsForm(props) {
     if (props.competency.target_competency.length > 0) {
       return props.competency.target_competency[0].label;
     } else {
-      return "";
+      return null;
     }
   };
 
@@ -16,7 +16,7 @@ export default function CompetencyDetailsForm(props) {
     if (props.competency.assessment_criteria.length > 0) {
       return props.competency.assessment_criteria[0].label;
     } else {
-      return "";
+      return null;
     }
   };
 
@@ -95,18 +95,22 @@ export default function CompetencyDetailsForm(props) {
         <div className="card card-body my-0 py-1 ml-3">
           <Form>
             <Row>
-              <Col className="mx-0">
-                <FormGroup className="my-0 mx-0">
-                  <Label for="TarComp"> Target Competency: </Label>
-                  <div id="TarComp">{TargetCompetency()}</div>
-                </FormGroup>
-              </Col>
-              <Col className="my-0 mx-0">
-                <FormGroup className="my-0 mx-0">
-                  <Label for="AssessCrit">Assessment Criteria: </Label>
-                  <div id="AssessCrit">{AssessmentCriteria()}</div>
-                </FormGroup>
-              </Col>
+              {TargetCompetency() && (
+                <Col className="mx-0">
+                  <FormGroup className="my-0 mx-0">
+                    <Label for="TarComp"> Target Competency: </Label>
+                    <div id="TarComp">{TargetCompetency()}</div>
+                  </FormGroup>
+                </Col>
+              )}
+              {AssessmentCriteria() && (
+                <Col className="my-0 mx-0">
+                  <FormGroup className="my-0 mx-0">
+                    <Label for="AssessCrit">Assessment Criteria: </Label>
+                    <div id="AssessCrit">{AssessmentCriteria()}</div>
+                  </FormGroup>
+                </Col>
+              )}
               <Col className="my-0 mx-0">
                 <FormGroup className="my-0 mx-0">
                   <Label for="SuggestionBox">Suggested Activity: </Label>
@@ -127,7 +131,7 @@ export default function CompetencyDetailsForm(props) {
                   </select>
                 </FormGroup>
               </Col>
-              <Col>
+              {/*               <Col>
                 <FormGroup className="my-0 mx-0">
                   <Label for="Progress">Comments:</Label>
                   <textarea
@@ -135,7 +139,7 @@ export default function CompetencyDetailsForm(props) {
                     id="comments"
                     rows="3"></textarea>
                 </FormGroup>
-              </Col>
+              </Col> */}
               <Col>
                 <FormGroup>
                   <Label for="Progress">Planned Activities:</Label>
