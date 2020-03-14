@@ -46,6 +46,7 @@ for (let index = 0; index < 2; index++) {
       planNum = process.env.GCPLANNUM;
   }
 
+  // Note: XML Files are in the Import Folder of Neo4j
   console.log;
 
   const Cypher = require("cypher-tagged-templates").default;
@@ -474,7 +475,7 @@ for (let index = 0; index < 2; index++) {
       MATCH (cc:CompetencyCategory {id: "LT-2882607985780612"})
       MATCH (prof:CompetencyCategory {id: "LT-4852932822755204"})
       MATCH (ed:CompetencyCategory {id: "LT-5978832729597828"})
-      MATCH (pr:PlanRoot {id: "1-root"})
+      MATCH (pr:PlanRoot {id: "1"})
 
       MERGE (m1:Milestone {ms: "LTSpec1"})<-[:HAS_MILESTONE]-(pr)
       MERGE (m1)-[:HAS_SHORT_NAME]-(:ShortName {label: "Language Technology Specialist (Level 1)"})
@@ -541,15 +542,18 @@ for (let index = 0; index < 2; index++) {
     // ================Adding Orlando ===================
     q.push(cypher`
 	MATCH (pr:ProgressRoot {userId: "1"})
-	MERGE (ms:Milestone {ms: "TransCons1"})
 	MERGE (d:Domain {id: "2"})
-	SET d.label = "Translation (Orlando)"
-
-	MERGE (d)-[:IS_PRIMARY_DOMAIN_OF]->(p:PlanRoot {id: "2-root"})-[:HAS_PRIMARY_DOMAIN]->(d)
+	MERGE (d)-[:IS_PRIMARY_DOMAIN_OF]->(p:PlanRoot {id: "2"})-[:HAS_PRIMARY_DOMAIN]->(d)
 	SET p.label = "Translation (Orlando) Plan",
 		p.plan_class = "Generic"
+	MERGE (ms:Milestone {ms: "TransCons1"})<-[:HAS_MILESTONE]-(p)
+	MERGE (ms)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translation Consultant (1)"})
+	
+	SET d.label = "Translation (Orlando)"
 
-	//CatTrans-Exe in 2-root
+	
+
+	//CatTrans-Exe in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 1, planId: "2"}]->(cat1:CompetencyCategory {id: "Trans-Exe"})-[:IS_CATEGORY_OF {order: 1, planId: "2"}]->(p)
 	SET cat1.label = "Exegetical and Hermeneutical Competencies"
 	MERGE (cat1)-[:HAS_SHORT_NAME]->(sn1:ShortName {id : "sn1"})
@@ -645,11 +649,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Ling in 2-root
+	//CatTrans-Ling in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 11, planId: "2"}]->(cat2:CompetencyCategory {id: "Trans-Ling"})-[:IS_CATEGORY_OF {order: 11, planId: "2"}]->(p)
 	SET cat2.label = "Linguistic Competencies"
 	MERGE (cat2)-[:HAS_SHORT_NAME]->(sn11:ShortName {id : "sn11"})
@@ -749,11 +753,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Proc in 2-root
+	//CatTrans-Proc in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 22, planId: "2"}]->(cat3:CompetencyCategory {id: "Trans-Proc"})-[:IS_CATEGORY_OF {order: 22, planId: "2"}]->(p)
 	SET cat3.label = "Translation Competencies"
 	MERGE (cat3)-[:HAS_SHORT_NAME]->(sn22:ShortName {id : "sn22"})
@@ -937,11 +941,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Lang in 2-root
+	//CatTrans-Lang in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 41, planId: "2"}]->(cat4:CompetencyCategory {id: "Trans-Lang"})-[:IS_CATEGORY_OF {order: 41, planId: "2"}]->(p)
 	SET cat4.label = "Language and Culture"
 	MERGE (cat4)-[:HAS_SHORT_NAME]->(sn40:ShortName {id : "sn40"})
@@ -1136,11 +1140,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Culture in 2-root
+	//CatTrans-Culture in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 60, planId: "2"}]->(cat5:CompetencyCategory {id: "Trans-Culture"})-[:IS_CATEGORY_OF {order: 60, planId: "2"}]->(p)
 	SET cat5.label = "Working in a Multicultural Environment"
 	MERGE (cat5)-[:HAS_SHORT_NAME]->(sn59:ShortName {id : "sn59"})
@@ -1274,11 +1278,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Mentor in 2-root
+	//CatTrans-Mentor in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 73, planId: "2"}]->(cat6:CompetencyCategory {id: "Trans-Mentor"})-[:IS_CATEGORY_OF {order: 73, planId: "2"}]->(p)
 	SET cat6.label = "Mentoring "
 	MERGE (cat6)-[:HAS_SHORT_NAME]->(sn72:ShortName {id : "sn72"})
@@ -1528,11 +1532,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Cons in 2-root
+	//CatTrans-Cons in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 97, planId: "2"}]->(cat7:CompetencyCategory {id: "Trans-Cons"})-[:IS_CATEGORY_OF {order: 97, planId: "2"}]->(p)
 	SET cat7.label = "Consulting Process Skills "
 	MERGE (cat7)-[:HAS_SHORT_NAME]->(sn96:ShortName {id : "sn96"})
@@ -1700,11 +1704,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Tech in 2-root
+	//CatTrans-Tech in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 114, planId: "2"}]->(cat8:CompetencyCategory {id: "Trans-Tech"})-[:IS_CATEGORY_OF {order: 114, planId: "2"}]->(p)
 	SET cat8.label = "Technology for Consulting "
 	MERGE (cat8)-[:HAS_SHORT_NAME]->(sn113:ShortName {id : "sn113"})
@@ -1816,11 +1820,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Prog in 2-root
+	//CatTrans-Prog in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 125, planId: "2"}]->(cat9:CompetencyCategory {id: "Trans-Prog"})-[:IS_CATEGORY_OF {order: 125, planId: "2"}]->(p)
 	SET cat9.label = "Language Programs "
 	MERGE (cat9)-[:HAS_SHORT_NAME]->(sn124:ShortName {id : "sn124"})
@@ -1987,11 +1991,11 @@ for (let index = 0; index < 2; index++) {
 `);
 
     q.push(cypher`
-	MATCH (p:PlanRoot {id: "2-root"})
+	MATCH (p:PlanRoot {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
-	//CatTrans-Interp in 2-root
+	//CatTrans-Interp in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 141, planId: "2"}]->(cat10:CompetencyCategory {id: "Trans-Interp"})-[:IS_CATEGORY_OF {order: 141, planId: "2"}]->(p)
 	SET cat10.label = "Interpersonal Skills "
 	MERGE (cat10)-[:HAS_SHORT_NAME]->(sn140:ShortName {id : "sn140"})

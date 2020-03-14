@@ -6,7 +6,7 @@ with open('./Trans1.tsv') as tsvfile:
     reader = csv.DictReader(tsvfile, dialect='excel-tab')
     currentCat = ""
     currentGrp = ""
-    currentPlanRoot = "2-root"
+    currentPlanRoot = "2"
     currentplanId = "2"
     catIndex = 0
     tcIndex = 0
@@ -36,7 +36,7 @@ with open('./Trans1.tsv') as tsvfile:
                 o.write('\n')
                 o.write('\n')
                 o.write('q.push(cypher`\n')
-                o.write('\tMATCH (p:PlanRoot {id: "2-root"})\n')
+                o.write('\tMATCH (p:PlanRoot {id: "2"})\n')
                 o.write('\tMATCH (pr:ProgressRoot {userId: "1"})\n')
                 o.write('\tMATCH (ms:Milestone {ms: "TransCons1"})\n')
                 o.write('\n')

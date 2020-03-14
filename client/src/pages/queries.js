@@ -177,6 +177,10 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
               label
               default_weight
               default_expiration
+              orders {
+                order
+                planId
+              }
               short_name {
                 label
               }
@@ -282,6 +286,10 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
             group_has_competencies_of {
               id
               label
+              orders {
+                order
+                planId
+              }
               default_weight
               default_expiration
               short_name {
