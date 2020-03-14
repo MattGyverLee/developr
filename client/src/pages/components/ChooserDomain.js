@@ -9,7 +9,7 @@ import { SelectionContext } from "./SelectionContext";
 function ChooserDomain(props) {
   const { state, setLocalState } = useContext(SelectionContext);
   const [setDomain] = useMutation(SET_LOCAL_DOMAIN);
-  const { domainId } = useQuery(SITREP);
+  const domainId = state.domainId;
 
   const UpdateSelectedDomain = domain => {
     localStorage.setItem("SelectedDomain", domain);

@@ -543,15 +543,12 @@ for (let index = 0; index < 2; index++) {
     q.push(cypher`
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MERGE (d:Domain {id: "2"})
+	SET d.label = "Translation (Orlando)"
 	MERGE (d)-[:IS_PRIMARY_DOMAIN_OF]->(p:PlanRoot {id: "2"})-[:HAS_PRIMARY_DOMAIN]->(d)
 	SET p.label = "Translation (Orlando) Plan",
 		p.plan_class = "Generic"
 	MERGE (ms:Milestone {ms: "TransCons1"})<-[:HAS_MILESTONE]-(p)
-	MERGE (ms)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translation Consultant (1)"})
-	
-	SET d.label = "Translation (Orlando)"
-
-	
+	MERGE (ms)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translation Consultant (1)"}) 
 
 	//CatTrans-Exe in 2
 	MERGE (p)-[:HAS_CATEGORY {order: 1, planId: "2"}]->(cat1:CompetencyCategory {id: "Trans-Exe"})-[:IS_CATEGORY_OF {order: 1, planId: "2"}]->(p)
@@ -573,6 +570,7 @@ for (let index = 0; index < 2; index++) {
 		cmp1.default_weight = 1.0
 	MERGE (cmp1)-[:HAS_SHORT_NAME]->(sn3:ShortName {id : "sn3"})
 	SET sn3.label = "Identify exegetical problems"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp1)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp1)-[:HAS_TARGET_COMPETENCY]->(tc2:TargetCompetency {id : "tc2"})
 	SET tc2.label = "Identify a potential problem in exegesis, think about alternative solutions, and evaluate those solutions based on sound reasoning."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp1)
@@ -584,6 +582,7 @@ for (let index = 0; index < 2; index++) {
 		cmp2.default_weight = 1.0
 	MERGE (cmp2)-[:HAS_SHORT_NAME]->(sn4:ShortName {id : "sn4"})
 	SET sn4.label = "Hermeneutical awareness"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp2)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp2)-[:HAS_TARGET_COMPETENCY]->(tc3:TargetCompetency {id : "tc3"})
 	SET tc3.label = "Demonstrate the awareness that exegesis is a hermeneutical activity that is partly based on the theological, social, and cultural assumptions of the interpreter."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp2)
@@ -601,6 +600,7 @@ for (let index = 0; index < 2; index++) {
 		cmp3.default_weight = 1.0
 	MERGE (cmp3)-[:HAS_SHORT_NAME]->(sn6:ShortName {id : "sn6"})
 	SET sn6.label = "Bible background"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp3)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp3)-[:HAS_TARGET_COMPETENCY]->(tc4:TargetCompetency {id : "tc4"})
 	SET tc4.label = "Demonstrate  overall knowledge of the Bible, e.g. the geographical, cultural, social, historical and theological background  and its  relevance for translation. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp3)
@@ -612,6 +612,7 @@ for (let index = 0; index < 2; index++) {
 		cmp4.default_weight = 1.0
 	MERGE (cmp4)-[:HAS_SHORT_NAME]->(sn7:ShortName {id : "sn7"})
 	SET sn7.label = "Biblical key terms"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp4)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp4)-[:HAS_TARGET_COMPETENCY]->(tc5:TargetCompetency {id : "tc5"})
 	SET tc5.label = "Demonstrate a good understanding of the meanings of Biblical key terms/concepts."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp4)
@@ -623,6 +624,7 @@ for (let index = 0; index < 2; index++) {
 		cmp5.default_weight = 1.0
 	MERGE (cmp5)-[:HAS_SHORT_NAME]->(sn8:ShortName {id : "sn8"})
 	SET sn8.label = "Intertextuality"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp5)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp5)-[:HAS_TARGET_COMPETENCY]->(tc6:TargetCompetency {id : "tc6"})
 	SET tc6.label = "Demonstrate a good understanding of intertextuality issues related to translation. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp5)
@@ -640,6 +642,7 @@ for (let index = 0; index < 2; index++) {
 		cmp6.default_weight = 1.0
 	MERGE (cmp6)-[:HAS_SHORT_NAME]->(sn10:ShortName {id : "sn10"})
 	SET sn10.label = "Biblical languages"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp6)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp6)-[:HAS_TARGET_COMPETENCY]->(tc7:TargetCompetency {id : "tc7"})
 	SET tc7.label = "Explain how the structure and properties of the Biblical languages (word order, use of articles, discourse structures, etc.) affect existing translations (which in turn affect the translation team). "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp6)
@@ -650,6 +653,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -671,6 +675,7 @@ for (let index = 0; index < 2; index++) {
 		cmp7.default_weight = 1.0
 	MERGE (cmp7)-[:HAS_SHORT_NAME]->(sn13:ShortName {id : "sn13"})
 	SET sn13.label = "Experience in foreign language"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp7)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp7)-[:HAS_TARGET_COMPETENCY]->(tc8:TargetCompetency {id : "tc8"})
 	SET tc8.label = "Converse  in at least one language outside the language family of their native language. Has a personal experiential appreciation for the effect the difficulties of learning and processing a radically different language may have on the translation process. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp7)
@@ -688,6 +693,7 @@ for (let index = 0; index < 2; index++) {
 		cmp8.default_weight = 1.0
 	MERGE (cmp8)-[:HAS_SHORT_NAME]->(sn15:ShortName {id : "sn15"})
 	SET sn15.label = "Language typology "
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp8)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp8)-[:HAS_TARGET_COMPETENCY]->(tc9:TargetCompetency {id : "tc9"})
 	SET tc9.label = "Demonstrate an understanding of language typology and basic grammatical structures of the minority language(s) and LWC(s) and how this may affect translation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp8)
@@ -705,6 +711,7 @@ for (let index = 0; index < 2; index++) {
 		cmp9.default_weight = 1.0
 	MERGE (cmp9)-[:HAS_SHORT_NAME]->(sn17:ShortName {id : "sn17"})
 	SET sn17.label = "Discourse structures"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp9)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp9)-[:HAS_TARGET_COMPETENCY]->(tc10:TargetCompetency {id : "tc10"})
 	SET tc10.label = "Understand the basic discourse structures and features in a variety of genres in the source text (LWC, Hebrew or Greek) and in the receptor language and their impact on exegesis and translation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp9)
@@ -716,6 +723,7 @@ for (let index = 0; index < 2; index++) {
 		cmp10.default_weight = 1.0
 	MERGE (cmp10)-[:HAS_SHORT_NAME]->(sn18:ShortName {id : "sn18"})
 	SET sn18.label = "Discourse mismatch"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp10)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp10)-[:HAS_TARGET_COMPETENCY]->(tc11:TargetCompetency {id : "tc11"})
 	SET tc11.label = "Demonstrate a good understanding of areas of potential discourse mismatch between the Biblical, source and target languages."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp10)
@@ -733,6 +741,7 @@ for (let index = 0; index < 2; index++) {
 		cmp11.default_weight = 1.0
 	MERGE (cmp11)-[:HAS_SHORT_NAME]->(sn20:ShortName {id : "sn20"})
 	SET sn20.label = "Sociolinguistics and pragmatics  "
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp11)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp11)-[:HAS_TARGET_COMPETENCY]->(tc12:TargetCompetency {id : "tc12"})
 	SET tc12.label = "Demonstrate a good understanding of the linguistic-pragmatic and sociolinguistic aspects of languages (e.g. language style, register, various pragmatic-linguistic functions of language, politeness, inferences, linguistic variation, multilingualism, language attitudes  etc.) and their impact upon the translation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp11)
@@ -744,6 +753,7 @@ for (let index = 0; index < 2; index++) {
 		cmp12.default_weight = 1.0
 	MERGE (cmp12)-[:HAS_SHORT_NAME]->(sn21:ShortName {id : "sn21"})
 	SET sn21.label = "Sociolinguistics and pragmatics  "
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp12)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp12)-[:HAS_TARGET_COMPETENCY]->(tc13:TargetCompetency {id : "tc13"})
 	SET tc13.label = "Demonstrate an understanding of the impact of the sociolinguistic context (e.g. impact of gender, dialect, register, voice quality) on the acceptability of written and audio Scripture."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp12)
@@ -754,6 +764,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -777,6 +788,7 @@ for (let index = 0; index < 2; index++) {
 		cmp13.default_weight = 1.0
 	MERGE (cmp13)-[:HAS_SHORT_NAME]->(sn24:ShortName {id : "sn24"})
 	SET sn24.label = "Identify potential problems"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp13)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp13)-[:HAS_TARGET_COMPETENCY]->(tc15:TargetCompetency {id : "tc15"})
 	SET tc15.label = "Identify a (potential) problem in translation, think about alternative solutions, and evaluate those solutions based on sound reasoning."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp13)
@@ -788,6 +800,7 @@ for (let index = 0; index < 2; index++) {
 		cmp14.default_weight = 1.0
 	MERGE (cmp14)-[:HAS_SHORT_NAME]->(sn25:ShortName {id : "sn25"})
 	SET sn25.label = "Evaluate  problems"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp14)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp14)-[:HAS_TARGET_COMPETENCY]->(tc16:TargetCompetency {id : "tc16"})
 	SET tc16.label = "Evaluate whether a potential problem of a translation is a real problem based on clear, systematic thinking."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp14)
@@ -799,6 +812,7 @@ for (let index = 0; index < 2; index++) {
 		cmp15.default_weight = 1.0
 	MERGE (cmp15)-[:HAS_SHORT_NAME]->(sn26:ShortName {id : "sn26"})
 	SET sn26.label = "Solve problems"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp15)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp15)-[:HAS_TARGET_COMPETENCY]->(tc17:TargetCompetency {id : "tc17"})
 	SET tc17.label = "Demonstrate a good understanding of frequently occurring translation problems (related to participant reference, foreign concepts, metaphors, rhetorical questions, lexical choices, culture and worldview interference, implicit information, key terms etc.) and of ways to solve these problems."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp15)
@@ -810,6 +824,7 @@ for (let index = 0; index < 2; index++) {
 		cmp16.default_weight = 1.0
 	MERGE (cmp16)-[:HAS_SHORT_NAME]->(sn27:ShortName {id : "sn27"})
 	SET sn27.label = "Theological awareness"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp16)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp16)-[:HAS_TARGET_COMPETENCY]->(tc18:TargetCompetency {id : "tc18"})
 	SET tc18.label = "Detect theological bias in translations and to help translation teams to remove those biases from the translation. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp16)
@@ -827,6 +842,7 @@ for (let index = 0; index < 2; index++) {
 		cmp17.default_weight = 1.0
 	MERGE (cmp17)-[:HAS_SHORT_NAME]->(sn29:ShortName {id : "sn29"})
 	SET sn29.label = "Translation roles"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp17)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp17)-[:HAS_TARGET_COMPETENCY]->(tc19:TargetCompetency {id : "tc19"})
 	SET tc19.label = "Explain the different roles and responsibilities of translators, translation facilitators, translation consultants. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp17)
@@ -838,6 +854,7 @@ for (let index = 0; index < 2; index++) {
 		cmp18.default_weight = 1.0
 	MERGE (cmp18)-[:HAS_SHORT_NAME]->(sn30:ShortName {id : "sn30"})
 	SET sn30.label = "Prepare for consultant check"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp18)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp18)-[:HAS_TARGET_COMPETENCY]->(tc20:TargetCompetency {id : "tc20"})
 	SET tc20.label = "Prepare for a consultant check, analyze written back translations, write clear and concise exegetical notes for translation teams, to actually do a face-to-face consultant check as well as remote check, and to follow up on the consultant check."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp18)
@@ -849,6 +866,7 @@ for (let index = 0; index < 2; index++) {
 		cmp19.default_weight = 1.0
 	MERGE (cmp19)-[:HAS_SHORT_NAME]->(sn31:ShortName {id : "sn31"})
 	SET sn31.label = "Train translation team"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp19)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp19)-[:HAS_TARGET_COMPETENCY]->(tc21:TargetCompetency {id : "tc21"})
 	SET tc21.label = "Guide and assist the translation team in drafting a section of Scripture. This includes, but is not limited to, exegesis, internalization, drafting, oral drafting, and quality assessment of the draft in relation to the source text and project goals. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp19)
@@ -860,6 +878,7 @@ for (let index = 0; index < 2; index++) {
 		cmp20.default_weight = 1.0
 	MERGE (cmp20)-[:HAS_SHORT_NAME]->(sn32:ShortName {id : "sn32"})
 	SET sn32.label = "Translation styles"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp20)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp20)-[:HAS_TARGET_COMPETENCY]->(tc22:TargetCompetency {id : "tc22"})
 	SET tc22.label = "Demonstrate a good understanding of different translation styles appropriate for different audiences and of the sociolinguistic factors that play a role in regard to making decisions related to translation style."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp20)
@@ -871,6 +890,7 @@ for (let index = 0; index < 2; index++) {
 		cmp21.default_weight = 1.0
 	MERGE (cmp21)-[:HAS_SHORT_NAME]->(sn33:ShortName {id : "sn33"})
 	SET sn33.label = "Biblical genres"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp21)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp21)-[:HAS_TARGET_COMPETENCY]->(tc23:TargetCompetency {id : "tc23"})
 	SET tc23.label = "Explain the differences to the translation team between different genres in the Bible (narrative, poetic, epistolary, prophetic) and the implications for translation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp21)
@@ -882,6 +902,7 @@ for (let index = 0; index < 2; index++) {
 		cmp22.default_weight = 1.0
 	MERGE (cmp22)-[:HAS_SHORT_NAME]->(sn34:ShortName {id : "sn34"})
 	SET sn34.label = "Back translations"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp22)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp22)-[:HAS_TARGET_COMPETENCY]->(tc24:TargetCompetency {id : "tc24"})
 	SET tc24.label = "Train the translation team in how to elicit or produce back translations and then verify them."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp22)
@@ -893,6 +914,7 @@ for (let index = 0; index < 2; index++) {
 		cmp23.default_weight = 1.0
 	MERGE (cmp23)-[:HAS_SHORT_NAME]->(sn35:ShortName {id : "sn35"})
 	SET sn35.label = "Comprehension check"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp23)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp23)-[:HAS_TARGET_COMPETENCY]->(tc25:TargetCompetency {id : "tc25"})
 	SET tc25.label = "Model, mentor and conduct good comprehension checks (including issues of naturalness and acceptability) with native speakers of the receptor language. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp23)
@@ -910,6 +932,7 @@ for (let index = 0; index < 2; index++) {
 		cmp24.default_weight = 1.0
 	MERGE (cmp24)-[:HAS_SHORT_NAME]->(sn37:ShortName {id : "sn37"})
 	SET sn37.label = "Impact of performance on meaning"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp24)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp24)-[:HAS_TARGET_COMPETENCY]->(tc26:TargetCompetency {id : "tc26"})
 	SET tc26.label = "Demonstrate an understanding of the impact of performance upon the meaning of the text/audio. Demonstrate familiarity with different theories of communication, the role of the communicator, the role of the audience, and the impact upon meaning. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp24)
@@ -921,6 +944,7 @@ for (let index = 0; index < 2; index++) {
 		cmp25.default_weight = 1.0
 	MERGE (cmp25)-[:HAS_SHORT_NAME]->(sn38:ShortName {id : "sn38"})
 	SET sn38.label = "Adaptation to audio"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp25)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp25)-[:HAS_TARGET_COMPETENCY]->(tc27:TargetCompetency {id : "tc27"})
 	SET tc27.label = "Demonstrate an understanding of the issues associated with adapting written text to audio and recorded audio to text and the ability to help a team think through the issues and choose appropriate translation solutions."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp25)
@@ -932,6 +956,7 @@ for (let index = 0; index < 2; index++) {
 		cmp26.default_weight = 1.0
 	MERGE (cmp26)-[:HAS_SHORT_NAME]->(sn39:ShortName {id : "sn39"})
 	SET sn39.label = "Paratextual materials"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp26)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp26)-[:HAS_TARGET_COMPETENCY]->(tc28:TargetCompetency {id : "tc28"})
 	SET tc28.label = "Demonstrate a clear understanding of the use of paratextual materials (e.g. footnotes, pictures, headings, introduction) and their impact upon the meaning of Scripture (e.g. written, audio) and their impact upon people's engagement with Scripture (e.g. written, audio). The ability to assess the impact of paratextual materials and advise the team on making appropriate decisions about paratextual material."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp26)
@@ -942,6 +967,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -965,6 +991,7 @@ for (let index = 0; index < 2; index++) {
 		cmp27.default_weight = 1.0
 	MERGE (cmp27)-[:HAS_SHORT_NAME]->(sn42:ShortName {id : "sn42"})
 	SET sn42.label = "Communicate in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp27)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp27)-[:HAS_TARGET_COMPETENCY]->(tc30:TargetCompetency {id : "tc30"})
 	SET tc30.label = "Listen and communicate well in the LWC with people from a variety of language communities."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp27)
@@ -976,6 +1003,7 @@ for (let index = 0; index < 2; index++) {
 		cmp28.default_weight = 1.0
 	MERGE (cmp28)-[:HAS_SHORT_NAME]->(sn43:ShortName {id : "sn43"})
 	SET sn43.label = "Choose LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp28)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp28)-[:HAS_TARGET_COMPETENCY]->(tc31:TargetCompetency {id : "tc31"})
 	SET tc31.label = "Choose the most appropriate language(s) from their repertoire for each context and be aware of the social implications of their language choice."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp28)
@@ -987,6 +1015,7 @@ for (let index = 0; index < 2; index++) {
 		cmp29.default_weight = 1.0
 	MERGE (cmp29)-[:HAS_SHORT_NAME]->(sn44:ShortName {id : "sn44"})
 	SET sn44.label = "Instruct in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp29)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp29)-[:HAS_TARGET_COMPETENCY]->(tc32:TargetCompetency {id : "tc32"})
 	SET tc32.label = "Use the LWC to design and lead instruction in multicultural contexts."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp29)
@@ -998,6 +1027,7 @@ for (let index = 0; index < 2; index++) {
 		cmp30.default_weight = 1.0
 	MERGE (cmp30)-[:HAS_SHORT_NAME]->(sn45:ShortName {id : "sn45"})
 	SET sn45.label = "Mentor in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp30)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp30)-[:HAS_TARGET_COMPETENCY]->(tc33:TargetCompetency {id : "tc33"})
 	SET tc33.label = "Coach and mentor others through the LWC."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp30)
@@ -1009,6 +1039,7 @@ for (let index = 0; index < 2; index++) {
 		cmp31.default_weight = 1.0
 	MERGE (cmp31)-[:HAS_SHORT_NAME]->(sn46:ShortName {id : "sn46"})
 	SET sn46.label = "Present in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp31)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp31)-[:HAS_TARGET_COMPETENCY]->(tc34:TargetCompetency {id : "tc34"})
 	SET tc34.label = "Prepare proposals, reports, and presentations in the LWC."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp31)
@@ -1020,6 +1051,7 @@ for (let index = 0; index < 2; index++) {
 		cmp32.default_weight = 1.0
 	MERGE (cmp32)-[:HAS_SHORT_NAME]->(sn47:ShortName {id : "sn47"})
 	SET sn47.label = "Assess in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp32)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp32)-[:HAS_TARGET_COMPETENCY]->(tc35:TargetCompetency {id : "tc35"})
 	SET tc35.label = "Assess and evaluate fairly the work of individuals and project teams in the LWC."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp32)
@@ -1037,6 +1069,7 @@ for (let index = 0; index < 2; index++) {
 		cmp33.default_weight = 1.0
 	MERGE (cmp33)-[:HAS_SHORT_NAME]->(sn49:ShortName {id : "sn49"})
 	SET sn49.label = "Create materials in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp33)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp33)-[:HAS_TARGET_COMPETENCY]->(tc36:TargetCompetency {id : "tc36"})
 	SET tc36.label = "Develop or adapt materials for instructional use and for publication in the LWC."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp33)
@@ -1048,6 +1081,7 @@ for (let index = 0; index < 2; index++) {
 		cmp34.default_weight = 1.0
 	MERGE (cmp34)-[:HAS_SHORT_NAME]->(sn50:ShortName {id : "sn50"})
 	SET sn50.label = "Participate in community in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp34)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp34)-[:HAS_TARGET_COMPETENCY]->(tc37:TargetCompetency {id : "tc37"})
 	SET tc37.label = "Contribute to a community of practice [CoP] through the LWC."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp34)
@@ -1059,6 +1093,7 @@ for (let index = 0; index < 2; index++) {
 		cmp35.default_weight = 1.0
 	MERGE (cmp35)-[:HAS_SHORT_NAME]->(sn51:ShortName {id : "sn51"})
 	SET sn51.label = "Research in LWC"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp35)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp35)-[:HAS_TARGET_COMPETENCY]->(tc38:TargetCompetency {id : "tc38"})
 	SET tc38.label = "Perform research which involves reading published technical materials in his/her specialty through the LWC."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp35)
@@ -1070,6 +1105,7 @@ for (let index = 0; index < 2; index++) {
 		cmp36.default_weight = 1.0
 	MERGE (cmp36)-[:HAS_SHORT_NAME]->(sn52:ShortName {id : "sn52"})
 	SET sn52.label = "Write in LWC for L2 speakers"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp36)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp36)-[:HAS_TARGET_COMPETENCY]->(tc39:TargetCompetency {id : "tc39"})
 	SET tc39.label = "Write in the LWC so that L2 readers can understand easily."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp36)
@@ -1087,6 +1123,7 @@ for (let index = 0; index < 2; index++) {
 		cmp37.default_weight = 1.0
 	MERGE (cmp37)-[:HAS_SHORT_NAME]->(sn54:ShortName {id : "sn54"})
 	SET sn54.label = "Cross-cultural research: execute"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp37)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp37)-[:HAS_TARGET_COMPETENCY]->(tc40:TargetCompetency {id : "tc40"})
 	SET tc40.label = "Choose and apply appropriate research skills to better understand cross-cultural experiences and situations."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp37)
@@ -1098,6 +1135,7 @@ for (let index = 0; index < 2; index++) {
 		cmp38.default_weight = 1.0
 	MERGE (cmp38)-[:HAS_SHORT_NAME]->(sn55:ShortName {id : "sn55"})
 	SET sn55.label = "Cross-cultural research: analyze"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp38)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp38)-[:HAS_TARGET_COMPETENCY]->(tc41:TargetCompetency {id : "tc41"})
 	SET tc41.label = "Find implications of results and share them with others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp38)
@@ -1109,6 +1147,7 @@ for (let index = 0; index < 2; index++) {
 		cmp39.default_weight = 1.0
 	MERGE (cmp39)-[:HAS_SHORT_NAME]->(sn56:ShortName {id : "sn56"})
 	SET sn56.label = "Cross-cultural research: apply"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp39)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp39)-[:HAS_TARGET_COMPETENCY]->(tc42:TargetCompetency {id : "tc42"})
 	SET tc42.label = "Use research findings to improve consulting strategies and practices."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp39)
@@ -1120,6 +1159,7 @@ for (let index = 0; index < 2; index++) {
 		cmp40.default_weight = 1.0
 	MERGE (cmp40)-[:HAS_SHORT_NAME]->(sn57:ShortName {id : "sn57"})
 	SET sn57.label = "Cross-cultural research: document"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp40)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp40)-[:HAS_TARGET_COMPETENCY]->(tc43:TargetCompetency {id : "tc43"})
 	SET tc43.label = "Document research findings so they can be shared in the organization and beyond."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp40)
@@ -1131,6 +1171,7 @@ for (let index = 0; index < 2; index++) {
 		cmp41.default_weight = 1.0
 	MERGE (cmp41)-[:HAS_SHORT_NAME]->(sn58:ShortName {id : "sn58"})
 	SET sn58.label = "Cross-cultural research: train"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp41)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp41)-[:HAS_TARGET_COMPETENCY]->(tc44:TargetCompetency {id : "tc44"})
 	SET tc44.label = "Help others to be reflexive and to apply basic anthropological skills."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp41)
@@ -1141,6 +1182,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -1164,6 +1206,7 @@ for (let index = 0; index < 2; index++) {
 		cmp42.default_weight = 1.0
 	MERGE (cmp42)-[:HAS_SHORT_NAME]->(sn61:ShortName {id : "sn61"})
 	SET sn61.label = "Understand patterns of communication"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp42)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp42)-[:HAS_TARGET_COMPETENCY]->(tc46:TargetCompetency {id : "tc46"})
 	SET tc46.label = "Identify and understand different patterns of communication."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp42)
@@ -1175,6 +1218,7 @@ for (let index = 0; index < 2; index++) {
 		cmp43.default_weight = 1.0
 	MERGE (cmp43)-[:HAS_SHORT_NAME]->(sn62:ShortName {id : "sn62"})
 	SET sn62.label = "Relate in different communication styles"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp43)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp43)-[:HAS_TARGET_COMPETENCY]->(tc47:TargetCompetency {id : "tc47"})
 	SET tc47.label = "Communicate and relate effectively with people of different communication styles, being aware of the impact of body language."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp43)
@@ -1186,6 +1230,7 @@ for (let index = 0; index < 2; index++) {
 		cmp44.default_weight = 1.0
 	MERGE (cmp44)-[:HAS_SHORT_NAME]->(sn63:ShortName {id : "sn63"})
 	SET sn63.label = "Complete team assignments"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp44)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp44)-[:HAS_TARGET_COMPETENCY]->(tc48:TargetCompetency {id : "tc48"})
 	SET tc48.label = "Complete team assignments acceptably where applicable. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp44)
@@ -1197,6 +1242,7 @@ for (let index = 0; index < 2; index++) {
 		cmp45.default_weight = 1.0
 	MERGE (cmp45)-[:HAS_SHORT_NAME]->(sn64:ShortName {id : "sn64"})
 	SET sn64.label = "Account for cultural backgrounds"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp45)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp45)-[:HAS_TARGET_COMPETENCY]->(tc49:TargetCompetency {id : "tc49"})
 	SET tc49.label = "Account for people's different cultural backgrounds and facilitate positive group dynamics and patterns of working that allow people to contribute more effectively."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp45)
@@ -1208,6 +1254,7 @@ for (let index = 0; index < 2; index++) {
 		cmp46.default_weight = 1.0
 	MERGE (cmp46)-[:HAS_SHORT_NAME]->(sn65:ShortName {id : "sn65"})
 	SET sn65.label = "Adapt to leadership styles"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp46)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp46)-[:HAS_TARGET_COMPETENCY]->(tc50:TargetCompetency {id : "tc50"})
 	SET tc50.label = "Identify, understand and adapt to a variety of cross-cultural leadership styles."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp46)
@@ -1219,6 +1266,7 @@ for (let index = 0; index < 2; index++) {
 		cmp47.default_weight = 1.0
 	MERGE (cmp47)-[:HAS_SHORT_NAME]->(sn66:ShortName {id : "sn66"})
 	SET sn66.label = "Participate in decision making"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp47)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp47)-[:HAS_TARGET_COMPETENCY]->(tc51:TargetCompetency {id : "tc51"})
 	SET tc51.label = "Participate effectively in decision-making processes."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp47)
@@ -1230,6 +1278,7 @@ for (let index = 0; index < 2; index++) {
 		cmp48.default_weight = 1.0
 	MERGE (cmp48)-[:HAS_SHORT_NAME]->(sn67:ShortName {id : "sn67"})
 	SET sn67.label = "Communicate and participate effectively in cross-cultural mentoring, training, and project team activities, guiding translation teams to find translation problems and to solve them rather than solving the problems for them."
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp48)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp48)-[:HAS_TARGET_COMPETENCY]->(tc52:TargetCompetency {id : "tc52"})
 	SET tc52.label = "Explain how the various cultural structures and social processes may present both opportunities and challenges in leadership, decision making and relationships when working with a multicultural group or team."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp48)
@@ -1247,6 +1296,7 @@ for (let index = 0; index < 2; index++) {
 		cmp49.default_weight = 1.0
 	MERGE (cmp49)-[:HAS_SHORT_NAME]->(sn69:ShortName {id : "sn69"})
 	SET sn69.label = "Train cross-culturally"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp49)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp49)-[:HAS_TARGET_COMPETENCY]->(tc53:TargetCompetency {id : "tc53"})
 	SET tc53.label = "Communicate and participate effectively in cross-cultural mentoring, training, and project team activities, guiding translation teams to find translation problems and to solve them rather than solving the problems for them."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp49)
@@ -1258,6 +1308,7 @@ for (let index = 0; index < 2; index++) {
 		cmp50.default_weight = 1.0
 	MERGE (cmp50)-[:HAS_SHORT_NAME]->(sn70:ShortName {id : "sn70"})
 	SET sn70.label = "Mentor peers cross-culturally"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp50)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp50)-[:HAS_TARGET_COMPETENCY]->(tc54:TargetCompetency {id : "tc54"})
 	SET tc54.label = "Coach and mentor peers in culturally sensitive ways."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp50)
@@ -1269,6 +1320,7 @@ for (let index = 0; index < 2; index++) {
 		cmp51.default_weight = 1.0
 	MERGE (cmp51)-[:HAS_SHORT_NAME]->(sn71:ShortName {id : "sn71"})
 	SET sn71.label = "Assess cross-culturally"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp51)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp51)-[:HAS_TARGET_COMPETENCY]->(tc55:TargetCompetency {id : "tc55"})
 	SET tc55.label = "Assess and evaluate the work of individuals in a multicultural environment, and communicate that assessment in a culturally appropriate way:  knowing when to be flexible and when to insist that a certain interpretation or rendering is not acceptable; clearly explaining why a certain interpretation or rendering is not acceptable."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp51)
@@ -1279,6 +1331,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -1302,6 +1355,7 @@ for (let index = 0; index < 2; index++) {
 		cmp52.default_weight = 1.0
 	MERGE (cmp52)-[:HAS_SHORT_NAME]->(sn74:ShortName {id : "sn74"})
 	SET sn74.label = "Mentoring and Coaching"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp52)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp52)-[:HAS_TARGET_COMPETENCY]->(tc57:TargetCompetency {id : "tc57"})
 	SET tc57.label = "Describe how formal mentoring is different from informal mentoring and coaching/facilitation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp52)
@@ -1313,6 +1367,7 @@ for (let index = 0; index < 2; index++) {
 		cmp53.default_weight = 1.0
 	MERGE (cmp53)-[:HAS_SHORT_NAME]->(sn75:ShortName {id : "sn75"})
 	SET sn75.label = "Mentor and Mentoree in Formal Mentoring"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp53)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp53)-[:HAS_TARGET_COMPETENCY]->(tc58:TargetCompetency {id : "tc58"})
 	SET tc58.label = "Understand and be able to explain the purpose and expectations of formal mentoring, and the roles of the mentor and mentoree."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp53)
@@ -1324,6 +1379,7 @@ for (let index = 0; index < 2; index++) {
 		cmp54.default_weight = 1.0
 	MERGE (cmp54)-[:HAS_SHORT_NAME]->(sn76:ShortName {id : "sn76"})
 	SET sn76.label = "Administrative expectations"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp54)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp54)-[:HAS_TARGET_COMPETENCY]->(tc59:TargetCompetency {id : "tc59"})
 	SET tc59.label = "Know the administrative tasks expected by the mentoree's organization."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp54)
@@ -1341,6 +1397,7 @@ for (let index = 0; index < 2; index++) {
 		cmp55.default_weight = 1.0
 	MERGE (cmp55)-[:HAS_SHORT_NAME]->(sn78:ShortName {id : "sn78"})
 	SET sn78.label = "Expectations for relationship"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp55)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp55)-[:HAS_TARGET_COMPETENCY]->(tc60:TargetCompetency {id : "tc60"})
 	SET tc60.label = "Set and follow protocols and expectations for the relationship (how goals are going to be achieved, how to handle disagreements, how to track progress, etc.)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp55)
@@ -1352,6 +1409,7 @@ for (let index = 0; index < 2; index++) {
 		cmp56.default_weight = 1.0
 	MERGE (cmp56)-[:HAS_SHORT_NAME]->(sn79:ShortName {id : "sn79"})
 	SET sn79.label = "Reciprocal relationship"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp56)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp56)-[:HAS_TARGET_COMPETENCY]->(tc61:TargetCompetency {id : "tc61"})
 	SET tc61.label = "Develop a reciprocal relationship through sharing experiences, exploring expectations, and clarifying the roles of mentor and mentoree."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp56)
@@ -1363,6 +1421,7 @@ for (let index = 0; index < 2; index++) {
 		cmp57.default_weight = 1.0
 	MERGE (cmp57)-[:HAS_SHORT_NAME]->(sn80:ShortName {id : "sn80"})
 	SET sn80.label = "Mutual learning"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp57)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp57)-[:HAS_TARGET_COMPETENCY]->(tc62:TargetCompetency {id : "tc62"})
 	SET tc62.label = "Encourage a relationship of mutual learning between mentor and mentoree (with an attitude of  'Let us learn together')."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp57)
@@ -1374,6 +1433,7 @@ for (let index = 0; index < 2; index++) {
 		cmp58.default_weight = 1.0
 	MERGE (cmp58)-[:HAS_SHORT_NAME]->(sn81:ShortName {id : "sn81"})
 	SET sn81.label = "Listen to enourage growth"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp58)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp58)-[:HAS_TARGET_COMPETENCY]->(tc63:TargetCompetency {id : "tc63"})
 	SET tc63.label = "Listen actively and use encouragement to facilitate growth."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp58)
@@ -1385,6 +1445,7 @@ for (let index = 0; index < 2; index++) {
 		cmp59.default_weight = 1.0
 	MERGE (cmp59)-[:HAS_SHORT_NAME]->(sn82:ShortName {id : "sn82"})
 	SET sn82.label = "Goals for continuous improvement"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp59)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp59)-[:HAS_TARGET_COMPETENCY]->(tc64:TargetCompetency {id : "tc64"})
 	SET tc64.label = "Provide guidance in reflecting upon and interpreting experiences and performance in order to develop goals in a plan for continuous improvement."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp59)
@@ -1396,6 +1457,7 @@ for (let index = 0; index < 2; index++) {
 		cmp60.default_weight = 1.0
 	MERGE (cmp60)-[:HAS_SHORT_NAME]->(sn83:ShortName {id : "sn83"})
 	SET sn83.label = "Recognize goals met"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp60)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp60)-[:HAS_TARGET_COMPETENCY]->(tc65:TargetCompetency {id : "tc65"})
 	SET tc65.label = "Set clear goals for the mentoree to achieve, recognize and articulate when goals are met. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp60)
@@ -1407,6 +1469,7 @@ for (let index = 0; index < 2; index++) {
 		cmp61.default_weight = 1.0
 	MERGE (cmp61)-[:HAS_SHORT_NAME]->(sn84:ShortName {id : "sn84"})
 	SET sn84.label = "Transfer competencies"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp61)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp61)-[:HAS_TARGET_COMPETENCY]->(tc66:TargetCompetency {id : "tc66"})
 	SET tc66.label = "Use knowledge and experience in a particular domain to help the mentoree acquire and apply new knowledge, skills and attitudes, a. by explaining, modeling, giving effective examples b. by drawing out the mentoree's thoughts in culturally appropriate ways (e.g open questions, polite commands, sharing stories with each other, saying ' I wonder what the best way would be to...')."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp61)
@@ -1418,6 +1481,7 @@ for (let index = 0; index < 2; index++) {
 		cmp62.default_weight = 1.0
 	MERGE (cmp62)-[:HAS_SHORT_NAME]->(sn85:ShortName {id : "sn85"})
 	SET sn85.label = "Provide feedback"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp62)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp62)-[:HAS_TARGET_COMPETENCY]->(tc67:TargetCompetency {id : "tc67"})
 	SET tc67.label = "Give and receive sincere feedback about the mentoree's performance, behavior and development with care and compassion in a culturally appropriate way, (identifying both positive growth and areas still needing improvement)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp62)
@@ -1429,6 +1493,7 @@ for (let index = 0; index < 2; index++) {
 		cmp63.default_weight = 1.0
 	MERGE (cmp63)-[:HAS_SHORT_NAME]->(sn86:ShortName {id : "sn86"})
 	SET sn86.label = "Create safe space"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp63)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp63)-[:HAS_TARGET_COMPETENCY]->(tc68:TargetCompetency {id : "tc68"})
 	SET tc68.label = "Create a safe space for the mentoree to excel, shine and build confidence. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp63)
@@ -1440,6 +1505,7 @@ for (let index = 0; index < 2; index++) {
 		cmp64.default_weight = 1.0
 	MERGE (cmp64)-[:HAS_SHORT_NAME]->(sn87:ShortName {id : "sn87"})
 	SET sn87.label = "Advocate on behalf of mentoree"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp64)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp64)-[:HAS_TARGET_COMPETENCY]->(tc69:TargetCompetency {id : "tc69"})
 	SET tc69.label = "Advocate on behalf of one's mentorees so they  have opportunities to get experiences necessary for their growth."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp64)
@@ -1451,6 +1517,7 @@ for (let index = 0; index < 2; index++) {
 		cmp65.default_weight = 1.0
 	MERGE (cmp65)-[:HAS_SHORT_NAME]->(sn88:ShortName {id : "sn88"})
 	SET sn88.label = "Maintain confidentiality"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp65)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp65)-[:HAS_TARGET_COMPETENCY]->(tc70:TargetCompetency {id : "tc70"})
 	SET tc70.label = "Maintain confidentiality when sharing experiences, discussing issues and solving problems."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp65)
@@ -1468,6 +1535,7 @@ for (let index = 0; index < 2; index++) {
 		cmp66.default_weight = 1.0
 	MERGE (cmp66)-[:HAS_SHORT_NAME]->(sn90:ShortName {id : "sn90"})
 	SET sn90.label = "Respect"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp66)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp66)-[:HAS_TARGET_COMPETENCY]->(tc71:TargetCompetency {id : "tc71"})
 	SET tc71.label = "Respects and values other people's opinions, knowledge, and experience."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp66)
@@ -1479,6 +1547,7 @@ for (let index = 0; index < 2; index++) {
 		cmp67.default_weight = 1.0
 	MERGE (cmp67)-[:HAS_SHORT_NAME]->(sn91:ShortName {id : "sn91"})
 	SET sn91.label = "Humility"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp67)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp67)-[:HAS_TARGET_COMPETENCY]->(tc72:TargetCompetency {id : "tc72"})
 	SET tc72.label = "Is realistically self-aware and humble."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp67)
@@ -1490,6 +1559,7 @@ for (let index = 0; index < 2; index++) {
 		cmp68.default_weight = 1.0
 	MERGE (cmp68)-[:HAS_SHORT_NAME]->(sn92:ShortName {id : "sn92"})
 	SET sn92.label = "Rejoice with others"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp68)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp68)-[:HAS_TARGET_COMPETENCY]->(tc73:TargetCompetency {id : "tc73"})
 	SET tc73.label = "Delights in  other people's success."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp68)
@@ -1501,6 +1571,7 @@ for (let index = 0; index < 2; index++) {
 		cmp69.default_weight = 1.0
 	MERGE (cmp69)-[:HAS_SHORT_NAME]->(sn93:ShortName {id : "sn93"})
 	SET sn93.label = "Open"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp69)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp69)-[:HAS_TARGET_COMPETENCY]->(tc74:TargetCompetency {id : "tc74"})
 	SET tc74.label = "Is willing to be open about one's own successes and failures (wise and appropriate self-disclosure)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp69)
@@ -1512,6 +1583,7 @@ for (let index = 0; index < 2; index++) {
 		cmp70.default_weight = 1.0
 	MERGE (cmp70)-[:HAS_SHORT_NAME]->(sn94:ShortName {id : "sn94"})
 	SET sn94.label = "Self-aware"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp70)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp70)-[:HAS_TARGET_COMPETENCY]->(tc75:TargetCompetency {id : "tc75"})
 	SET tc75.label = "Understands the limitations of one's own experiences and perspective, and minimize any negative impact on the mentoree."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp70)
@@ -1523,6 +1595,7 @@ for (let index = 0; index < 2; index++) {
 		cmp71.default_weight = 1.0
 	MERGE (cmp71)-[:HAS_SHORT_NAME]->(sn95:ShortName {id : "sn95"})
 	SET sn95.label = "Expect mentoree to mentor othesr"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp71)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp71)-[:HAS_TARGET_COMPETENCY]->(tc76:TargetCompetency {id : "tc76"})
 	SET tc76.label = "Expects that the mentoree develops to mentor  others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp71)
@@ -1533,6 +1606,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -1556,6 +1630,7 @@ for (let index = 0; index < 2; index++) {
 		cmp72.default_weight = 1.0
 	MERGE (cmp72)-[:HAS_SHORT_NAME]->(sn98:ShortName {id : "sn98"})
 	SET sn98.label = "Establish collaborative relationships"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp72)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp72)-[:HAS_TARGET_COMPETENCY]->(tc78:TargetCompetency {id : "tc78"})
 	SET tc78.label = "Establish collaborative relationships with individual clients and within an organization."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp72)
@@ -1567,6 +1642,7 @@ for (let index = 0; index < 2; index++) {
 		cmp73.default_weight = 1.0
 	MERGE (cmp73)-[:HAS_SHORT_NAME]->(sn99:ShortName {id : "sn99"})
 	SET sn99.label = "Represent  organization with diplomacy"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp73)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp73)-[:HAS_TARGET_COMPETENCY]->(tc79:TargetCompetency {id : "tc79"})
 	SET tc79.label = "Represent their organization with diplomacy in intra- and inter-organizational projects/consulting processes."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp73)
@@ -1578,6 +1654,7 @@ for (let index = 0; index < 2; index++) {
 		cmp74.default_weight = 1.0
 	MERGE (cmp74)-[:HAS_SHORT_NAME]->(sn100:ShortName {id : "sn100"})
 	SET sn100.label = " Articulate different stages of the consulting process"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp74)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp74)-[:HAS_TARGET_COMPETENCY]->(tc80:TargetCompetency {id : "tc80"})
 	SET tc80.label = "Articulate an understanding of different stages/facets of the consulting process, including contracting (defining the assignment and clarifying roles), discovery, feedback, engagement/implementation, and evaluation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp74)
@@ -1595,6 +1672,7 @@ for (let index = 0; index < 2; index++) {
 		cmp75.default_weight = 1.0
 	MERGE (cmp75)-[:HAS_SHORT_NAME]->(sn102:ShortName {id : "sn102"})
 	SET sn102.label = "Define expectations"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp75)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp75)-[:HAS_TARGET_COMPETENCY]->(tc81:TargetCompetency {id : "tc81"})
 	SET tc81.label = "Define what is expected of the consultation process, what the boundaries are, what support the consultant requires, and what and when the consultant and consultee are expected to deliver."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp75)
@@ -1606,6 +1684,7 @@ for (let index = 0; index < 2; index++) {
 		cmp76.default_weight = 1.0
 	MERGE (cmp76)-[:HAS_SHORT_NAME]->(sn103:ShortName {id : "sn103"})
 	SET sn103.label = "Listen to needs of team"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp76)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp76)-[:HAS_TARGET_COMPETENCY]->(tc82:TargetCompetency {id : "tc82"})
 	SET tc82.label = "Listen to and understand the needs that the client/team/organization expresses. Understands the interplay between Budget, Time, Scope, project goals, and their impact on Quality and can successfully shape and navigate these things to meet desired parameters."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp76)
@@ -1623,6 +1702,7 @@ for (let index = 0; index < 2; index++) {
 		cmp77.default_weight = 1.0
 	MERGE (cmp77)-[:HAS_SHORT_NAME]->(sn105:ShortName {id : "sn105"})
 	SET sn105.label = "Guide team through consultant process"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp77)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp77)-[:HAS_TARGET_COMPETENCY]->(tc83:TargetCompetency {id : "tc83"})
 	SET tc83.label = "Organize a process of discovery, data collection, and dialogue that will help analyze the expressed needs/problems.  (Is able to guide the team through a consulting session, including preparation and follow-up)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp77)
@@ -1634,6 +1714,7 @@ for (let index = 0; index < 2; index++) {
 		cmp78.default_weight = 1.0
 	MERGE (cmp78)-[:HAS_SHORT_NAME]->(sn106:ShortName {id : "sn106"})
 	SET sn106.label = "Provide feedback"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp78)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp78)-[:HAS_TARGET_COMPETENCY]->(tc84:TargetCompetency {id : "tc84"})
 	SET tc84.label = "Provide feedback and recommendations from the discovery process in a way that maximizes client commitment and engagement (write a consultant report)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp78)
@@ -1645,6 +1726,7 @@ for (let index = 0; index < 2; index++) {
 		cmp79.default_weight = 1.0
 	MERGE (cmp79)-[:HAS_SHORT_NAME]->(sn107:ShortName {id : "sn107"})
 	SET sn107.label = "Deal with resistance to change"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp79)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp79)-[:HAS_TARGET_COMPETENCY]->(tc85:TargetCompetency {id : "tc85"})
 	SET tc85.label = "Understand the process of change (including cultural, emotional, and personal factors) and deal with resistance to it from within the organization."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp79)
@@ -1662,6 +1744,7 @@ for (let index = 0; index < 2; index++) {
 		cmp80.default_weight = 1.0
 	MERGE (cmp80)-[:HAS_SHORT_NAME]->(sn109:ShortName {id : "sn109"})
 	SET sn109.label = "Define specific assignments"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp80)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp80)-[:HAS_TARGET_COMPETENCY]->(tc86:TargetCompetency {id : "tc86"})
 	SET tc86.label = "Manage meetings which will lead to a plan of action, clearly defining specific assignments needed to implement change."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp80)
@@ -1673,6 +1756,7 @@ for (let index = 0; index < 2; index++) {
 		cmp81.default_weight = 1.0
 	MERGE (cmp81)-[:HAS_SHORT_NAME]->(sn110:ShortName {id : "sn110"})
 	SET sn110.label = "Monitor progress"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp81)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp81)-[:HAS_TARGET_COMPETENCY]->(tc87:TargetCompetency {id : "tc87"})
 	SET tc87.label = "Monitor progress during the implementation."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp81)
@@ -1684,6 +1768,7 @@ for (let index = 0; index < 2; index++) {
 		cmp82.default_weight = 1.0
 	MERGE (cmp82)-[:HAS_SHORT_NAME]->(sn111:ShortName {id : "sn111"})
 	SET sn111.label = "Equip the team"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp82)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp82)-[:HAS_TARGET_COMPETENCY]->(tc88:TargetCompetency {id : "tc88"})
 	SET tc88.label = "Work towards a situation where the organization/client is equipped to carry forward the project independent of the consultant."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp82)
@@ -1695,6 +1780,7 @@ for (let index = 0; index < 2; index++) {
 		cmp83.default_weight = 1.0
 	MERGE (cmp83)-[:HAS_SHORT_NAME]->(sn112:ShortName {id : "sn112"})
 	SET sn112.label = "Final evaluation"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp83)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp83)-[:HAS_TARGET_COMPETENCY]->(tc89:TargetCompetency {id : "tc89"})
 	SET tc89.label = "Provide an evaluation of the process/results before withdrawal (including oral feedback and written reports, as appropriate)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp83)
@@ -1705,6 +1791,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -1728,6 +1815,7 @@ for (let index = 0; index < 2; index++) {
 		cmp84.default_weight = 1.0
 	MERGE (cmp84)-[:HAS_SHORT_NAME]->(sn115:ShortName {id : "sn115"})
 	SET sn115.label = "Use relevant translation software"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp84)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp84)-[:HAS_TARGET_COMPETENCY]->(tc91:TargetCompetency {id : "tc91"})
 	SET tc91.label = "Demonstrate the ability to use relevant software (e.g. Paratext, Logos, Render, OneStory Editor, HearThis, Transcriber) well (research an exegetical issue, prepare exegetical notes, resolve notes, perform various kinds of checks)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp84)
@@ -1739,6 +1827,7 @@ for (let index = 0; index < 2; index++) {
 		cmp85.default_weight = 1.0
 	MERGE (cmp85)-[:HAS_SHORT_NAME]->(sn116:ShortName {id : "sn116"})
 	SET sn116.label = "Help team with first aid on software"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp85)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp85)-[:HAS_TARGET_COMPETENCY]->(tc92:TargetCompetency {id : "tc92"})
 	SET tc92.label = "Demonstrate the ability to help translation teams ('first aid'), when they run into a problem with their equipment and software (e.g. reinstalling the relevant software)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp85)
@@ -1756,6 +1845,7 @@ for (let index = 0; index < 2; index++) {
 		cmp86.default_weight = 1.0
 	MERGE (cmp86)-[:HAS_SHORT_NAME]->(sn118:ShortName {id : "sn118"})
 	SET sn118.label = "Maintain technological devices"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp86)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp86)-[:HAS_TARGET_COMPETENCY]->(tc93:TargetCompetency {id : "tc93"})
 	SET tc93.label = "Responsibly maintain digital devices."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp86)
@@ -1767,6 +1857,7 @@ for (let index = 0; index < 2; index++) {
 		cmp87.default_weight = 1.0
 	MERGE (cmp87)-[:HAS_SHORT_NAME]->(sn119:ShortName {id : "sn119"})
 	SET sn119.label = "Safeguard data"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp87)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp87)-[:HAS_TARGET_COMPETENCY]->(tc94:TargetCompetency {id : "tc94"})
 	SET tc94.label = "Keep data safe and well-organized."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp87)
@@ -1778,6 +1869,7 @@ for (let index = 0; index < 2; index++) {
 		cmp88.default_weight = 1.0
 	MERGE (cmp88)-[:HAS_SHORT_NAME]->(sn120:ShortName {id : "sn120"})
 	SET sn120.label = "Digital communication"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp88)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp88)-[:HAS_TARGET_COMPETENCY]->(tc95:TargetCompetency {id : "tc95"})
 	SET tc95.label = "Use various devices and digital tools to communicate with others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp88)
@@ -1789,6 +1881,7 @@ for (let index = 0; index < 2; index++) {
 		cmp89.default_weight = 1.0
 	MERGE (cmp89)-[:HAS_SHORT_NAME]->(sn121:ShortName {id : "sn121"})
 	SET sn121.label = "Written communication"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp89)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp89)-[:HAS_TARGET_COMPETENCY]->(tc96:TargetCompetency {id : "tc96"})
 	SET tc96.label = "Use best practices for email and other written communication with others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp89)
@@ -1800,6 +1893,7 @@ for (let index = 0; index < 2; index++) {
 		cmp90.default_weight = 1.0
 	MERGE (cmp90)-[:HAS_SHORT_NAME]->(sn122:ShortName {id : "sn122"})
 	SET sn122.label = "Collaboration tools"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp90)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp90)-[:HAS_TARGET_COMPETENCY]->(tc97:TargetCompetency {id : "tc97"})
 	SET tc97.label = "Use collaboration tools (e.g. file sharing, track changes, Google, etc.)."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp90)
@@ -1811,6 +1905,7 @@ for (let index = 0; index < 2; index++) {
 		cmp91.default_weight = 1.0
 	MERGE (cmp91)-[:HAS_SHORT_NAME]->(sn123:ShortName {id : "sn123"})
 	SET sn123.label = "Internet"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp91)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp91)-[:HAS_TARGET_COMPETENCY]->(tc98:TargetCompetency {id : "tc98"})
 	SET tc98.label = "Use the internet to find reliable information in the field and share information appropriately."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp91)
@@ -1821,6 +1916,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -1844,6 +1940,7 @@ for (let index = 0; index < 2; index++) {
 		cmp92.default_weight = 1.0
 	MERGE (cmp92)-[:HAS_SHORT_NAME]->(sn126:ShortName {id : "sn126"})
 	SET sn126.label = "Planning process"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp92)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp92)-[:HAS_TARGET_COMPETENCY]->(tc100:TargetCompetency {id : "tc100"})
 	SET tc100.label = "Articulate the elements of the planning process."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp92)
@@ -1855,6 +1952,7 @@ for (let index = 0; index < 2; index++) {
 		cmp93.default_weight = 1.0
 	MERGE (cmp93)-[:HAS_SHORT_NAME]->(sn127:ShortName {id : "sn127"})
 	SET sn127.label = "Project funding proposal"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp93)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp93)-[:HAS_TARGET_COMPETENCY]->(tc101:TargetCompetency {id : "tc101"})
 	SET tc101.label = "Articulate the key elements of a project funding proposal."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp93)
@@ -1866,6 +1964,7 @@ for (let index = 0; index < 2; index++) {
 		cmp94.default_weight = 1.0
 	MERGE (cmp94)-[:HAS_SHORT_NAME]->(sn128:ShortName {id : "sn128"})
 	SET sn128.label = "Authorisations required"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp94)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp94)-[:HAS_TARGET_COMPETENCY]->(tc102:TargetCompetency {id : "tc102"})
 	SET tc102.label = "Explain the checks and sign-offs required at different stages of a language program."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp94)
@@ -1877,6 +1976,7 @@ for (let index = 0; index < 2; index++) {
 		cmp95.default_weight = 1.0
 	MERGE (cmp95)-[:HAS_SHORT_NAME]->(sn129:ShortName {id : "sn129"})
 	SET sn129.label = "Sociolingiustic relevance"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp95)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp95)-[:HAS_TARGET_COMPETENCY]->(tc103:TargetCompetency {id : "tc103"})
 	SET tc103.label = "Explain the relevance of basic concepts of sociolinguistics, such as variation, identity, multilingualism, attitudes, vitality, etc. to language program design."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp95)
@@ -1888,6 +1988,7 @@ for (let index = 0; index < 2; index++) {
 		cmp96.default_weight = 1.0
 	MERGE (cmp96)-[:HAS_SHORT_NAME]->(sn130:ShortName {id : "sn130"})
 	SET sn130.label = "Intellectual property"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp96)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp96)-[:HAS_TARGET_COMPETENCY]->(tc104:TargetCompetency {id : "tc104"})
 	SET tc104.label = "Demonstrate appropriate handling of Intellectual Property issues."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp96)
@@ -1899,6 +2000,7 @@ for (let index = 0; index < 2; index++) {
 		cmp97.default_weight = 1.0
 	MERGE (cmp97)-[:HAS_SHORT_NAME]->(sn131:ShortName {id : "sn131"})
 	SET sn131.label = "Working in partnership"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp97)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp97)-[:HAS_TARGET_COMPETENCY]->(tc105:TargetCompetency {id : "tc105"})
 	SET tc105.label = "Demonstrate understanding of, and positive attitudes towards, working through partnerships and teams to accomplish all language development strategic goals."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp97)
@@ -1910,6 +2012,7 @@ for (let index = 0; index < 2; index++) {
 		cmp98.default_weight = 1.0
 	MERGE (cmp98)-[:HAS_SHORT_NAME]->(sn132:ShortName {id : "sn132"})
 	SET sn132.label = "Participatory methods"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp98)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp98)-[:HAS_TARGET_COMPETENCY]->(tc106:TargetCompetency {id : "tc106"})
 	SET tc106.label = "Demonstrate an ability to use participatory methods when working with a language community to promote acceptance."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp98)
@@ -1921,6 +2024,7 @@ for (let index = 0; index < 2; index++) {
 		cmp99.default_weight = 1.0
 	MERGE (cmp99)-[:HAS_SHORT_NAME]->(sn133:ShortName {id : "sn133"})
 	SET sn133.label = "Best practices for desigining project"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp99)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp99)-[:HAS_TARGET_COMPETENCY]->(tc107:TargetCompetency {id : "tc107"})
 	SET tc107.label = "Explain general principles, approaches and best practices for designing and developing language programs. Understands the interplay between Budget, Time, Scope, project goals, and their impact on Quality and can successfully shape and navigate these things to meet desired parameters."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp99)
@@ -1938,6 +2042,7 @@ for (let index = 0; index < 2; index++) {
 		cmp100.default_weight = 1.0
 	MERGE (cmp100)-[:HAS_SHORT_NAME]->(sn135:ShortName {id : "sn135"})
 	SET sn135.label = "Interdisciplinary approach"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp100)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp100)-[:HAS_TARGET_COMPETENCY]->(tc108:TargetCompetency {id : "tc108"})
 	SET tc108.label = "Articulate the roles of the different academic domains in a language program."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp100)
@@ -1949,6 +2054,7 @@ for (let index = 0; index < 2; index++) {
 		cmp101.default_weight = 1.0
 	MERGE (cmp101)-[:HAS_SHORT_NAME]->(sn136:ShortName {id : "sn136"})
 	SET sn136.label = "Scripture Engagement principles"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp101)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp101)-[:HAS_TARGET_COMPETENCY]->(tc109:TargetCompetency {id : "tc109"})
 	SET tc109.label = "Articulate the basic principles and conditions for effective Scripture Engagement."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp101)
@@ -1960,6 +2066,7 @@ for (let index = 0; index < 2; index++) {
 		cmp102.default_weight = 1.0
 	MERGE (cmp102)-[:HAS_SHORT_NAME]->(sn137:ShortName {id : "sn137"})
 	SET sn137.label = "Multilingualism Urbanisation & Scripture Engagement (MUSE)"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp102)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp102)-[:HAS_TARGET_COMPETENCY]->(tc110:TargetCompetency {id : "tc110"})
 	SET tc110.label = "Articulate the relevance of multilingualism, urbanization and migration to a BT/SE program."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp102)
@@ -1971,6 +2078,7 @@ for (let index = 0; index < 2; index++) {
 		cmp103.default_weight = 1.0
 	MERGE (cmp103)-[:HAS_SHORT_NAME]->(sn138:ShortName {id : "sn138"})
 	SET sn138.label = "Church mission & community engagement"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp103)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp103)-[:HAS_TARGET_COMPETENCY]->(tc111:TargetCompetency {id : "tc111"})
 	SET tc111.label = "Articulate and appreciate the role of the church and missions in a BT/SE program: how the community will engage with the Scriptures and the implications that has for how Scripture is translated."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp103)
@@ -1982,6 +2090,7 @@ for (let index = 0; index < 2; index++) {
 		cmp104.default_weight = 1.0
 	MERGE (cmp104)-[:HAS_SHORT_NAME]->(sn139:ShortName {id : "sn139"})
 	SET sn139.label = "SE approaches"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp104)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp104)-[:HAS_TARGET_COMPETENCY]->(tc112:TargetCompetency {id : "tc112"})
 	SET tc112.label = "Is familiar with a variety of SE approaches (e.g. private reading, public reading, Storying Fellowship Groups, Listening Groups, apps). Demonstrate a good understanding of the most relevant developments and approaches in Scripture Engagement. "
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp104)
@@ -1992,6 +2101,7 @@ for (let index = 0; index < 2; index++) {
 
     q.push(cypher`
 	MATCH (p:PlanRoot {id: "2"})
+	MATCH (d:Domain {id: "2"})
 	MATCH (pr:ProgressRoot {userId: "1"})
 	MATCH (ms:Milestone {ms: "TransCons1"})
 
@@ -2015,6 +2125,7 @@ for (let index = 0; index < 2; index++) {
 		cmp105.default_weight = 1.0
 	MERGE (cmp105)-[:HAS_SHORT_NAME]->(sn142:ShortName {id : "sn142"})
 	SET sn142.label = "Cuture-Savvy"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp105)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp105)-[:HAS_TARGET_COMPETENCY]->(tc114:TargetCompetency {id : "tc114"})
 	SET tc114.label = "Is able to explain how one's own cultural background and personality impacts one's thinking, values and behavior and how one relates to others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp105)
@@ -2026,6 +2137,7 @@ for (let index = 0; index < 2; index++) {
 		cmp106.default_weight = 1.0
 	MERGE (cmp106)-[:HAS_SHORT_NAME]->(sn143:ShortName {id : "sn143"})
 	SET sn143.label = "Self-Aware"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp106)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp106)-[:HAS_TARGET_COMPETENCY]->(tc115:TargetCompetency {id : "tc115"})
 	SET tc115.label = "Being aware of one's own personality and cultural background, is able to take responsible courses of action in cross-cultural situations."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp106)
@@ -2037,6 +2149,7 @@ for (let index = 0; index < 2; index++) {
 		cmp107.default_weight = 1.0
 	MERGE (cmp107)-[:HAS_SHORT_NAME]->(sn144:ShortName {id : "sn144"})
 	SET sn144.label = "Tolerance"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp107)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp107)-[:HAS_TARGET_COMPETENCY]->(tc116:TargetCompetency {id : "tc116"})
 	SET tc116.label = "Tolerantly considers other views/perspectives."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp107)
@@ -2048,6 +2161,7 @@ for (let index = 0; index < 2; index++) {
 		cmp108.default_weight = 1.0
 	MERGE (cmp108)-[:HAS_SHORT_NAME]->(sn145:ShortName {id : "sn145"})
 	SET sn145.label = "Responsible"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp108)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp108)-[:HAS_TARGET_COMPETENCY]->(tc117:TargetCompetency {id : "tc117"})
 	SET tc117.label = "Is willing to take responsibility for negative patterns that affect one's interactions in community."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp108)
@@ -2059,6 +2173,7 @@ for (let index = 0; index < 2; index++) {
 		cmp109.default_weight = 1.0
 	MERGE (cmp109)-[:HAS_SHORT_NAME]->(sn146:ShortName {id : "sn146"})
 	SET sn146.label = "Initiative"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp109)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp109)-[:HAS_TARGET_COMPETENCY]->(tc118:TargetCompetency {id : "tc118"})
 	SET tc118.label = "Takes initiative."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp109)
@@ -2070,6 +2185,7 @@ for (let index = 0; index < 2; index++) {
 		cmp110.default_weight = 1.0
 	MERGE (cmp110)-[:HAS_SHORT_NAME]->(sn147:ShortName {id : "sn147"})
 	SET sn147.label = "Self-Controlled"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp110)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp110)-[:HAS_TARGET_COMPETENCY]->(tc119:TargetCompetency {id : "tc119"})
 	SET tc119.label = "Is intentional about dealing with one's own inner dynamics appropriately as one becomes aware of them."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp110)
@@ -2081,6 +2197,7 @@ for (let index = 0; index < 2; index++) {
 		cmp111.default_weight = 1.0
 	MERGE (cmp111)-[:HAS_SHORT_NAME]->(sn148:ShortName {id : "sn148"})
 	SET sn148.label = "Balance"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp111)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp111)-[:HAS_TARGET_COMPETENCY]->(tc120:TargetCompetency {id : "tc120"})
 	SET tc120.label = "Balances workload in a healthy way."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp111)
@@ -2092,6 +2209,7 @@ for (let index = 0; index < 2; index++) {
 		cmp112.default_weight = 1.0
 	MERGE (cmp112)-[:HAS_SHORT_NAME]->(sn149:ShortName {id : "sn149"})
 	SET sn149.label = "Dependability"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp112)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp112)-[:HAS_TARGET_COMPETENCY]->(tc121:TargetCompetency {id : "tc121"})
 	SET tc121.label = "Fulfills obligations/achieves agreed upon goals consistently."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp112)
@@ -2103,6 +2221,7 @@ for (let index = 0; index < 2; index++) {
 		cmp113.default_weight = 1.0
 	MERGE (cmp113)-[:HAS_SHORT_NAME]->(sn150:ShortName {id : "sn150"})
 	SET sn150.label = "Attitude"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp113)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp113)-[:HAS_TARGET_COMPETENCY]->(tc122:TargetCompetency {id : "tc122"})
 	SET tc122.label = "Demonstrates a positive attitude in all circumstances."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp113)
@@ -2120,6 +2239,7 @@ for (let index = 0; index < 2; index++) {
 		cmp114.default_weight = 1.0
 	MERGE (cmp114)-[:HAS_SHORT_NAME]->(sn152:ShortName {id : "sn152"})
 	SET sn152.label = "Easy-Going"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp114)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp114)-[:HAS_TARGET_COMPETENCY]->(tc123:TargetCompetency {id : "tc123"})
 	SET tc123.label = "Takes responsibility for negative patterns, does not easily take offense."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp114)
@@ -2131,6 +2251,7 @@ for (let index = 0; index < 2; index++) {
 		cmp115.default_weight = 1.0
 	MERGE (cmp115)-[:HAS_SHORT_NAME]->(sn153:ShortName {id : "sn153"})
 	SET sn153.label = "Non-work Relationships"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp115)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp115)-[:HAS_TARGET_COMPETENCY]->(tc124:TargetCompetency {id : "tc124"})
 	SET tc124.label = "Builds personal relationships that extend beyond work situations."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp115)
@@ -2142,6 +2263,7 @@ for (let index = 0; index < 2; index++) {
 		cmp116.default_weight = 1.0
 	MERGE (cmp116)-[:HAS_SHORT_NAME]->(sn154:ShortName {id : "sn154"})
 	SET sn154.label = "Caring"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp116)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp116)-[:HAS_TARGET_COMPETENCY]->(tc125:TargetCompetency {id : "tc125"})
 	SET tc125.label = "Shows genuine interest in the work of others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp116)
@@ -2153,6 +2275,7 @@ for (let index = 0; index < 2; index++) {
 		cmp117.default_weight = 1.0
 	MERGE (cmp117)-[:HAS_SHORT_NAME]->(sn155:ShortName {id : "sn155"})
 	SET sn155.label = "Critcism"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp117)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp117)-[:HAS_TARGET_COMPETENCY]->(tc126:TargetCompetency {id : "tc126"})
 	SET tc126.label = "Expresses and receives criticism in constructive ways."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp117)
@@ -2164,6 +2287,7 @@ for (let index = 0; index < 2; index++) {
 		cmp118.default_weight = 1.0
 	MERGE (cmp118)-[:HAS_SHORT_NAME]->(sn156:ShortName {id : "sn156"})
 	SET sn156.label = "Listener"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp118)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp118)-[:HAS_TARGET_COMPETENCY]->(tc127:TargetCompetency {id : "tc127"})
 	SET tc127.label = "Listens to the ideas of others and learns from them."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp118)
@@ -2181,6 +2305,7 @@ for (let index = 0; index < 2; index++) {
 		cmp119.default_weight = 1.0
 	MERGE (cmp119)-[:HAS_SHORT_NAME]->(sn158:ShortName {id : "sn158"})
 	SET sn158.label = "Respect"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp119)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp119)-[:HAS_TARGET_COMPETENCY]->(tc128:TargetCompetency {id : "tc128"})
 	SET tc128.label = "Shows respect for the person consulted: that s/he is a learner but also an expert in his/her own domain."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp119)
@@ -2192,6 +2317,7 @@ for (let index = 0; index < 2; index++) {
 		cmp120.default_weight = 1.0
 	MERGE (cmp120)-[:HAS_SHORT_NAME]->(sn159:ShortName {id : "sn159"})
 	SET sn159.label = "Listener"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp120)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp120)-[:HAS_TARGET_COMPETENCY]->(tc129:TargetCompetency {id : "tc129"})
 	SET tc129.label = "Listens attentively to understand what others need and want."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp120)
@@ -2203,6 +2329,7 @@ for (let index = 0; index < 2; index++) {
 		cmp121.default_weight = 1.0
 	MERGE (cmp121)-[:HAS_SHORT_NAME]->(sn160:ShortName {id : "sn160"})
 	SET sn160.label = "Questions"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp121)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp121)-[:HAS_TARGET_COMPETENCY]->(tc130:TargetCompetency {id : "tc130"})
 	SET tc130.label = "Formulates insightful questions."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp121)
@@ -2214,6 +2341,7 @@ for (let index = 0; index < 2; index++) {
 		cmp122.default_weight = 1.0
 	MERGE (cmp122)-[:HAS_SHORT_NAME]->(sn161:ShortName {id : "sn161"})
 	SET sn161.label = "Responsive"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp122)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp122)-[:HAS_TARGET_COMPETENCY]->(tc131:TargetCompetency {id : "tc131"})
 	SET tc131.label = "Responds to comments initiated by others."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp122)
@@ -2225,6 +2353,7 @@ for (let index = 0; index < 2; index++) {
 		cmp123.default_weight = 1.0
 	MERGE (cmp123)-[:HAS_SHORT_NAME]->(sn162:ShortName {id : "sn162"})
 	SET sn162.label = "Advice"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp123)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp123)-[:HAS_TARGET_COMPETENCY]->(tc132:TargetCompetency {id : "tc132"})
 	SET tc132.label = "Gives advice in a way that is appropriate and persuasive."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp123)
@@ -2236,6 +2365,7 @@ for (let index = 0; index < 2; index++) {
 		cmp124.default_weight = 1.0
 	MERGE (cmp124)-[:HAS_SHORT_NAME]->(sn163:ShortName {id : "sn163"})
 	SET sn163.label = "Appreciative"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp124)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp124)-[:HAS_TARGET_COMPETENCY]->(tc133:TargetCompetency {id : "tc133"})
 	SET tc133.label = "Expresses appreciation and affirmation for good work and goals met, and so motivates those being consulted."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp124)
@@ -2247,6 +2377,7 @@ for (let index = 0; index < 2; index++) {
 		cmp125.default_weight = 1.0
 	MERGE (cmp125)-[:HAS_SHORT_NAME]->(sn164:ShortName {id : "sn164"})
 	SET sn164.label = "Peace-Maker"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp125)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp125)-[:HAS_TARGET_COMPETENCY]->(tc134:TargetCompetency {id : "tc134"})
 	SET tc134.label = "Seeks to defuse tension and promote positive relationships in culturally appropriate ways."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp125)
@@ -2258,6 +2389,7 @@ for (let index = 0; index < 2; index++) {
 		cmp126.default_weight = 1.0
 	MERGE (cmp126)-[:HAS_SHORT_NAME]->(sn165:ShortName {id : "sn165"})
 	SET sn165.label = "Growth Despite Conflict"
+	MERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp126)-[:HAS_PRIMARY_DOMAIN]->(d)
 	MERGE (cmp126)-[:HAS_TARGET_COMPETENCY]->(tc135:TargetCompetency {id : "tc135"})
 	SET tc135.label = "Resolves conflicts in a way that results in strengthened, positive relationships. (for example with regard to the question of how to translate a certain Biblical key term), or when there is a conflict between the translation team and the translation consultant."
 	Merge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "Trans-GUID"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp126)

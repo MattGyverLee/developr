@@ -16,14 +16,16 @@ with open('./Trans1.tsv') as tsvfile:
     # Return pr, ms, d, cat1, grp1, cmp1, cmp2
     o.write('q.push(cypher`\n')
     o.write('\tMATCH (pr:ProgressRoot {userId: "1"})\n')
-    o.write('\tMERGE (ms:Milestone {ms: "TransCons1"})\n')
     o.write('\tMERGE (d:Domain {id: "'+currentplanId+'"})\n')
     o.write('\tSET d.label = "Translation (Orlando)"\n')
-    o.write('\n')
     o.write(
         '\tMERGE (d)-[:IS_PRIMARY_DOMAIN_OF]->(p:PlanRoot {id: "'+currentPlanRoot+'"})-[:HAS_PRIMARY_DOMAIN]->(d)\n')
     o.write('\tSET p.label = "Translation (Orlando) Plan",\n')
     o.write('\t\tp.plan_class = "Generic"\n')
+    o.write(
+        '\tMERGE (ms:Milestone {ms: "TransCons1"})<-[:HAS_MILESTONE]-(p)\n')
+    o.write(
+        '\tMERGE (ms)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translation Consultant (1)"}) \n')
     o.write('\n')
 
     for row in reader:
@@ -36,12 +38,13 @@ with open('./Trans1.tsv') as tsvfile:
                 o.write('\n')
                 o.write('\n')
                 o.write('q.push(cypher`\n')
-                o.write('\tMATCH (p:PlanRoot {id: "2"})\n')
+                o.write('\tMATCH (p:PlanRoot {id: "'+currentplanId+'"})\n')
+                o.write('\tMATCH (d:Domain {id: "'+currentplanId+'"})\n')
                 o.write('\tMATCH (pr:ProgressRoot {userId: "1"})\n')
                 o.write('\tMATCH (ms:Milestone {ms: "TransCons1"})\n')
                 o.write('\n')
             o.write("\t//Cat" + row['ID']+" in "+currentPlanRoot+"\n")
-            o.write("\tMERGE (p)-[:HAS_CATEGORY {order: " + row['Order'] + ", planId: " + currentplanId + "}]->(cat" + str(catIndex) +
+            o.write("\tMERGE (p)-[:HAS_CATEGORY {order: " + row['Order'] + ', planId: "' + currentplanId + '"}]->(cat' + str(catIndex) +
                     ':CompetencyCategory {id: "' + currentCat+'"})-[:IS_CATEGORY_OF {order: ' + row['Order'] + ', planId: "' + currentplanId + '"}]->(p)\n')
             if row['Competency']:
                 o.write('\tSET cat' + str(catIndex) +
@@ -66,8 +69,8 @@ with open('./Trans1.tsv') as tsvfile:
             grpIndex = grpIndex + 1
 
             o.write("\t//Grp" + "\t"+row['ID']+" in "+currentCat+"\n")
-            o.write("\tMERGE (cat" + str(catIndex) + ")-[:HAS_GROUP {order: " + row['Order'] + ", planId: " + currentplanId + "}]->(grp" + str(grpIndex) +
-                    ':CompetencyGroup {id: "' + row['ID']+'"})-[:IS_IN_GROUP {order: ' + row['Order'] + ", planId: " + currentplanId + "}]->(cat" + str(catIndex) + ")\n")
+            o.write("\tMERGE (cat" + str(catIndex) + ")-[:HAS_GROUP {order: " + row['Order'] + ', planId: "' + currentplanId + '"}]->(grp' + str(grpIndex) +
+                    ':CompetencyGroup {id: "' + row['ID']+'"})-[:IS_IN_GROUP {order: ' + row['Order'] + ', planId: "' + currentplanId + '"}]->(cat' + str(catIndex) + ")\n")
             if row['Competency']:
                 o.write("\tSET grp" + str(grpIndex) +
                         '.label = "' + row['Competency']+'"\n')
@@ -86,12 +89,11 @@ with open('./Trans1.tsv') as tsvfile:
                         '.label = "' + row['Description']+'"\n')
             o.write('\n')
         if row["Type"] == "Cmp":
-
             cmpIndex = cmpIndex + 1
             o.write("\t//Comp" + "\t\t"+row['ID']+" in "+currentGrp+"\n")
 
-            o.write("\tMERGE (grp" + str(grpIndex) + ")-[:GROUP_HAS_COMPETENCIES_OF {order: " + row['Order'] + ", planId: " + currentplanId + "}]->(cmp" + str(cmpIndex) +
-                    ':Competency {id: "' + row['ID']+'"})-[:IS_IN_GROUP {order: ' + row['Order'] + ', planId: ' + currentplanId + '}]->(grp' + str(grpIndex) + ")\n")
+            o.write("\tMERGE (grp" + str(grpIndex) + ")-[:GROUP_HAS_COMPETENCIES_OF {order: " + row['Order'] + ', planId: "' + currentplanId + '"}]->(cmp' + str(cmpIndex) +
+                    ':Competency {id: "' + row['ID']+'"})-[:IS_IN_GROUP {order: ' + row['Order'] + ', planId: "' + currentplanId + '"}]->(grp' + str(grpIndex) + ")\n")
             if row['Competency']:
                 o.write("\tSET cmp" + str(cmpIndex) +
                         '.label = "' + row['Competency']+'",\n')
@@ -103,6 +105,8 @@ with open('./Trans1.tsv') as tsvfile:
                         '"})\n')
                 o.write("\tSET sn" + str(snIndex) +
                         '.label = "' + row['Competency']+'"\n')
+                o.write("\tMERGE (d)-[:PRIMARY_DOMAIN_OF]->(cmp" + str(cmpIndex) +
+                        ")-[:HAS_PRIMARY_DOMAIN]->(d)\n")
             if row['Description']:
                 tcIndex = tcIndex + 1
                 o.write("\tMERGE (cmp" + str(cmpIndex) + ")-[:HAS_TARGET_COMPETENCY]->(tc" + str(tcIndex) +
