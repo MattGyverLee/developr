@@ -23,21 +23,36 @@ const client = new ApolloClient({
   resolvers
 });
 
-cache.writeData({
-  data: {
-    userId: localStorage.getItem("SelectedDomain") || "1",
-    planId: localStorage.getItem("SelectedPlan") || "-1",
-    domainId: localStorage.getItem("SelectedDomain") || "-1",
-    milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
+const provisionStorage = () => {
+  if (!localStorage.getItem("SelectedDomain")) {
+    localStorage.setItem("SelectedDomain", "-1");
   }
-});
+  if (!localStorage.getItem("SelectedPlan")) {
+    localStorage.setItem("SelectedPlan", "-1");
+  }
+  if (!localStorage.getItem("SelectedMilestone")) {
+    localStorage.setItem("SelectedMilestone", "-1");
+  }
+  if (!localStorage.getItem("SelectedUser")) {
+    localStorage.setItem("SelectedUser", "1");
+  }
+  cache.writeData({
+    data: {
+      userId: localStorage.getItem("SelectedUser") || "1",
+      planId: localStorage.getItem("SelectedPlan") || "-1",
+      domainId: localStorage.getItem("SelectedDomain") || "-1",
+      milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
+    }
+  });
+};
 
 function App() {
+  provisionStorage();
   const [state, setLocalState] = useState({
-    domainId: localStorage.getItem("SelectedDomain") || "-1",
-    userId: "1",
-    planId: localStorage.getItem("SelectedPlan") || "-1",
-    milestoneId: localStorage.getItem("SelectedMilestone") || "-1"
+    domainId: localStorage.getItem("SelectedDomain"),
+    userId: localStorage.getItem("SelectedUser"),
+    planId: localStorage.getItem("SelectedPlan"),
+    milestoneId: localStorage.getItem("SelectedMilestone")
   });
 
   const DebugInfo = () => {

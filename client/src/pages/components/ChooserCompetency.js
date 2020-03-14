@@ -25,7 +25,13 @@ function ChooserCompetency(props) {
     return (
       <div>
         {loading && !error && <p>Loading...</p>}
-        {error && !loading && <p>Error</p>}
+        {error && !loading && (
+          <p>
+            Error ChooserCompetency
+            <br />
+            <pre>{JSON.stringify(error)}</pre>
+          </p>
+        )}
         {data && !loading && !error && (
           <Fragment>
             <div>Choose a competency below:</div>

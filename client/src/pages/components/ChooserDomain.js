@@ -33,7 +33,12 @@ function ChooserDomain(props) {
   return (
     <div>
       {loading && !error && <p>Loading...</p>}
-      {error && !loading && <p>Error</p>}
+      {error && !loading && (
+        <p>
+          Error ChooserDomain
+          <pre>{JSON.stringify(error)}</pre>
+        </p>
+      )}
       {data && !loading && !error && (
         <Fragment>
           <div className="gravity-right">
