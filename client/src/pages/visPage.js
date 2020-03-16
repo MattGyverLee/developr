@@ -7,11 +7,11 @@ function VisPage() {
     <Fragment>
       <div className="mx-3">
         <h2>Plan Visualization</h2>
-        {state.planId === "2" && <Graph planId="2" userId="1" />}
-        {state.planId === "1" && <Graph planId="1" userId="1" />}
-        {state.planId === "0" && <Graph planId="0" userId="1" />}
+        {state.planId !== "-1" && <Graph planId={state.planId} userId="1" />}
         {state.planId === "-1" && (
-          <div>Please choose a domain and plan from the options above.</div>
+          <div id="makeChoices">
+            Please choose a domain and plan from the options above.
+          </div>
         )}
       </div>
     </Fragment>

@@ -40,7 +40,7 @@ function ChooserPlan(props) {
         <Fragment>
           <select
             id="PlanDrop"
-            name="progress"
+            name="PlanDrop"
             value={state.planId}
             onChange={e => updateSelectedPlan(e.currentTarget.value)}>
             {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}

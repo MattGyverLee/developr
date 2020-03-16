@@ -44,7 +44,7 @@ function ChooserDomain(props) {
           <div className="gravity-right">
             <select
               id="DomDrop"
-              name="progress"
+              name="DomDrop"
               value={domainId}
               onChange={e => UpdateSelectedDomain(e.currentTarget.value)}>
               <option key="-1" value="-1">

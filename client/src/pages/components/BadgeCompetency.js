@@ -23,7 +23,7 @@ export default function BadgeCompetency(props) {
   // TODO: Load Colors into form
   return (
     <Fragment>
-      <div className="card border-warning mb-3">
+      <div className="card border-warning ml-3 mb-3">
         <h4 className="ml-3 py-0">
           {props.competency.label} -
           <small className="text-muted"> {props.competency.id} </small>

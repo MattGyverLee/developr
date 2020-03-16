@@ -7,10 +7,12 @@ function MyMilestone() {
     <Fragment>
       <div className="mx-3">
         {state.planId !== "-1" &&
-          state.milestoneID !== "-1" &&
+          state.milestoneId !== "-1" &&
           state.domainId !== "-1" && <Milestone planId="1" details={true} />}
-        {state.planId === "-1" && (
-          <div>
+        {(state.domainId === "-1" ||
+          state.planId === "-1" ||
+          state.milestoneId === "-1") && (
+          <div id="makeChoices">
             Please choose a domain, plan, and milestone from the options above.
           </div>
         )}

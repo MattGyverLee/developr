@@ -82,7 +82,7 @@ function App() {
       server (Apollo_Server) and client (Apollo_Client) */}
       <SelectionContext.Provider value={{ state, setLocalState }}>
         <NavBar />
-        <DebugInfo />
+        {/* <DebugInfo /> */}
         <Router>
           {/* React-Router makes a single-page react app modular. */}
           <div>

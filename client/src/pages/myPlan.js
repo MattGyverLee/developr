@@ -11,7 +11,9 @@ function MyPlan() {
           <Plan userId="1" planRoot={state.planId} planId="1" />
         )}
         {state.planId === "-1" && (
-          <div>Please choose a domain and plan from the options above.</div>
+          <div id="makeChoices">
+            Please choose a domain and plan from the options above.
+          </div>
         )}
       </div>
     </Fragment>

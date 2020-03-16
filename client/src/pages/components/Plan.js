@@ -15,15 +15,15 @@ export const Plan = props => {
           if (loading)
             return (
               <Fragment>
-                <h2>My Growth Plan</h2> <h3>Loading...</h3>
+                <h2>My Growth Plan</h2> <h3 id="loading">Loading...</h3>
               </Fragment>
             );
-          if (error) return <DisplayError error={error} />;
+          if (error) return <DisplayError id="displayError" error={error} />;
           // console.log(data);
           if (data.PlanRoot) {
             return (
               <Fragment>
-                <h2 className="display-4 my-0">
+                <h2 id="planTitle" className="display-4 my-0">
                   <small className="text-muted">Plan for: </small>
                   {data.PlanRoot[0].label}
                 </h2>

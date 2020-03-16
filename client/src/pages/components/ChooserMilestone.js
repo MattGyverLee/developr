@@ -42,7 +42,7 @@ const ChooserMilestone = props => {
         <Fragment>
           <select
             id="MilestoneDrop"
-            name="milestones"
+            name="MilestoneDrop"
             defaultValue={state.milestoneId}
             onChange={e => updateSelectedMilestone(e.currentTarget.value)}>
             {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}
