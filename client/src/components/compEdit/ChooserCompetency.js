@@ -37,7 +37,7 @@ function ChooserCompetency(props) {
             <div>Choose a competency below:</div>
             <select
               id="CompDrop"
-              name="progress"
+              name="CompDrop"
               value={selectedCompetency}
               onChange={e => setSelectedCompetency(e.currentTarget.value)}>
               <option key="-1" value="-1">
@@ -53,7 +53,7 @@ function ChooserCompetency(props) {
                 } else return;
               })}
             </select>
-            {parseInt(domainId) >= 0 && (
+            {parseInt(domainId) >= 0 && selectedCompetency !== "-1" && (
               <LoadEditCompetency competencyId={selectedCompetency} />
             )}
           </Fragment>

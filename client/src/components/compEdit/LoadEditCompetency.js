@@ -59,7 +59,11 @@ function LoadEditCompetency(props) {
               <span className="text-muted">Assessment Criteria: </span>
               <textarea
                 cols="100"
-                defaultValue={c.assessment_criteria[0].label || "Undefined"}
+                defaultValue={
+                  (c.assessment_criteria.length > 0 &&
+                    c.assessment_criteria[0].label) ||
+                  "Undefined"
+                }
               />
             </div>
             <div>

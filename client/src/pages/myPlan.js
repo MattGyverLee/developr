@@ -12,7 +12,7 @@ function MyPlan() {
         )}
         {state.planId === "-1" && (
           <div id="makeChoices">
-            Please choose a domain and plan from the options above.
+            Please choose both a domain and plan from the options above.
           </div>
         )}
       </div>

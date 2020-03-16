@@ -10,8 +10,10 @@ function EditCompetency(props) {
         {parseInt(state.domainId) >= 0 && (
           <ChooserCompetency domainId={state.domainId} />
         )}
-        {parseInt(state.domainId) === "-1" && (
-          <div>Please choose a domain above to edit competencies.</div>
+        {state.domainId === "-1" && (
+          <div id="makeChoices">
+            Please choose a domain above to view/edit competencies.
+          </div>
         )}
       </div>
     </Fragment>

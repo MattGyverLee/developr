@@ -15,11 +15,13 @@ function ChooserDomain(props) {
     localStorage.setItem("SelectedDomain", domain);
     localStorage.setItem("SelectedPlan", "-1");
     localStorage.setItem("SelectedMilestone", "-1");
+    localStorage.setItem("SelectedCompetency", "-1");
     setLocalState({
       ...state,
       domainId: domain,
       planId: "-1",
-      milestoneId: "-1"
+      milestoneId: "-1",
+      selectedCompetency: "-1"
     });
     setDomain({
       variables: { domainId: domain }

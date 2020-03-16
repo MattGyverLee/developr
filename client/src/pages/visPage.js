@@ -10,7 +10,7 @@ function VisPage() {
         {state.planId !== "-1" && <Graph planId={state.planId} userId="1" />}
         {state.planId === "-1" && (
           <div id="makeChoices">
-            Please choose a domain and plan from the options above.
+            Please choose both a domain and plan from the options above.
           </div>
         )}
       </div>

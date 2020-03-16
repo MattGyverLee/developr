@@ -338,6 +338,7 @@ export const SET_DOMAIN = gql`
       chosenDomain: $chosenDomain
       chosenPlan: "-1"
       chosenMilestone: "-1"
+      # Todo: Do I need to set selectedCompetency
       Name: $Name
     ) {
       id
