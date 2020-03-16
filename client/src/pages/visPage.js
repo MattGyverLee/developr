@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
-import { SelectionContext } from "./components/SelectionContext";
-import Graph from "./components/Graph";
+import { SelectionContext } from "../components/utilities/SelectionContext";
+import Graph from "../components/graph/Graph";
 function VisPage() {
   const { state } = useContext(SelectionContext);
   return (

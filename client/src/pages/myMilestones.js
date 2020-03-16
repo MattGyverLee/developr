@@ -1,6 +1,6 @@
-import Milestone from "./components/Milestone";
+import Milestone from "../components/milestone/Milestone";
 import React, { Fragment, useContext } from "react";
-import { SelectionContext } from "./components/SelectionContext";
+import { SelectionContext } from "../components/utilities/SelectionContext";
 function MyMilestone() {
   const { state } = useContext(SelectionContext);
   return (

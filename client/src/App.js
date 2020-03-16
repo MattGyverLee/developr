@@ -7,12 +7,12 @@ import MyMilestones from "./pages/myMilestones";
 import Home from "./pages/home";
 import EditCompetency from "./pages/editCompetency";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { SelectionContext } from "./pages/components/SelectionContext";
-import NavBar from "./pages/components/NavBar";
+import { SelectionContext } from "./components/utilities/SelectionContext";
+import NavBar from "./components/nav/NavBar";
 import { resolvers, typeDefs } from "./resolvers";
 import { useQuery } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { SITREP } from "./pages/queries";
+import { SITREP } from "./components/queries";
 
 const cache = new InMemoryCache();
 

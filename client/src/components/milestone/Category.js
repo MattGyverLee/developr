@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
-import { findSortOrder } from "./sort";
-import BadgeSubDetails from "./BadgeSubDetails";
+import BadgeSubDetails from "./SubDetails";
 
 var acc = 0;
 

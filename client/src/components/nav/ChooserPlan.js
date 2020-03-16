@@ -2,7 +2,7 @@ import React, { Fragment, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { SITREP, SET_LOCAL_PLAN, LIST_PLANS } from "../queries";
 
-import { SelectionContext } from "./SelectionContext";
+import { SelectionContext } from "../utilities/SelectionContext";
 import ChooserMilestone from "./ChooserMilestone";
 
 function ChooserPlan(props) {
@@ -43,7 +43,6 @@ function ChooserPlan(props) {
             name="PlanDrop"
             value={state.planId}
             onChange={e => updateSelectedPlan(e.currentTarget.value)}>
-            {/* todo: Use UseEffect https://www.robinwieruch.de/local-storage-react */}
             <option key="-1" value="-1">
               Not Selected
             </option>

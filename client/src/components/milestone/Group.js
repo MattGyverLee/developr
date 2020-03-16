@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
-import BadgeCompetency from "./BadgeCompetency";
-import { findSortOrder } from "./sort";
+import Competency from "./Competency";
+import { findSortOrder } from "../utilities/sort";
 
-export default function BadgeGroup(props) {
+export default function Group(props) {
   console.log(props);
   // TODO: Load Colors into form
   return (
@@ -14,7 +14,7 @@ export default function BadgeGroup(props) {
         </h4>
         {findSortOrder(props.group.group_has_competencies_of).map(
           competency => (
-            <BadgeCompetency
+            <Competency
               key={competency.id}
               competency={competency}
               user={props.user}

@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
 import { Query } from "react-apollo";
 import Category from "./Category";
-import DisplayError from "./QueryError";
+import DisplayError from "../QueryError";
 import { SITREP, DOMAIN_QUERY } from "../queries";
-import { useQuery } from "@apollo/react-hooks";
-import { findSortOrder } from "./sort";
+import { findSortOrder } from "../utilities/sort";
 
 //todo: Sub string for userId variable
 export const Plan = props => {

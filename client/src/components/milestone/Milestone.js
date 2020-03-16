@@ -1,9 +1,9 @@
 import React, { Fragment, useContext } from "react";
 import { SITREP, GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
-import BadgeCategory from "./BadgeCategory";
-import { SelectionContext } from "./SelectionContext";
-import { findSortOrder } from "./sort";
+import BadgeCategory from "./Category";
+import { SelectionContext } from "../utilities/SelectionContext";
+import { findSortOrder } from "../utilities/sort";
 
 const Milestone = props => {
   const { state } = useContext(SelectionContext);

@@ -1,10 +1,10 @@
 import React, { Fragment, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import ChooserCompetency from "./ChooserCompetency";
+import ChooserCompetency from "../compEdit/ChooserCompetency";
 import ChooserPlan from "./ChooserPlan";
 import { SITREP, GET_DOMAINS, SET_DOMAIN, SET_LOCAL_DOMAIN } from "../queries";
-import { SelectionContext } from "./SelectionContext";
+import { SelectionContext } from "../utilities/SelectionContext";
 
 function ChooserDomain(props) {
   const { state, setLocalState } = useContext(SelectionContext);

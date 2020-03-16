@@ -1,17 +1,17 @@
 import React, { Fragment } from "react";
-import BadgeCompetency from "./BadgeCompetency";
-import BadgeGroup from "./BadgeGroup";
-import { findSortOrder } from "./sort";
+import Competency from "./Competency";
+import Group from "./Group";
+import { findSortOrder } from "../utilities/sort";
 
 const processCatGroups = groupList => {
   try {
-    groupList.map(group => <BadgeGroup key={group.id} group={group} />);
+    groupList.map(group => <Group key={group.id} group={group} />);
   } catch (error) {}
 };
 
 // Todo: why is BadgeGroup done twice?
 
-export default function BadgeSubDetails(props) {
+export default function SubDetails(props) {
   //console.log(props.category);
   // TODO: Load Colors into form
   if (props.details) {
@@ -19,7 +19,7 @@ export default function BadgeSubDetails(props) {
       <Fragment>
         {findSortOrder(props.category.category_has_competencies_of).map(
           competency => (
-            <BadgeCompetency
+            <Competency
               key={competency.id}
               competency={competency}
               user={props.user}
@@ -30,7 +30,7 @@ export default function BadgeSubDetails(props) {
           )
         )}
         {findSortOrder(props.category.has_group).map(group => (
-          <BadgeGroup
+          <Group
             key={group.id}
             group={group}
             user={props.user}

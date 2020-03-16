@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
-import ChooserCompetency from "./components/ChooserCompetency";
-import { SelectionContext } from "./components/SelectionContext";
+import ChooserCompetency from "../components/compEdit/ChooserCompetency";
+import { SelectionContext } from "../components/utilities/SelectionContext";
 
 function EditCompetency(props) {
   const { state } = useContext(SelectionContext);

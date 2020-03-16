@@ -1,5 +1,5 @@
-import Plan from "./components/Plan";
-import { SelectionContext } from "./components/SelectionContext";
+import Plan from "../components/plan/Plan";
+import { SelectionContext } from "../components/utilities/SelectionContext";
 import React, { Fragment, useContext } from "react";
 
 function MyPlan() {
