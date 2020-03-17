@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from "react";
 import { SITREP, GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
-import BadgeCategory from "./Category";
+import Category from "./Category";
 import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
 
@@ -47,7 +47,7 @@ const Milestone = props => {
                     {/* TODO: Get Full Name for Milestone */}
                     {findSortOrder(data.PlanRoot[0].has_category).map(
                       category => (
-                        <BadgeCategory
+                        <Category
                           key={category.id}
                           category={category}
                           user={data.User}

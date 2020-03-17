@@ -369,6 +369,14 @@ type Milestone {
   ms: String!
   competencycategories: [CompetencyCategory]
     @relation(name: "TARGET_VALUE_IS", direction: "IN")
+  minValues: [MinPair]
+    @cypher(
+      statement: """
+      MATCH p=(c)-[r:TARGET_VALUE_IS]->(this)
+      WHERE NOT EXISTS(r.to)
+      RETURN {id: c.id, min: r.min, planId: r.planId}
+      """
+    )
   short_name: [ShortName]
     @cypher(
       statement: """
@@ -376,6 +384,12 @@ type Milestone {
       WHERE NOT EXISTS(r.to) RETURN sn LIMIT 1
       """
     )
+}
+
+type MinPair {
+  id: String
+  min: Int
+  planId: String
 }
 
 type Domain {

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import BadgeSubDetails from "./SubDetails";
+import SubDetails from "./SubDetails";
 
 var acc = 0;
 
@@ -100,7 +100,7 @@ const displayTarget = (category, progresses, inTarget) => {
   }
 };
 
-export default function BadgeCategory(props) {
+export default function Category(props) {
   // console.log(props);
 
   // Figure Out Target Value
@@ -130,7 +130,7 @@ export default function BadgeCategory(props) {
           <small className="text-muted"> {props.category.id} </small>{" "}
         </h4>
 
-        <BadgeSubDetails
+        <SubDetails
           display={true}
           category={props.category}
           user={props.user}

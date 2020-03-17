@@ -314,7 +314,9 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
     }
     Milestone(ms: "${milestoneId}"){
       ms
-      short_name {label}
+      short_name {
+        label
+      }
       competencycategories {
         id
         TARGET_VALUE_IS_rel {
@@ -322,6 +324,11 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
           planId
           Milestone {ms}
         }
+      }
+      minValues   {
+        id
+        min
+        planId
       }
     }
   }
