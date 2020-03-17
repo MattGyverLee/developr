@@ -8,7 +8,9 @@ function MyMilestone() {
       <div className="mx-3">
         {state.planId !== "-1" &&
           state.milestoneId !== "-1" &&
-          state.domainId !== "-1" && <Milestone planId="1" details={true} />}
+          state.domainId !== "-1" && (
+            <Milestone planId={state.planId} details={true} />
+          )}
         {(state.domainId === "-1" ||
           state.planId === "-1" ||
           state.milestoneId === "-1") && (

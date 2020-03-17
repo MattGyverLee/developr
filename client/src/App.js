@@ -52,7 +52,10 @@ function App() {
     domainId: localStorage.getItem("SelectedDomain"),
     userId: localStorage.getItem("SelectedUser"),
     planId: localStorage.getItem("SelectedPlan"),
-    milestoneId: localStorage.getItem("SelectedMilestone")
+    milestoneId: localStorage.getItem("SelectedMilestone"),
+    msMilestone: {},
+    msUser: {},
+    msPlanRoot: {}
   });
 
   const DebugInfo = () => {

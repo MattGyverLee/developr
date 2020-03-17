@@ -6,7 +6,7 @@ import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
 
 const Milestone = props => {
-  const { state } = useContext(SelectionContext);
+  const { state, setLocalState } = useContext(SelectionContext);
   return (
     <div>
       {state.planId !== "-1" && state.milestoneId !== "-1" && (
@@ -34,24 +34,48 @@ const Milestone = props => {
               );
             }
             if (data.PlanRoot && data.PlanRoot.length > 0) {
+              if (state.msPlanRoot !== data.PlanRoot[0]) {
+                setLocalState({
+                  ...state,
+                  msPlanRoot: data.PlanRoot[0]
+                });
+              }
+
+              if (data.Milestone && data.Milestone.length > 0) {
+                if (state.msMilestone !== data.Milestone[0]) {
+                  setLocalState({
+                    ...state,
+                    msMilestone: data.Milestone[0]
+                  });
+                }
+              }
+              if (data.User) {
+                if (state.msUser !== data.User) {
+                  setLocalState({
+                    ...state,
+                    msUser: data.User
+                  });
+                }
+              }
+
               return (
                 <Fragment>
                   <div className="container">
                     <h2 className="my-0">
                       <small className="text-muted">Progress Report for </small>
-                      {data.Milestone[0].short_name[0].label}
+                      {state.msMilestone.short_name[0].label}
                       <small className="text-muted"> Using Plan </small>{" "}
-                      {data.PlanRoot[0].label}
+                      {state.msPlanRoot.label}
                     </h2>
                     <br />
                     {/* TODO: Get Full Name for Milestone */}
-                    {findSortOrder(data.PlanRoot[0].has_category).map(
+                    {findSortOrder(state.msPlanRoot.has_category).map(
                       category => (
                         <BadgeCategory
                           key={category.id}
                           category={category}
-                          user={data.User}
-                          milestone={data.Milestone[0]}
+                          user={state.msUser}
+                          milestone={state.msMilestone}
                           target={state.milestoneId}
                           details={props.details}
                           planId={state.planId}

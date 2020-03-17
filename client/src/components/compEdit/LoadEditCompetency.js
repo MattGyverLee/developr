@@ -52,7 +52,11 @@ function LoadEditCompetency(props) {
               <span className="text-muted">Target Competency: </span>
               <textarea
                 cols="100"
-                defaultValue={c.target_competency[0].label || "Undefined"}
+                defaultValue={
+                  (c.target_competency.length > 0 &&
+                    c.target_competency[0].label) ||
+                  "Undefined"
+                }
               />
             </div>
             <div>
