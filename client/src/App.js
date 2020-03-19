@@ -6,6 +6,7 @@ import MyPlan from "./pages/myPlan";
 import MyMilestones from "./pages/myMilestones";
 import MyOverview from "./pages/myOverview";
 import Home from "./pages/home";
+import MyRadar from "./pages/radar";
 import EditCompetency from "./pages/editCompetency";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { SelectionContext } from "./components/utilities/SelectionContext";
@@ -105,6 +106,10 @@ function App() {
               <Route path="/graph">
                 {/* This is the graph vis page. */}
                 <VisPage />
+              </Route>
+              <Route path="/radar">
+                {/* This is the radar page. */}
+                <MyRadar />
               </Route>
               <Route path="/edcomp">
                 {/* This is the graph vis page. */}

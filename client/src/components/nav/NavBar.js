@@ -28,22 +28,22 @@ const NavBar = local => {
           <div className="mb-n1 mt-n2">Growth Tracking</div>
         </a>
         <div className="nav-item active mx-2">
-            <a className="nav-link" href="./">
-              Home {checkLoc(local, "home")}
-            </a>
+          <a className="nav-link" href="./">
+            Home {checkLoc(local, "home")}
+          </a>
         </div>
         <div className="nav-item text-center mx-2">
-            <a className="nav-link" href="./myPlan">
+          <a className="nav-link" href="./myPlan">
             My Growth
             <br />
             Plan {checkLoc(local, "myPlan")}
-            </a>
+          </a>
         </div>
         <div className="nav-item text-center mx-2">
-            <a className="nav-link" href="./myMilestones">
+          <a className="nav-link" href="./myMilestones">
             Progress
             <br /> Details {checkLoc(local, "myMilestones")}
-            </a>
+          </a>
         </div>
         <div className="nav-item text-center mx-2">
           <a className="nav-link" href="./myOverview">
@@ -52,14 +52,19 @@ const NavBar = local => {
           </a>
         </div>
         <div className="nav-item text-center mx-2">
-            <a className="nav-link" href="./graph">
-              Visualize {checkLoc(local, "graph")}
-            </a>
+          <a className="nav-link" href="./radar">
+            Radar
+          </a>
         </div>
         <div className="nav-item text-center mx-2">
-            <a className="nav-link" href="./edComp">
-              Competencies {checkLoc(local, "edComp")}
-            </a>
+          <a className="nav-link" href="./graph">
+            Visualize {checkLoc(local, "graph")}
+          </a>
+        </div>
+        <div className="nav-item text-center mx-2">
+          <a className="nav-link" href="./edComp">
+            Competencies {checkLoc(local, "edComp")}
+          </a>
         </div>
         <div className="float-right">
           <ChooserDomain subElement="choosePlan" />
