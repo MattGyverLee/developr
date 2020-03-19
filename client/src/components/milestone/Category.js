@@ -1,9 +1,11 @@
 import React, { Fragment } from "react";
 import SubDetails from "./SubDetails";
+import { getTarget } from "../utilities/maths";
 
 var acc = 0;
 
-const displayTarget = (category, progresses, inTarget) => {
+const displayProgress = (category, progresses, inTarget, minValues) => {
+  // this runs when the Category has a target score.
   if (inTarget > 0) {
     acc = 0;
     var countComps = 0;
@@ -29,7 +31,7 @@ const displayTarget = (category, progresses, inTarget) => {
         );
         countComps += 1;
         if (relevantProgress.length > 0) {
-          console.log(relevantProgress);
+          /* console.log(relevantProgress); */
           acc =
             acc +
             relevantProgress[0].currentLevel *
@@ -52,51 +54,119 @@ const displayTarget = (category, progresses, inTarget) => {
       });
     });
 
-    if (inTarget > 0) {
-      if (acc >= inTarget) {
-        const randnum = Math.floor(Math.random() * 14) + 1;
-        const imagePath = "./images/badges/badge" + randnum.toString() + ".jpg";
-
-        return (
-          <Fragment>
-            <img
-              className="float-right mr-5 mt-2"
-              width="100px"
-              src={imagePath}
-            />
-            <br />
-            <big>
-              {acc} out of {inTarget} points,{" "}
-              <span style={{ color: "#009900" }}>
-                {Math.round((acc / inTarget) * 100)}% Completion
-              </span>
-            </big>
-            <br />
-          </Fragment>
-        );
-      }
+    if (acc >= inTarget) {
+      // Gets Badge
+      const randnum = Math.floor(Math.random() * 14) + 1;
+      const imagePath = "./images/badges/badge" + randnum.toString() + ".jpg";
 
       return (
         <Fragment>
           <img
             className="float-right mr-5 mt-2"
             width="100px"
-            src="./images/badges/badge0.png"
+            src={imagePath}
           />
+          <br />
           <big>
-            {acc} out of {inTarget},{" "}
-            <span style={{ color: "#cc9900" }}>
+            {acc} out of {inTarget} points,{" "}
+            <span style={{ color: "#009900" }}>
               {Math.round((acc / inTarget) * 100)}% Completion
             </span>
           </big>
+          <br />
         </Fragment>
       );
-    } else {
-      return (
+    }
+
+    return (
+      <Fragment>
+        <img
+          className="float-right mr-5 mt-2"
+          width="100px"
+          src="./images/badges/badge0.png"
+        />
         <big>
-          {acc} Total Points from {countComps} Competencies
+          {acc} out of {inTarget},{" "}
+          <span style={{ color: "#cc9900" }}>
+            {Math.round((acc / inTarget) * 100)}% Completion
+          </span>
         </big>
+      </Fragment>
+    );
+  }
+  if (inTarget <= 0) {
+    // targets are unavalable or further down
+    var badge = true;
+    // Get totals from child competencies and check progress
+    category.category_has_competencies_of.forEach(competency => {
+      console.log(competency.id);
+      const relevantProgress = progresses.filter(
+        progress => progress.competency_progress[0].id === competency.id
       );
+      if (relevantProgress.length > 0) {
+        const target = getTarget(competency.id, minValues);
+        if (
+          relevantProgress[0].currentLevel *
+            parseFloat(competency.default_weight) <
+          target
+        ) {
+          badge = false;
+        }
+        console.log(badge);
+        // Todo: Handle non-default weight
+      }
+    });
+
+    // Get totals from child groups
+    category.has_group.forEach(group => {
+      console.log(group.id);
+      console.log("Point 1");
+      group.group_has_competencies_of.forEach(competency => {
+        console.log(competency.id);
+        const relevantProgress = progresses.filter(
+          progress => progress.competency_progress[0].id === competency.id
+        );
+        if (relevantProgress.length > 0) {
+          const target = getTarget(competency.id, minValues);
+          if (
+            relevantProgress[0].currentLevel *
+              parseFloat(competency.default_weight) <
+            target
+          ) {
+            badge = false;
+          }
+          console.log("Point 2");
+          console.log(badge);
+          // Todo: Handle non-default weight
+        }
+      });
+      group.has_group.forEach(group => {
+        console.log(group.id);
+        console.log("Point 3");
+        group.group_has_competencies_of.forEach(competency => {
+          const relevantProgress = progresses.filter(
+            progress => progress.competency_progress[0].id === competency.id
+          );
+          if (relevantProgress.length > 0) {
+            const target = getTarget(competency.id, minValues);
+            if (
+              relevantProgress[0].currentLevel *
+                parseFloat(competency.default_weight) <
+              target
+            ) {
+              badge = false;
+            }
+            console.log("Point 4");
+            console.log(badge);
+            // Todo: Handle non-default weight
+          }
+        });
+      });
+    });
+    if (badge) {
+      return <big>Badge</big>;
+    } else {
+      return <big>NoBadge</big>;
     }
   }
 };
@@ -109,7 +179,7 @@ export default function Category(props) {
     competency => competency.id === props.category.id
   )[0];
   var thisTarget = -1;
-  var mode = "sum";
+  var mode = "cat";
   try {
     thisTarget = thisComp.TARGET_VALUE_IS_rel.filter(
       target => target.Milestone.ms === props.target && target.planId === "1"
@@ -118,7 +188,7 @@ export default function Category(props) {
     // TODO: Make PlanId a variable
   } catch (error) {
     console.log(error);
-    mode = "sub";
+    mode = "grp";
   }
 
   // TODO: Load Colors into form
@@ -127,17 +197,17 @@ export default function Category(props) {
       <div className="card border-success ml-3 mb-3">
         <h4 className="ml-3">
           {props.category.label} -{" "}
-          {mode === "sum" &&
-            displayTarget(
-              props.category,
-              props.user[0].has_progress_root[0].child_progress,
-              thisTarget
-            )}
-          <small className="text-muted"> {props.category.id} </small>{" "}
+          {displayProgress(
+            props.category,
+            props.user[0].has_progress_root[0].child_progress,
+            thisTarget,
+            props.milestone.minValues
+          )}
+          <small className="text-muted"> {props.category.id} </small>
         </h4>
-        {mode === "sub" && <div className="ml-3">Need to get sums</div>}
 
         <SubDetails
+          mode={mode}
           display={true}
           category={props.category}
           user={props.user}

@@ -3,7 +3,6 @@ import Competency from "./Competency";
 import { findSortOrder } from "../utilities/sort";
 
 export default function Group(props) {
-  console.log(props);
   // TODO: Load Colors into form
   return (
     <Fragment>
