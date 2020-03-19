@@ -7,7 +7,7 @@ export default function Group(props) {
   // TODO: Load Colors into form
   return (
     <Fragment>
-      <div className="card border-warning mb-1 mx-3">
+      <div className="card border-info mb-0 mx-3">
         <h4 className="ml-3">
           {props.group.label} -
           <small className="text-muted"> {props.group.id}</small>

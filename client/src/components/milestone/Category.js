@@ -71,6 +71,7 @@ const displayTarget = (category, progresses, inTarget) => {
                 {Math.round((acc / inTarget) * 100)}% Completion
               </span>
             </big>
+            <br />
           </Fragment>
         );
       }
@@ -108,27 +109,33 @@ export default function Category(props) {
     competency => competency.id === props.category.id
   )[0];
   var thisTarget = -1;
+  var mode = "sum";
   try {
     thisTarget = thisComp.TARGET_VALUE_IS_rel.filter(
       target => target.Milestone.ms === props.target && target.planId === "1"
     )[0].min;
+    console.log(thisTarget);
     // TODO: Make PlanId a variable
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    mode = "sub";
+  }
 
   // TODO: Load Colors into form
   return (
     <Fragment>
-      <div className="card border-success mb-3">
+      <div className="card border-success ml-3 mb-3">
         <h4 className="ml-3">
           {props.category.label} -{" "}
-          {displayTarget(
-            props.category,
-            props.user[0].has_progress_root[0].child_progress,
-            thisTarget
-          )}
-          <br />
+          {mode === "sum" &&
+            displayTarget(
+              props.category,
+              props.user[0].has_progress_root[0].child_progress,
+              thisTarget
+            )}
           <small className="text-muted"> {props.category.id} </small>{" "}
         </h4>
+        {mode === "sub" && <div className="ml-3">Need to get sums</div>}
 
         <SubDetails
           display={true}
