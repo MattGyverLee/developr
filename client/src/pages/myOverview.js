@@ -1,14 +1,14 @@
 import Milestone from "../components/milestone/Milestone";
 import React, { Fragment, useContext } from "react";
 import { SelectionContext } from "../components/utilities/SelectionContext";
-function MyMilestone() {
+function MyOverview() {
   const { state } = useContext(SelectionContext);
   return (
     <Fragment>
       <div className="mx-3">
         {state.planId !== "-1" &&
           state.milestoneId !== "-1" &&
-          state.domainId !== "-1" && <Milestone details={true} />}
+          state.domainId !== "-1" && <Milestone details={false} />}
         {(state.domainId === "-1" ||
           state.planId === "-1" ||
           state.milestoneId === "-1") && (
@@ -21,4 +21,4 @@ function MyMilestone() {
   );
 }
 
-export default MyMilestone;
+export default MyOverview;

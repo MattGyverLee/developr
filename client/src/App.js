@@ -4,6 +4,7 @@ import { ApolloProvider } from "react-apollo";
 import VisPage from "./pages/visPage";
 import MyPlan from "./pages/myPlan";
 import MyMilestones from "./pages/myMilestones";
+import MyOverview from "./pages/myOverview";
 import Home from "./pages/home";
 import EditCompetency from "./pages/editCompetency";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -92,6 +93,10 @@ function App() {
               <Route path="/myMilestones">
                 {/* This Shows a progress table for a specific Milestone */}
                 <MyMilestones />
+              </Route>
+              <Route path="/myOverview">
+                {/* This Shows a progress table for a specific Milestone */}
+                <MyOverview />
               </Route>
               <Route path="/myPlan">
                 {/* This is the main growth plan workspace. */}
