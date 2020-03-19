@@ -12,8 +12,6 @@ const processCatGroups = groupList => {
 // Todo: why is BadgeGroup done twice?
 
 export default function SubDetails(props) {
-  //console.log(props.category);
-
   // TODO: Load Colors into form
   if (props.details) {
     return (

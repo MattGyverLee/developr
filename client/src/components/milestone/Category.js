@@ -6,8 +6,8 @@ var acc = 0;
 
 const displayProgress = (category, progresses, inTarget, minValues) => {
   // this runs when the Category has a target score.
+  acc = 0;
   if (inTarget > 0) {
-    acc = 0;
     var countComps = 0;
     // Get totals from child competencies
     category.category_has_competencies_of.forEach(competency => {
@@ -53,7 +53,6 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         });
       });
     });
-
     if (acc >= inTarget) {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
@@ -61,39 +60,35 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
 
       return (
         <Fragment>
-          <img
-            className="float-right mr-5 mt-2"
-            width="100px"
-            src={imagePath}
-          />
-          <br />
-          <big>
-            {acc} out of {inTarget} points,{" "}
-            <span style={{ color: "#009900" }}>
-              {Math.round((acc / inTarget) * 100)}% Completion
+          <div className="float-right mr-2 mt-2">
+            <span>
+              {acc} out of {inTarget} points,{" "}
+              <span style={{ color: "#009900" }}>
+                {Math.round((acc / inTarget) * 100)}% Completion -{" "}
+              </span>
             </span>
-          </big>
+            <img width="100px" src={imagePath} />
+          </div>
           <br />
         </Fragment>
       );
+    } else {
+      return (
+        <Fragment>
+          <div className="float-right mr-2 mt-2">
+            <span>
+              {acc} out of {inTarget} points,{" "}
+              <span style={{ color: "#cc9900" }}>
+                {Math.round((acc / inTarget) * 100)}% Completion -{" "}
+              </span>
+            </span>
+            <img width="100px" src="./images/badges/badge0.png" />
+          </div>
+        </Fragment>
+      );
     }
-
-    return (
-      <Fragment>
-        <img
-          className="float-right mr-5 mt-2"
-          width="100px"
-          src="./images/badges/badge0.png"
-        />
-        <big>
-          {acc} out of {inTarget},{" "}
-          <span style={{ color: "#cc9900" }}>
-            {Math.round((acc / inTarget) * 100)}% Completion
-          </span>
-        </big>
-      </Fragment>
-    );
   }
+
   if (inTarget <= 0) {
     // targets are unavalable or further down
     var badge = true;
@@ -164,16 +159,34 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       });
     });
     if (badge) {
-      return <big>Badge</big>;
+      // Gets Badge
+      const randnum = Math.floor(Math.random() * 14) + 1;
+      const imagePath = "./images/badges/badge" + randnum.toString() + ".jpg";
+
+      return (
+        <Fragment>
+          <div className="float-right mr-2 mt-2">
+            <span style={{ color: "#009900" }}>Category Complete - </span>
+            <img width="100px" src={imagePath} />
+          </div>
+          <br />
+        </Fragment>
+      );
     } else {
-      return <big>NoBadge</big>;
+      return (
+        <Fragment>
+          <div className="float-right mr-2 mt-2">
+            <span style={{ color: "#cc9900" }}>Category Incomplete - </span>
+            <img width="100px" src="./images/badges/badge0.png" />
+          </div>
+          <br />
+        </Fragment>
+      );
     }
   }
 };
 
 export default function Category(props) {
-  // console.log(props);
-
   // Figure Out Target Value
   const thisComp = props.milestone.competencycategories.filter(
     competency => competency.id === props.category.id
@@ -195,8 +208,8 @@ export default function Category(props) {
   return (
     <Fragment>
       <div className="card border-success ml-3 mb-3">
-        <h4 className="ml-3">
-          {props.category.label} -{" "}
+        <h2 className="ml-3">
+          {props.category.label}
           {displayProgress(
             props.category,
             props.user[0].has_progress_root[0].child_progress,
@@ -204,7 +217,7 @@ export default function Category(props) {
             props.milestone.minValues
           )}
           <small className="text-muted"> {props.category.id} </small>
-        </h4>
+        </h2>
 
         <SubDetails
           mode={mode}

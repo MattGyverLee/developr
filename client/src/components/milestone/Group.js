@@ -6,11 +6,11 @@ export default function Group(props) {
   // TODO: Load Colors into form
   return (
     <Fragment>
-      <div className="card border-info mb-0 mx-3">
-        <h4 className="ml-3">
-          {props.group.label} -
-          <small className="text-muted"> {props.group.id}</small>
-        </h4>
+      <div className="card border-info mb-1 mx-2">
+        <h3 className="ml-2">
+          {props.group.label}
+          {/* - <small className="text-muted"> {props.group.id}</small> */}
+        </h3>
         {findSortOrder(props.group.group_has_competencies_of).map(
           competency => (
             <Competency
