@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { SITREP, GET_MILESTONE_QUERY } from "../queries";
+import { GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
 import Category from "./Category";
 import { SelectionContext } from "../utilities/SelectionContext";

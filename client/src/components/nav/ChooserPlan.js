@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { SITREP, SET_LOCAL_PLAN, LIST_PLANS } from "../queries";
+import { SET_LOCAL_PLAN, LIST_PLANS } from "../queries";
 
 import { SelectionContext } from "../utilities/SelectionContext";
 import ChooserMilestone from "./ChooserMilestone";

@@ -8,13 +8,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
   // this runs when the Category has a target score.
   acc = 0;
   if (inTarget > 0) {
-    var countComps = 0;
     // Get totals from child competencies
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
         progress => progress.competency_progress[0].id === competency.id
       );
-      countComps += 1;
       if (relevantProgress.length > 0) {
         acc =
           acc +
@@ -29,7 +27,6 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         const relevantProgress = progresses.filter(
           progress => progress.competency_progress[0].id === competency.id
         );
-        countComps += 1;
         if (relevantProgress.length > 0) {
           /* console.log(relevantProgress); */
           acc =
@@ -43,7 +40,6 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
           const relevantProgress = progresses.filter(
             progress => progress.competency_progress[0].id === competency.id
           );
-          countComps += 1;
           if (relevantProgress.length > 0) {
             acc =
               acc +
@@ -67,7 +63,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
                 {Math.round((acc / inTarget) * 100)}% Completion -{" "}
               </span>
             </span>
-            <img width="100px" src={imagePath} />
+            <img width="100px" alt="Badge" src={imagePath} />
           </div>
           <br />
         </Fragment>
@@ -82,7 +78,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
                 {Math.round((acc / inTarget) * 100)}% Completion -{" "}
               </span>
             </span>
-            <img width="100px" src="./images/badges/badge0.png" />
+            <img width="100px" alt="Badge" src="./images/badges/badge0.png" />
           </div>
         </Fragment>
       );
@@ -94,7 +90,6 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     var badge = true;
     // Get totals from child competencies and check progress
     category.category_has_competencies_of.forEach(competency => {
-      console.log(competency.id);
       const relevantProgress = progresses.filter(
         progress => progress.competency_progress[0].id === competency.id
       );
@@ -107,17 +102,13 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         ) {
           badge = false;
         }
-        console.log(badge);
         // Todo: Handle non-default weight
       }
     });
 
     // Get totals from child groups
     category.has_group.forEach(group => {
-      console.log(group.id);
-      console.log("Point 1");
       group.group_has_competencies_of.forEach(competency => {
-        console.log(competency.id);
         const relevantProgress = progresses.filter(
           progress => progress.competency_progress[0].id === competency.id
         );
@@ -130,14 +121,10 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
           ) {
             badge = false;
           }
-          console.log("Point 2");
-          console.log(badge);
           // Todo: Handle non-default weight
         }
       });
       group.has_group.forEach(group => {
-        console.log(group.id);
-        console.log("Point 3");
         group.group_has_competencies_of.forEach(competency => {
           const relevantProgress = progresses.filter(
             progress => progress.competency_progress[0].id === competency.id
@@ -151,8 +138,6 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             ) {
               badge = false;
             }
-            console.log("Point 4");
-            console.log(badge);
             // Todo: Handle non-default weight
           }
         });
@@ -167,7 +152,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         <Fragment>
           <div className="float-right mr-2 mt-2">
             <span style={{ color: "#009900" }}>Category Complete - </span>
-            <img width="100px" src={imagePath} />
+            <img width="100px" alt="Badge" src={imagePath} />
           </div>
           <br />
         </Fragment>
@@ -177,7 +162,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         <Fragment>
           <div className="float-right mr-2 mt-2">
             <span style={{ color: "#cc9900" }}>Category Incomplete - </span>
-            <img width="100px" src="./images/badges/badge0.png" />
+            <img width="100px" alt="Badge" src="./images/badges/badge0.png" />
           </div>
           <br />
         </Fragment>
@@ -193,14 +178,13 @@ export default function Category(props) {
   )[0];
   var thisTarget = -1;
   var mode = "cat";
-  try {
+
+  if (thisComp && thisComp.TARGET_VALUE_IS_rel.length > 0) {
     thisTarget = thisComp.TARGET_VALUE_IS_rel.filter(
-      target => target.Milestone.ms === props.target && target.planId === "1"
+      target =>
+        target.Milestone.ms === props.target && target.planId === props.planId
     )[0].min;
-    console.log(thisTarget);
-    // TODO: Make PlanId a variable
-  } catch (error) {
-    console.log(error);
+  } else {
     mode = "grp";
   }
 

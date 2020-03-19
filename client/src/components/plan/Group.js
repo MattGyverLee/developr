@@ -22,8 +22,8 @@ export default function GroupDetails(props) {
   /* {showCompDetails(props.group.group_has_competencies_of)} */
   return (
     <Fragment>
-      <div className="card border-warning mb-1 mx-3">
-        <h4 className="card-header mb-1">{props.group.label}</h4>
+      <div className="card border-warning mb-1 mx-2">
+        <h4 className="card-header mb-2">{props.group.label}</h4>
 
         {showCompDetailsForm(props.group.group_has_competencies_of)}
         {showGroupDetails(props.group.has_group)}

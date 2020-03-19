@@ -54,9 +54,9 @@ function App() {
     planId: localStorage.getItem("SelectedPlan"),
     milestoneId: localStorage.getItem("SelectedMilestone")
   });
-
+  const showDebug = false;
   const DebugInfo = () => {
-    const { data, loading, error } = useQuery(SITREP);
+    const { data } = useQuery(SITREP);
     return (
       <div>
         <div>
@@ -82,7 +82,7 @@ function App() {
       server (Apollo_Server) and client (Apollo_Client) */}
       <SelectionContext.Provider value={{ state, setLocalState }}>
         <NavBar />
-        {/* <DebugInfo /> */}
+        {showDebug && <DebugInfo />}
         <Router>
           {/* React-Router makes a single-page react app modular. */}
           <div>

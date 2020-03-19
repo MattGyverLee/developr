@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Query } from "react-apollo";
 import Category from "./Category";
 import DisplayError from "../QueryError";
-import { SITREP, DOMAIN_QUERY } from "../queries";
+import { DOMAIN_QUERY } from "../queries";
 import { findSortOrder } from "../utilities/sort";
 
 //todo: Sub string for userId variable

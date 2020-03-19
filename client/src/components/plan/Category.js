@@ -8,7 +8,7 @@ export default function Category(props) {
   // TODO: Load Colors into form
   return (
     <Fragment>
-      <div className="card border-success mb-3">
+      <div className="card border-success mb-2">
         <h4 bgcolor={props.category.color} className="ml-3">
           {props.category.label}
         </h4>

@@ -50,7 +50,7 @@ function ChooserCompetency(props) {
                       {comp.label}
                     </option>
                   );
-                } else return;
+                } else return null;
               })}
             </select>
             {parseInt(domainId) >= 0 && selectedCompetency !== "-1" && (

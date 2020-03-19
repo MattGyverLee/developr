@@ -10,7 +10,7 @@ const checkLoc = (local, ref) => {
 const NavBar = local => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary py-1">
-      <a className="navbar-brand text-center">
+      <a className="navbar-brand text-center" href="./">
         <span className="navbar-brand logo my-n1">level.up</span>
         <br />
         <div className="mb-n1 mt-n2">Growth Tracking</div>
@@ -40,12 +40,12 @@ const NavBar = local => {
           </li>
           <li className="nav-item">
             <a className="nav-link" href="./myMilestones">
-              My Milestones {checkLoc(local, "myMilestones")}
+              My Progress {checkLoc(local, "myMilestones")}
             </a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="./graph">
-              Visualize Plan {checkLoc(local, "graph")}
+              Visualize {checkLoc(local, "graph")}
             </a>
           </li>
           <li className="nav-item">
