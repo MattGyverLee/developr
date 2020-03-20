@@ -1,20 +1,16 @@
 import { typeDefs } from "./graphql-schema";
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
-import { v1 as neo4j } from "neo4j-driver";
 import { makeAugmentedSchema } from "neo4j-graphql-js";
 import dotenv from "dotenv";
 import cors from "cors";
 import fs from "fs";
 
-// set environment variables from ../.env
-if (process.env.NODE_ENV === "development") {
-  dotenv.config(__dirname, `./.env.${process.env.NODE_ENV}`);
-} else {
-  dotenv.config(__dirname, `.env`);
-}
+const neo4j = require("neo4j-driver");
 
-const envy = `.env.${process.env.NODE_ENV}`;
+// set environment variables from ../.env
+
+dotenv.config(__dirname, `.env`);
 const app = express();
 
 // Allow Cross-Origin

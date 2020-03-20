@@ -36,7 +36,7 @@
     "fs": "^0.0.1-security",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
-    "neo4j-driver": "^1.7.5",
+    "neo4j-driver": "^4.0.2",
     "neo4j-graphql-js": "^2.7.1",
     "node-fetch": "^2.6.0",
     "now": "^17.0.4",
