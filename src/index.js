@@ -8,8 +8,13 @@ import cors from "cors";
 import fs from "fs";
 
 // set environment variables from ../.env
-dotenv.config();
+if (process.env.NODE_ENV === "development") {
+  dotenv.config(__dirname, `./.env.${process.env.NODE_ENV}`);
+} else {
+  dotenv.config(__dirname, `.env`);
+}
 
+const envy = `.env.${process.env.NODE_ENV}`;
 const app = express();
 
 // Allow Cross-Origin

@@ -2,7 +2,8 @@ import { ForceGraph3D } from "react-force-graph";
 import React, { Component } from "react";
 import SpriteText from "three-spritetext";
 
-const neo4j = require("neo4j-driver").v1;
+const neo4j = require("neo4j-driver");
+// this is the new format!
 
 export class Graph extends Component {
   constructor(props) {
