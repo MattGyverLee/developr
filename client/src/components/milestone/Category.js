@@ -55,8 +55,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     if (acc >= inTarget) {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
-      const imagePath = "./images/badges/badge" + randnum.toString() + ".jpg";
-
+      const imagePath =
+        "https://github.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge" +
+        randnum.toString() +
+        ".jpg";
+      // todo: Redirect this
       return (
         <Fragment>
           <div className="float-right mr-2 mt-2">

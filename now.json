@@ -90,6 +90,9 @@
     "GCROOT": "@level-up-gcroot",
     "GCPREFIX": "@level-up-gcprefix",
     "GCPLANNUM": "@level-up-gcplannum",
-    "GCDOMNUM": "@level-up-gcdomnum"
+    "GCDOMNUM": "@level-up-gcdomnum",
+    "REACT_APP_NEO4J_USER": "@level-up-react-app_neo4j_user",
+    "REACT_APP_NEO4J_PASSWORD": "@level-up-react-app_neo4j_password",
+    "REACT_APP_NEO4J_URI": "@level-up-react-app_neo4j_uri"
   }
 }
