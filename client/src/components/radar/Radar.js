@@ -4,12 +4,16 @@ import { Query } from "react-apollo";
 import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
 import { Radar } from "react-chartjs-2";
+import { getTarget } from "../utilities/maths";
 
 const displayProgress = (category, progresses, inTarget, minValues) => {
   // this runs when the Category has a target score.
   var acc = 0;
-  const target = minValues.filter(cat => cat.id === category.id)[0].min;
-  if (target > 0) {
+  var catTarget = -1;
+  try {
+    catTarget = minValues.filter(cat => cat.id === category.id)[0].min;
+  } catch (error) {}
+  if (catTarget > 0) {
     // Get totals from child competencies
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
@@ -52,28 +56,46 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       });
     });
 
-    return { id: category.label, progress: acc, target: target };
+    return { id: category.label, progress: acc, target: catTarget };
   }
 
-  /* if (inTarget <= 0) {
+  var fullAcc = 0;
+  var targetTotal = 0;
+  if (catTarget <= 0) {
     // targets are unavalable or further down
-    var badge = true;
+    acc = 0;
+    fullAcc = 0;
+    targetTotal = 0;
     // Get totals from child competencies and check progress
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
         progress => progress.competency_progress[0].id === competency.id
       );
+      const target = getTarget(competency.id, minValues);
       if (relevantProgress.length > 0) {
-        const target = getTarget(competency.id, minValues);
         if (
           relevantProgress[0].currentLevel *
-            parseFloat(competency.default_weight) <
+            parseFloat(competency.default_weight) <=
           target
         ) {
-          badge = false;
+          acc =
+            acc +
+            relevantProgress[0].currentLevel *
+              parseFloat(competency.default_weight);
+          fullAcc =
+            fullAcc +
+            relevantProgress[0].currentLevel *
+              parseFloat(competency.default_weight);
+        } else {
+          acc = acc + target;
+          fullAcc =
+            fullAcc +
+            relevantProgress[0].currentLevel *
+              parseFloat(competency.default_weight);
+          // Only counting required progress up to a goal.
         }
-        // Todo: Handle non-default weight
       }
+      targetTotal = targetTotal + target;
     });
 
     // Get totals from child groups
@@ -82,40 +104,74 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         const relevantProgress = progresses.filter(
           progress => progress.competency_progress[0].id === competency.id
         );
+        const target = getTarget(competency.id, minValues);
         if (relevantProgress.length > 0) {
-          const target = getTarget(competency.id, minValues);
           if (
             relevantProgress[0].currentLevel *
-              parseFloat(competency.default_weight) <
+              parseFloat(competency.default_weight) <=
             target
           ) {
-            badge = false;
+            acc =
+              acc +
+              relevantProgress[0].currentLevel *
+                parseFloat(competency.default_weight);
+            fullAcc =
+              fullAcc +
+              relevantProgress[0].currentLevel *
+                parseFloat(competency.default_weight);
+          } else {
+            acc = acc + target;
+            fullAcc =
+              fullAcc +
+              relevantProgress[0].currentLevel *
+                parseFloat(competency.default_weight);
+            // Only counting required progress up to a goal.
           }
           // Todo: Handle non-default weight
         }
+        targetTotal = targetTotal + target;
       });
       group.has_group.forEach(group => {
         group.group_has_competencies_of.forEach(competency => {
           const relevantProgress = progresses.filter(
             progress => progress.competency_progress[0].id === competency.id
           );
+          const target = getTarget(competency.id, minValues);
           if (relevantProgress.length > 0) {
-            const target = getTarget(competency.id, minValues);
             if (
               relevantProgress[0].currentLevel *
-                parseFloat(competency.default_weight) <
+                parseFloat(competency.default_weight) <=
               target
             ) {
-              badge = false;
+              acc =
+                acc +
+                relevantProgress[0].currentLevel *
+                  parseFloat(competency.default_weight);
+              fullAcc =
+                fullAcc +
+                relevantProgress[0].currentLevel *
+                  parseFloat(competency.default_weight);
+            } else {
+              acc = acc + target;
+              fullAcc =
+                fullAcc +
+                relevantProgress[0].currentLevel *
+                  parseFloat(competency.default_weight);
+              // Only counting required progress up to a goal.
             }
             // Todo: Handle non-default weight
           }
+          targetTotal = targetTotal + target;
         });
       });
     });
-    
   }
-}; */
+  return {
+    id: category.label,
+    progress: acc,
+    adjustedProgress: fullAcc,
+    target: targetTotal
+  };
 };
 
 const RadarComponent = props => {
@@ -136,23 +192,51 @@ const RadarComponent = props => {
       });
       var labelList = [];
       var progressList = [];
+      var adjProgressList = [];
       var targetList = [];
       accy.forEach(spur => {
         labelList.push(spur.id);
         progressList.push(spur.progress);
         targetList.push(spur.target);
+        if (spur.adjustedProgress) {
+          adjProgressList.push(spur.adjustedProgress);
+        }
       });
-      const radarData = {
-        labels: labelList,
-        datasets: [
-          {
-            label: data.Milestone[0].short_name[0].label,
-            data: targetList,
-            borderColor: "blue"
-          },
-          { label: "Progress", data: progressList, borderColor: "green" }
-        ]
-      };
+      var radarData = {};
+      if (adjProgressList.length > 0) {
+        radarData = {
+          labels: labelList,
+          datasets: [
+            {
+              label: data.Milestone[0].short_name[0].label,
+              data: targetList,
+              borderColor: "blue"
+            },
+            {
+              label: "Relevant Progress",
+              data: progressList,
+              borderColor: "green"
+            },
+            {
+              label: "Full Progress",
+              data: adjProgressList,
+              borderColor: "yellow"
+            }
+          ]
+        };
+      } else {
+        radarData = {
+          labels: labelList,
+          datasets: [
+            {
+              label: data.Milestone[0].short_name[0].label,
+              data: targetList,
+              borderColor: "blue"
+            },
+            { label: "Progress", data: progressList, borderColor: "green" }
+          ]
+        };
+      }
       return radarData;
     } else {
       return null;
