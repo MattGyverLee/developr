@@ -7,7 +7,7 @@ var acc = 0;
 const displayProgress = (category, progresses, inTarget, minValues) => {
   // this runs when the Category has a target score.
   acc = 0;
-  if (inTarget > 0) {
+  if (inTarget >= 0) {
     // Get totals from child competencies
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
@@ -49,6 +49,9 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         });
       });
     });
+    if (acc === 0 && inTarget === 0) {
+      return null;
+    }
     if (acc >= inTarget) {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
@@ -57,11 +60,9 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       return (
         <Fragment>
           <div className="float-right mr-2 mt-2">
-            <span>
-              {acc} out of {inTarget} points,{" "}
-              <span style={{ color: "#009900" }}>
-                {Math.round((acc / inTarget) * 100)}% Completion -{" "}
-              </span>
+            <span style={{ color: "#009900" }}>
+              <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
+              {Math.round((acc / inTarget) * 100)}% Completion -{" "}
             </span>
             <img width="100px" alt="Badge" src={imagePath} />
           </div>
@@ -72,11 +73,9 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       return (
         <Fragment>
           <div className="float-right mr-2 mt-2">
-            <span>
-              {acc} out of {inTarget} points,{" "}
-              <span style={{ color: "#cc9900" }}>
-                {Math.round((acc / inTarget) * 100)}% Completion -{" "}
-              </span>
+            <span style={{ color: "#cc9900" }}>
+              <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
+              {Math.round((acc / inTarget) * 100)}% Completion -{" "}
             </span>
             <img width="100px" alt="Badge" src="./images/badges/badge0.png" />
           </div>
@@ -84,10 +83,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       );
     }
   }
-
+  var totalTarget = 0;
   if (inTarget <= 0) {
     // targets are unavalable or further down
     var badge = true;
+    totalTarget = 0;
     // Get totals from child competencies and check progress
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
@@ -101,7 +101,12 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
           target
         ) {
           badge = false;
+          acc =
+            acc +
+            relevantProgress[0].currentLevel *
+              parseFloat(competency.default_weight);
         }
+        totalTarget = totalTarget + target;
         // Todo: Handle non-default weight
       }
     });
@@ -120,7 +125,12 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             target
           ) {
             badge = false;
+            acc =
+              acc +
+              relevantProgress[0].currentLevel *
+                parseFloat(competency.default_weight);
           }
+          totalTarget = totalTarget + target;
           // Todo: Handle non-default weight
         }
       });
@@ -137,12 +147,20 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
               target
             ) {
               badge = false;
+              acc =
+                acc +
+                relevantProgress[0].currentLevel *
+                  parseFloat(competency.default_weight);
             }
+            totalTarget = totalTarget + target;
             // Todo: Handle non-default weight
           }
         });
       });
     });
+    if (totalTarget === 0 && acc === 0) {
+      return null;
+    }
     if (badge) {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
@@ -157,7 +175,8 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
           <br />
         </Fragment>
       );
-    } else {
+    }
+    if (inTarget < 0 && !badge) {
       return (
         <Fragment>
           <div className="float-right mr-2 mt-2">
@@ -187,33 +206,41 @@ export default function Category(props) {
   } else {
     mode = "grp";
   }
+  if (
+    displayProgress(
+      props.category,
+      props.user[0].has_progress_root[0].child_progress,
+      thisTarget,
+      props.milestone.minValues
+    ) !== null
+  ) {
+    // TODO: Load Colors into form
+    return (
+      <Fragment>
+        <div className="card border-success ml-3 mb-3">
+          <h2 className="ml-3">
+            {props.category.label}
+            {displayProgress(
+              props.category,
+              props.user[0].has_progress_root[0].child_progress,
+              thisTarget,
+              props.milestone.minValues
+            )}
+            <small className="text-muted"> {props.category.id} </small>
+          </h2>
 
-  // TODO: Load Colors into form
-  return (
-    <Fragment>
-      <div className="card border-success ml-3 mb-3">
-        <h2 className="ml-3">
-          {props.category.label}
-          {displayProgress(
-            props.category,
-            props.user[0].has_progress_root[0].child_progress,
-            thisTarget,
-            props.milestone.minValues
-          )}
-          <small className="text-muted"> {props.category.id} </small>
-        </h2>
-
-        <SubDetails
-          mode={mode}
-          display={true}
-          category={props.category}
-          user={props.user}
-          milestone={props.milestone}
-          planId={props.planId}
-          target={props.target}
-          details={props.details}
-        />
-      </div>
-    </Fragment>
-  );
+          <SubDetails
+            mode={mode}
+            display={true}
+            category={props.category}
+            user={props.user}
+            milestone={props.milestone}
+            planId={props.planId}
+            target={props.target}
+            details={props.details}
+          />
+        </div>
+      </Fragment>
+    );
+  } else return null;
 }

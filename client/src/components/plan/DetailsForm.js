@@ -146,12 +146,12 @@ export default function CompetencyDetailsForm(props) {
                     id={"progDrop" + props.competency.id}
                     name="progress"
                     defaultValue="3">
-                    <option value="0">Not Selected</option>
-                    <option value="1">Learner</option>
-                    <option value="2">Practitioner</option>
-                    <option value="3">Guide</option>
-                    <option value="4">Expert</option>
-                    <option value="5">Thought Leader</option>
+                    <option value="-1">Not Selected</option>
+                    <option value="0">Learner</option>
+                    <option value="1">Practitioner</option>
+                    <option value="2">Guide</option>
+                    <option value="3">Expert</option>
+                    <option value="4">Thought Leader</option>
                   </select>
                 </FormGroup>
               </Col>

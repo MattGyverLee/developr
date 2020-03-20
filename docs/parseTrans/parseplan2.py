@@ -116,7 +116,7 @@ with open('./Trans1.tsv') as tsvfile:
                 o.write("\tSET tc" + str(tcIndex) +
                         '.label = "' + row['Description']+'"\n')
             o.write('\tMerge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "' +
-                    row['ID']+str(cmpIndex)+'"})-[:COMPETENCY_PROGRESS {userId: 1}]-(cmp' + str(cmpIndex) + ')\n')
+                    row['ID']+str(cmpIndex)+'"})-[:COMPETENCY_PROGRESS {userId: "1"}]-(cmp' + str(cmpIndex) + ')\n')
             o.write('\tMerge (cmp' + str(cmpIndex) +
                     ')-[:TARGET_VALUE_IS {planId: "2", min: ' + row['Cons1 min']+'}]-(ms)\n')
             o.write('\n')

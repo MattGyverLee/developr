@@ -208,14 +208,14 @@ const RadarComponent = props => {
           labels: labelList,
           datasets: [
             {
-              label: data.Milestone[0].short_name[0].label,
+              label: "Target: " + data.Milestone[0].short_name[0].label,
               data: targetList,
-              borderColor: "blue"
+              borderColor: "green"
             },
             {
               label: "Relevant Progress",
               data: progressList,
-              borderColor: "green"
+              borderColor: "blue"
             },
             {
               label: "Full Progress",
@@ -229,11 +229,11 @@ const RadarComponent = props => {
           labels: labelList,
           datasets: [
             {
-              label: data.Milestone[0].short_name[0].label,
+              label: "Target: " + data.Milestone[0].short_name[0].label,
               data: targetList,
-              borderColor: "blue"
+              borderColor: "green"
             },
-            { label: "Progress", data: progressList, borderColor: "green" }
+            { label: "Progress", data: progressList, borderColor: "blue" }
           ]
         };
       }
