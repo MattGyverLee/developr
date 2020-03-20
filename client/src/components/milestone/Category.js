@@ -56,7 +56,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
       const imagePath =
-        "https://github.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge" +
+        "https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge" +
         randnum.toString() +
         ".jpg";
       // todo: Redirect this
@@ -80,7 +80,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
               <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
               {Math.round((acc / inTarget) * 100)}% Completion -{" "}
             </span>
-            <img width="100px" alt="Badge" src="./images/badges/badge0.png" />
+            <img
+              width="100px"
+              alt="Badge"
+              src="https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge0.png"
+            />
           </div>
         </Fragment>
       );
@@ -167,7 +171,10 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     if (badge) {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
-      const imagePath = "./images/badges/badge" + randnum.toString() + ".jpg";
+      const imagePath =
+        "https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge" +
+        randnum.toString() +
+        ".jpg";
 
       return (
         <Fragment>
@@ -184,7 +191,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
         <Fragment>
           <div className="float-right mr-2 mt-2">
             <span style={{ color: "#cc9900" }}>Category Incomplete - </span>
-            <img width="100px" alt="Badge" src="./images/badges/badge0.png" />
+            <img
+              width="100px"
+              alt="Badge"
+              src="https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge0.png"
+            />
           </div>
           <br />
         </Fragment>

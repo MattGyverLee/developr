@@ -1,6 +1,6 @@
 //https://blog.grandstack.io/inferring-graphql-type-definitions-from-an-existing-neo4j-database-dadca2138b25
 
-const neo4j = require("neo4j-driver").v1;
+const neo4j = require("neo4j-driver");
 const inferSchema = require("neo4j-graphql-js").inferSchema;
 const dotenv = require("dotenv");
 
@@ -35,7 +35,11 @@ const cypher = new Cypher({ driver }).query;
 
 //Domain
 q.push(cypher`
-CALL apoc.export.cypher.all("export.cypher")
+CALL apoc.export.cypher.all("baseDB.cypher")
+      `);
+
+q.push(cypher`
+CALL apoc.export.csv.all("baseDB.csv", {})
       `);
 
 console.log(q.length);
