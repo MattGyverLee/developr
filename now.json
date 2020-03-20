@@ -1,0 +1,95 @@
+{
+  "version": 2,
+  "name": "level-up",
+  "builds": [
+    {
+      "src": "src/index.js",
+      "use": "@now/node"
+    },
+    {
+      "src": "client/package.json",
+      "use": "@now/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/graphql(.*)",
+      "dest": "src/index.js"
+    },
+    {
+      "src": "/static/(.*)",
+      "headers": {
+        "cache-control": "s-maxage=31536000,immutable"
+      },
+      "dest": "client/static/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "client/favicon.ico"
+    },
+    {
+      "src": "/img/(.*)",
+      "dest": "client/img/$1"
+    },
+    {
+      "src": "/asset-manifest.json",
+      "dest": "client/asset-manifest.json"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "client/manifest.json"
+    },
+    {
+      "src": "/precache-manifest.(.*)",
+      "dest": "client/precache-manifest.$1"
+    },
+    {
+      "src": "/service-worker.js",
+      "headers": {
+        "cache-control": "s-maxage=0"
+      },
+      "dest": "client/service-worker.js"
+    },
+    {
+      "src": "^(.*)$",
+      "headers": {
+        "cache-control": "s-maxage=0"
+      },
+      "dest": "/client/index.html"
+    }
+  ],
+  "build": {
+    "env": {
+      "REACT_APP_GRAPHQL_URI": "/graphql",
+      "NEO4J_URI": "@neo4j_uri",
+      "NEO4J_USER": "@neo4j_user",
+      "NEO4J_PASSWORD": "@neo4j_password"
+    }
+  },
+  "env": {
+    "NEO4J_URI": "@level-up-neo4j-uri",
+    "NEO4J_USER": "@level-up-neo4j-user",
+    "NEO4J_PASSWORD": "@level-up-neo4j-password",
+    "REACT_APP_GRAPHQL_URI": "@level-up-react-app_graphql_uri",
+    "PROXY": "@level-up-proxy",
+    "GRAPHQL_LISTEN_PORT": "@level-up-graphql-listen_port",
+    "GRAPHQL_URI": "@level-up-graphql-uri",
+    "LTDOM": "@level-up-ltdom",
+    "LTPLAN": "@level-up-ltplan",
+    "LTCOMP": "@level-up-ltcomp",
+    "LTROOT": "@level-up-ltroot",
+    "LTPREFIX": "@level-up-ltprefix",
+    "LTPLANNUM": "@level-up-ltplannum",
+    "LTDOMNUM": "@level-up-ltdomnum",
+    "GCDOM": "@level-up-gcdom",
+    "GCPLAN": "@level-up-gcplan",
+    "GCCOMP": "@level-up-gccomp",
+    "GCROOT": "@level-up-gcroot",
+    "GCPREFIX": "@level-up-gcprefix",
+    "GCPLANNUM": "@level-up-gcplannum",
+    "GCDOMNUM": "@level-up-gcdomnum"
+  }
+}

@@ -1,6 +1,3 @@
-# Build
-.build/
-
 # Logs
 logs
 *.log
@@ -88,5 +85,3 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
-
-
