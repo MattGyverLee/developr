@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "level-up",
   "builds": [
     {
       "src": "src/index.js",
@@ -58,7 +57,7 @@
       "headers": {
         "cache-control": "s-maxage=0"
       },
-      "dest": "/client/index.html"
+      "dest": "client/index.html"
     }
   ],
   "build": {
@@ -73,7 +72,7 @@
     "NEO4J_URI": "@level-up-neo4j-uri",
     "NEO4J_USER": "@level-up-neo4j-user",
     "NEO4J_PASSWORD": "@level-up-neo4j-password",
-    "REACT_APP_GRAPHQL_URI": "@level-up-react-app_graphql_uri",
+    "REACT_APP_GRAPHQL_URI": "/graphql",
     "PROXY": "@level-up-proxy",
     "GRAPHQL_LISTEN_PORT": "@level-up-graphql-listen_port",
     "GRAPHQL_URI": "@level-up-graphql-uri",
