@@ -15,6 +15,7 @@
     "dump": "node src/dbOps/dump.js",
     "load-dev": "nodemon src/dbOps/loadDB.js",
     "load": "node src/dbOps/loadDB.js",
+    "loadSandbox": "node src/dbOps/loadRemote.js",
     "augment": "node src/dbOps/inferAug.js"
   },
   "comments": {

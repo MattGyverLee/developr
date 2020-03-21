@@ -1,0 +1,2 @@
+colors = ["blue", "red", "green", "orange", "violet",
+              "brown", "teal", "yellow", "fuscia", "cyan", "avocado", "grey"]

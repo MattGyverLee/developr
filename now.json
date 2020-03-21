@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "level-up",
+  "dotenv": ".env.production",
   "builds": [
     {
       "src": "src/index.js",
