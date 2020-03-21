@@ -26,6 +26,9 @@
     "three": "^0.113.2",
     "three-spritetext": "^1.2.2"
   },
+  "devDependencies": {
+    "http-proxy-middleware": "^0.20.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
