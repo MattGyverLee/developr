@@ -26,7 +26,7 @@ export default function SubDetails(props) {
               target={props.target}
               planId={props.planId}
               color={props.color}
-              depth={props.depth + 1}
+              depth={props.depth}
             />
           )
         )}
@@ -39,7 +39,7 @@ export default function SubDetails(props) {
             target={props.target}
             planId={props.planId}
             color={props.color}
-            depth={props.depth + 1}
+            depth={props.depth}
           />
         ))}
         {processCatGroups(props.category.has_group)}
