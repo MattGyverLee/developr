@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import SubDetails from "./SubDetails";
 import { getTarget } from "../utilities/maths";
+import { getColor, calcAlpha } from "../utilities/color";
 
 var acc = 0;
 
@@ -56,13 +57,15 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
       const imagePath =
-        "https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge" +
+        "https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/badges/badge" +
         randnum.toString() +
         ".jpg";
       // todo: Redirect this
       return (
         <Fragment>
-          <div className="float-right mr-2 mt-2">
+          <div
+            style={{ backgroundColor: "white" }}
+            className="float-right mr-2 mt-2">
             <span style={{ color: "#009900" }}>
               <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
               {Math.round((acc / inTarget) * 100)}% Completion -{" "}
@@ -75,7 +78,9 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     } else {
       return (
         <Fragment>
-          <div className="float-right mr-2 mt-2">
+          <div
+            style={{ backgroundColor: "white" }}
+            className="float-right mr-2 mt-2">
             <span style={{ color: "#cc9900" }}>
               <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
               {Math.round((acc / inTarget) * 100)}% Completion -{" "}
@@ -83,7 +88,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             <img
               width="100px"
               alt="Badge"
-              src="https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge0.png"
+              src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/badges/badge0.png"
             />
           </div>
         </Fragment>
@@ -172,13 +177,15 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       // Gets Badge
       const randnum = Math.floor(Math.random() * 14) + 1;
       const imagePath =
-        "https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge" +
+        "https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/badges/badge" +
         randnum.toString() +
         ".jpg";
 
       return (
         <Fragment>
-          <div className="float-right mr-2 mt-2">
+          <div
+            style={{ backgroundColor: "white" }}
+            className="float-right mr-2 mt-2 px-2">
             <span style={{ color: "#009900" }}>Category Complete - </span>
             <img width="100px" alt="Badge" src={imagePath} />
           </div>
@@ -189,12 +196,14 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     if (inTarget < 0 && !badge) {
       return (
         <Fragment>
-          <div className="float-right mr-2 mt-2">
+          <div
+            style={{ backgroundColor: "white" }}
+            className="float-right mr-2 mt-2">
             <span style={{ color: "#cc9900" }}>Category Incomplete - </span>
             <img
               width="100px"
               alt="Badge"
-              src="https://raw.githubusercontent.com/MattGyverLee/developr/raw/master/client/public/images/badges/badge0.png"
+              src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/badges/badge0.png"
             />
           </div>
           <br />
@@ -228,11 +237,12 @@ export default function Category(props) {
       props.milestone.minValues
     ) !== null
   ) {
-    // TODO: Load Colors into form
+    const depth = 2;
+    const color = getColor(props.category.color, calcAlpha(depth));
     return (
       <Fragment>
-        <div className="card border-success ml-3 mb-3">
-          <h2 className="ml-3">
+        <div className="card border-success mb-3">
+          <h2 style={{ backgroundColor: color }} className="card-header ml-3">
             {props.category.label}
             {displayProgress(
               props.category,
@@ -240,7 +250,7 @@ export default function Category(props) {
               thisTarget,
               props.milestone.minValues
             )}
-            <small className="text-muted"> {props.category.id} </small>
+            {/* <small className="text-muted"> {props.category.id} </small> */}
           </h2>
 
           <SubDetails
@@ -252,6 +262,8 @@ export default function Category(props) {
             planId={props.planId}
             target={props.target}
             details={props.details}
+            color={props.category.color}
+            depth={depth + 1}
           />
         </div>
       </Fragment>

@@ -14,8 +14,8 @@ export default function Competency(props) {
       <Fragment>
         <div className="card border-warning mx-2 mb-1">
           <h4 className="ml-3 py-0">
-            {props.competency.label} -
-            <small className="text-muted"> {props.competency.id} </small>
+            {props.competency.label}
+            {/* - <small className="text-muted"> {props.competency.id} </small> */}
             {target > score && (
               <span className="float-right mr-2" style={{ color: "#cc9900" }}>
                 <big>{score}</big>/<small>{target}</small>

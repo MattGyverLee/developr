@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Form, Row, Col, Label, FormGroup } from "reactstrap";
+import { getColor, calcAlpha } from "../utilities/color";
 
 export default function CompetencyDetailsForm(props) {
   //console.log(props.competency);
@@ -106,17 +107,22 @@ export default function CompetencyDetailsForm(props) {
                   /> */
 
   //console.log(props.competency.has_lv2activities[0].label);
+
+  const color = getColor(props.color, calcAlpha(props.depth));
   return (
     <Fragment>
       <div className="card border-primary py-1 mb-1 mx-2">
-        <h4 className="card-header py-1 my-0">{props.competency.label}</h4>
+        <h4
+          style={{ backgroundColor: color }}
+          className="card-header py-1 my-0">
+          {props.competency.label}
+        </h4>
         <div className="card card-body my-0 py-1 ml-3">
           <Form>
             <Row>
               {TargetCompetency()}
               {AssessmentCriteria()}
               {GetSuggestion}
-
               <Col>
                 <FormGroup className="my-0 mx-0">
                   <Label for="Progress">Comments:</Label>
@@ -129,13 +135,19 @@ export default function CompetencyDetailsForm(props) {
               <Col>
                 <FormGroup>
                   <Label for="Progress">Planned Activities:</Label>
-                  <textarea class="form-control" id="plans" rows="3"></textarea>
+                  <textarea
+                    className="form-control"
+                    id="plans"
+                    rows="3"></textarea>
                 </FormGroup>
               </Col>
               <Col>
                 <FormGroup>
                   <Label for="Progress">Mentor</Label>
-                  <textarea class="form-control" id="email" rows="1"></textarea>
+                  <textarea
+                    className="form-control"
+                    id="email"
+                    rows="1"></textarea>
                 </FormGroup>
               </Col>
               <Col className="my-0 mx-0">

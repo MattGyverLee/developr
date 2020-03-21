@@ -1,5 +1,6 @@
 # Build
-.build/
+*build/
+.now/
 
 # Logs
 logs
@@ -90,3 +91,5 @@ typings/
 .dynamodb/
 
 
+
+.env.production

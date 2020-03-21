@@ -39,7 +39,7 @@ CALL apoc.export.cypher.all("baseDB.cypher")
       `);
 
 q.push(cypher`
-CALL apoc.export.csv.all("baseDB.csv", {})
+CALL apoc.export.csv.graph("baseDB.csv")
       `);
 
 console.log(q.length);

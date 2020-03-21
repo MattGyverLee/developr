@@ -86,6 +86,7 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
       has_category {
         id
         label
+        color
         orders {
           order
           planId
@@ -239,6 +240,7 @@ export const GET_MILESTONE_QUERY = (planId, userId, milestoneId) => gql`
       has_category {
         id
         label
+        color
         orders {
           order
           planId

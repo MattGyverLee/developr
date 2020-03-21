@@ -4,7 +4,7 @@ import { Query } from "react-apollo";
 import Category from "./Category";
 import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
-
+import { getColor, calcAlpha } from "../utilities/color";
 const Milestone = props => {
   const { state } = useContext(SelectionContext);
   return (
@@ -37,7 +37,7 @@ const Milestone = props => {
               return (
                 <Fragment>
                   <div className="container">
-                    <h2 className="my-0">
+                    <h2 className="card-header my-0">
                       <small className="text-muted">Progress Report for </small>
                       {data.Milestone[0].short_name[0].label}
                       <small className="text-muted"> Using Plan </small>{" "}

@@ -61,11 +61,13 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
 
   var fullAcc = 0;
   var targetTotal = 0;
+  var bonus = 0;
   if (catTarget <= 0) {
     // targets are unavalable or further down
     acc = 0;
     fullAcc = 0;
     targetTotal = 0;
+    bonus = 0;
     // Get totals from child competencies and check progress
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
@@ -93,6 +95,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             relevantProgress[0].currentLevel *
               parseFloat(competency.default_weight);
           // Only counting required progress up to a goal.
+          bonus =
+            bonus +
+            (relevantProgress[0].currentLevel *
+              parseFloat(competency.default_weight) -
+              target);
         }
       }
       targetTotal = targetTotal + target;
@@ -126,6 +133,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
               relevantProgress[0].currentLevel *
                 parseFloat(competency.default_weight);
             // Only counting required progress up to a goal.
+            bonus =
+              bonus +
+              (relevantProgress[0].currentLevel *
+                parseFloat(competency.default_weight) -
+                target);
           }
           // Todo: Handle non-default weight
         }
@@ -158,6 +170,11 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
                 relevantProgress[0].currentLevel *
                   parseFloat(competency.default_weight);
               // Only counting required progress up to a goal.
+              bonus =
+                bonus +
+                (relevantProgress[0].currentLevel *
+                  parseFloat(competency.default_weight) -
+                  target);
             }
             // Todo: Handle non-default weight
           }
@@ -170,17 +187,20 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     id: category.label,
     progress: acc,
     adjustedProgress: fullAcc,
-    target: targetTotal
+    target: targetTotal,
+    bonus: bonus
   };
 };
 
-const RadarComponent = props => {
+const Tabular = props => {
   const { state } = useContext(SelectionContext);
   var accy = [];
   var labelList = [];
   var progressList = [];
   var adjProgressList = [];
   var targetList = [];
+  var bonusList = [];
+
   const parseCats = (catList, data) => {
     accy = [];
     if (catList.length > 0) {
@@ -196,6 +216,7 @@ const RadarComponent = props => {
       labelList = [];
       progressList = [];
       adjProgressList = [];
+      bonusList = [];
       targetList = [];
       accy.forEach(spur => {
         labelList.push(spur.id);
@@ -203,44 +224,17 @@ const RadarComponent = props => {
         targetList.push(spur.target);
         if (spur.adjustedProgress) {
           adjProgressList.push(spur.adjustedProgress);
+          bonusList.push(spur.bonus);
         }
       });
-      var radarData = {};
-      if (adjProgressList.length > 0) {
-        radarData = {
-          labels: labelList,
-          datasets: [
-            {
-              label: "Target: " + data.Milestone[0].short_name[0].label,
-              data: targetList,
-              borderColor: "green"
-            },
-            {
-              label: "Qualifying Progress",
-              data: progressList,
-              borderColor: "blue"
-            },
-            {
-              label: "All Points",
-              data: adjProgressList,
-              borderColor: "yellow"
-            }
-          ]
-        };
-      } else {
-        radarData = {
-          labels: labelList,
-          datasets: [
-            {
-              label: "Target: " + data.Milestone[0].short_name[0].label,
-              data: targetList,
-              borderColor: "green"
-            },
-            { label: "Progress", data: progressList, borderColor: "blue" }
-          ]
-        };
-      }
-      return radarData;
+
+      return {
+        labelList,
+        progressList,
+        targetList,
+        adjProgressList,
+        bonusList
+      };
     } else {
       return null;
     }
@@ -275,33 +269,55 @@ const RadarComponent = props => {
                 );
               }
               if (data.PlanRoot && data.PlanRoot.length > 0) {
+                const tableData = parseCats(
+                  data.PlanRoot[0].has_category,
+                  data
+                );
                 return (
                   <Fragment>
                     <div className="container">
                       <h2 className="my-0">
-                        <small className="text-muted">Radar Report for </small>
+                        <small className="text-muted">
+                          Tabular Report for{" "}
+                        </small>
                         {data.Milestone[0].short_name[0].label}
                         <small className="text-muted"> Using Plan </small>{" "}
                         {data.PlanRoot[0].label}
                       </h2>
                       <br />
                       {/* TODO: Get Full Name for Milestone */}
-                      {parseCats(data.PlanRoot[0].has_category, data) && (
-                        <Radar
-                          data={parseCats(data.PlanRoot[0].has_category, data)}
-                          options={{
-                            scale: {
-                              ticks: {
-                                beginAtZero: true
-                              }
-                            },
-                            legend: {
-                              position: "right"
-                            }
-                          }}
-                        />
+                      {accy.length > 0 && (
+                        <table>
+                          <tr>
+                            <th />
+                            {tableData.labelList.map(label => (
+                              <th>{label}</th>
+                            ))}
+                          </tr>
+                          <tr>
+                            <th>Relevant Progress</th>
+                            {tableData.progressList.map(progress => (
+                              <td>
+                                <big>{progress}</big>
+                              </td>
+                            ))}
+                          </tr>
+                          <tr>
+                            <th>{data.Milestone[0].short_name[0].label}</th>
+                            {tableData.targetList.map(progress => (
+                              <td>{progress}</td>
+                            ))}
+                          </tr>
+                          {tableData.bonusList && (
+                            <tr>
+                              <th>Extra Points</th>
+                              {tableData.bonusList.map(bonus => (
+                                <td>{bonus || 0}</td>
+                              ))}
+                            </tr>
+                          )}
+                        </table>
                       )}
-                      {/* TODO: Make LTCons1 a variable passed in. */}
                     </div>
                   </Fragment>
                 );
@@ -313,4 +329,4 @@ const RadarComponent = props => {
   );
 };
 
-export default RadarComponent;
+export default Tabular;

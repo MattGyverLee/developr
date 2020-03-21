@@ -25,6 +25,8 @@ export default function SubDetails(props) {
               milestone={props.milestone}
               target={props.target}
               planId={props.planId}
+              color={props.color}
+              depth={props.depth + 1}
             />
           )
         )}
@@ -36,6 +38,8 @@ export default function SubDetails(props) {
             milestone={props.milestone}
             target={props.target}
             planId={props.planId}
+            color={props.color}
+            depth={props.depth + 1}
           />
         ))}
         {processCatGroups(props.category.has_group)}

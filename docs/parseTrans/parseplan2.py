@@ -26,6 +26,10 @@ with open('./Trans1.tsv') as tsvfile:
         '\tMERGE (ms:Milestone {ms: "TransCons1"})<-[:HAS_MILESTONE]-(p)\n')
     o.write(
         '\tMERGE (ms)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translation Consultant (1)"}) \n')
+    o.write(
+        '\tMERGE (ms2:Milestone {ms: "Translator"})<-[:HAS_MILESTONE]-(p)\n')
+    o.write(
+        '\tMERGE (ms2)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translator (1)"}) \n')
     o.write('\n')
 
     for row in reader:
@@ -42,13 +46,16 @@ with open('./Trans1.tsv') as tsvfile:
                 o.write('\tMATCH (d:Domain {id: "'+currentplanId+'"})\n')
                 o.write('\tMATCH (pr:ProgressRoot {userId: "1"})\n')
                 o.write('\tMATCH (ms:Milestone {ms: "TransCons1"})\n')
+                o.write('\tMATCH (ms2:Milestone {ms: "Translator"})\n')
                 o.write('\n')
             o.write("\t//Cat" + row['ID']+" in "+currentPlanRoot+"\n")
             o.write("\tMERGE (p)-[:HAS_CATEGORY {order: " + row['Order'] + ', planId: "' + currentplanId + '"}]->(cat' + str(catIndex) +
                     ':CompetencyCategory {id: "' + currentCat+'"})-[:IS_CATEGORY_OF {order: ' + row['Order'] + ', planId: "' + currentplanId + '"}]->(p)\n')
             if row['Competency']:
                 o.write('\tSET cat' + str(catIndex) +
-                        '.label = "' + row['Competency']+'"\n')
+                        '.label = "' + row['Competency']+'",\n')
+                o.write('\t\tcat' + str(catIndex) +
+                        '.color = "' + row['Color']+'"\n')
                 snIndex = snIndex + 1
                 o.write("\tMERGE (cat" + str(catIndex) + ")-[:HAS_SHORT_NAME]->(sn" + str(snIndex) +
                         ':ShortName {id : "sn' + str(snIndex) +
@@ -118,7 +125,9 @@ with open('./Trans1.tsv') as tsvfile:
             o.write('\tMerge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "' +
                     row['ID']+str(cmpIndex)+'"})-[:COMPETENCY_PROGRESS {userId: "1"}]-(cmp' + str(cmpIndex) + ')\n')
             o.write('\tMerge (cmp' + str(cmpIndex) +
-                    ')-[:TARGET_VALUE_IS {planId: "2", min: ' + row['Cons1 min']+'}]-(ms)\n')
+                    ')-[:TARGET_VALUE_IS {planId: "2", min: ' + row['Cons1 min']+'}]->(ms)\n')
+            o.write('\tMerge (cmp' + str(cmpIndex) +
+                    ')-[:TARGET_VALUE_IS {planId: "2", min: ' + row['Trans Min']+'}]->(ms2)\n')
             o.write('\n')
 o.write('\tRETURN cat' + str(catIndex)+"\n")
 o.write('`)\n')

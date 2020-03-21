@@ -5,6 +5,7 @@ import VisPage from "./pages/visPage";
 import MyPlan from "./pages/myPlan";
 import MyMilestones from "./pages/myMilestones";
 import MyOverview from "./pages/myOverview";
+import MyTable from "./pages/myTable";
 import Home from "./pages/home";
 import MyRadar from "./pages/radar";
 import EditCompetency from "./pages/editCompetency";
@@ -111,8 +112,12 @@ function App() {
                 {/* This is the radar page. */}
                 <MyRadar />
               </Route>
+              <Route path="/table">
+                {/* This is the table page. */}
+                <MyTable />
+              </Route>
               <Route path="/edcomp">
-                {/* This is the graph vis page. */}
+                {/* This is the competency editor page. */}
                 <EditCompetency />
               </Route>
               <Route path="/">
