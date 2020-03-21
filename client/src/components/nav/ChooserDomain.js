@@ -35,9 +35,13 @@ function ChooserDomain(props) {
     <div>
       {loading && !error && <p>Loading...</p>}
       {error && !loading && (
-        <p>ChooserDomain: Error connecting to {process.env.REACT_APP_GRAPHQL_URI}</p>
-        <pre>{JSON.stringify(error)}</pre>
-
+        <Fragment>
+          <p>
+            ChooserDomain: Error connecting to the{" "}
+            {process.env.REACT_APP_GRAPHQL_URI}
+          </p>
+          <pre>{JSON.stringify(error)}</pre>
+        </Fragment>
       )}
       {data && !loading && !error && (
         <Fragment>
