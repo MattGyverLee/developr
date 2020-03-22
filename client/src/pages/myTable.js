@@ -1,4 +1,3 @@
-import RadarComponent from "../components/radar/Radar";
 import React, { Fragment, useContext } from "react";
 import { SelectionContext } from "../components/utilities/SelectionContext";
 import Tabular from "../components/table/Tabular";

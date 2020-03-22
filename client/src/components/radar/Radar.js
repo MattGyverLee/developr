@@ -192,6 +192,7 @@ const RadarComponent = props => {
           data.Milestone[0].minValues
         );
         accy.push(progress);
+        return null;
       });
       labelList = [];
       progressList = [];

@@ -7,7 +7,7 @@ export default function Competency(props) {
   const target = getTarget(props.competency.id, props.milestone.minValues);
 
   const score = getScore2(props.competency, props.user);
-  if (score == 0 && target <= 0) {
+  if (score === 0 && target <= 0) {
     return null;
   } else {
     return (

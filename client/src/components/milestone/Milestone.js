@@ -4,7 +4,6 @@ import { Query } from "react-apollo";
 import Category from "./Category";
 import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
-import { getColor, calcAlpha } from "../utilities/color";
 const Milestone = props => {
   const { state } = useContext(SelectionContext);
   return (

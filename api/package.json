@@ -6,16 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "./node_modules/.bin/nodemon --watch src --ext js,graphql --exec babel-node  src/index.js",
-    "local-build": "babel src -d build && shx cp .env build && shx cp src/schema.graphql build",
-    "build": "babel src -d build && shx cp src/graphql-schema.js build",
+    "now-build": "babel src -d build && shx cp src/schema.graphql build",
+    "build": "babel src -d build && shx cp .env build && shx cp src/schema.graphql build",
     "start": "npm run build && node build/index.js",
-    "client": "yarn --cwd client start ",
+    "client": "yarn --cwd ../client start ",
     "dev": "concurrently \"yarn start-dev\" \"yarn client\" ",
     "infer": "node src/dbOps/infer.js",
     "dump": "node src/dbOps/dump.js",
     "load-dev": "nodemon src/dbOps/loadDB.js",
     "load": "node src/dbOps/loadDB.js",
-    "loadSandbox": "node src/dbOps/loadRemote.js",
     "augment": "node src/dbOps/inferAug.js"
   },
   "comments": {

@@ -3,7 +3,6 @@ import { GET_MILESTONE_QUERY } from "../queries";
 import { Query } from "react-apollo";
 import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
-import { Radar } from "react-chartjs-2";
 import { getTarget } from "../utilities/maths";
 
 const displayProgress = (category, progresses, inTarget, minValues) => {
@@ -212,6 +211,7 @@ const Tabular = props => {
           data.Milestone[0].minValues
         );
         accy.push(progress);
+        return null;
       });
       labelList = [];
       progressList = [];
