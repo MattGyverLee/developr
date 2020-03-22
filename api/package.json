@@ -1,8 +1,8 @@
 {
-  "name": "dev",
+  "name": "level-up-server",
   "version": "1.0.0",
   "description": "Growth Plan Engine",
-  "main": "infer.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "./node_modules/.bin/nodemon --watch src --ext js,graphql --exec babel-node  src/index.js",
