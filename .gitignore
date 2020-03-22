@@ -93,3 +93,5 @@ typings/
 
 
 .env.production
+
+.now

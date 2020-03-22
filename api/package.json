@@ -29,7 +29,6 @@
     "apollo-link-http": "^1.5.15",
     "apollo-server": "^2.8.2",
     "concurrently": "^5.1.0",
-    "cors": "^2.8.5",
     "cypher-tagged-templates": "^3.0.0",
     "cypress-graphql-mock": "^0.5.0-alpha.4",
     "dotenv": "^7.0.0",
