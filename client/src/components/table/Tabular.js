@@ -368,6 +368,9 @@ const Tabular = props => {
                                   <tr>
                                     <th colspan="2" scope="row">
                                       Extra Points
+                                      <a href="#extra">
+                                        <u>*</u>
+                                      </a>
                                     </th>
                                     {tableData.labelList.map((label, index) => (
                                       <td>{tableData.bonusList[index] || 0}</td>
@@ -402,6 +405,14 @@ const Tabular = props => {
                             </tbody>
                           </table>
                         </div>
+                      )}
+                      {tableData.bonusList && tableData.bonusList.length > 0 && (
+                        <p>
+                          <a id="extra" />* If targets are defined
+                          per-competency, then excess points don't count toward
+                          the Milestone. It's not clear how these "overachiever
+                          points" should best be displayed.
+                        </p>
                       )}
                       <h2>Global View</h2>
                       <p>

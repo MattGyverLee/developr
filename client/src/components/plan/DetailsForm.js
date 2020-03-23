@@ -117,7 +117,15 @@ export default function CompetencyDetailsForm(props) {
           style={{ backgroundColor: color }}
           className="card-header py-1 my-0">
           {props.competency.label} -{" "}
-          <a href=".">Click here for further resources.</a>
+          {props.competency.link && props.competency.link !== "./" ? (
+            <a href={props.competency.link} target="new">
+              <u>External Resources</u>
+            </a>
+          ) : (
+            <a href="./" target="new">
+              <u>Resources TBA</u>
+            </a>
+          )}
         </h4>
         <div className="card card-body my-0 py-1 ml-3">
           <Form>

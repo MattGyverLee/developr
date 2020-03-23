@@ -2,7 +2,7 @@
 # Python 3.7
 import csv
 o = open("./Cypher.txt", "w")
-with open('./Trans1.tsv') as tsvfile:
+with open('./Trans2.tsv') as tsvfile:
     reader = csv.DictReader(tsvfile, dialect='excel-tab')
     currentCat = ""
     currentGrp = ""

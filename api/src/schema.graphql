@@ -20,6 +20,7 @@ type Competency {
   default_weight: String!
   id: String!
   label: String!
+  link: String
   parent_id: String!
   smartsheet_id: String!
   has_primary_domain: [Domain]
