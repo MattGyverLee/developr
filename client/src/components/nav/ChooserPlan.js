@@ -19,6 +19,11 @@ function ChooserPlan(props) {
     }
   );
 
+  function setSelectedIndex(s, i) {
+    s.options[i - 1].selected = true;
+    return;
+  }
+
   const updateSelectedPlan = plan => {
     setPlan({
       variables: { planId: plan }
@@ -32,35 +37,72 @@ function ChooserPlan(props) {
     });
   };
   if (!state.planId) updateSelectedPlan("-1");
-  return (
-    <div>
-      {loading && !error && <p>Loading...</p>}
-      {error && !loading && <p>Error</p>}
-      {data && !loading && !error && (
-        <Fragment>
-          <select
-            id="PlanDrop"
-            name="PlanDrop"
-            value={state.planId}
-            onChange={e => updateSelectedPlan(e.currentTarget.value)}>
-            <option key="-1" value="-1">
-              Not Selected
+  if (loading && !error) {
+    return <p>Loading...</p>;
+  }
+
+  if (error && !loading) {
+    return <p>Error</p>;
+  }
+
+  if (
+    data &&
+    !loading &&
+    !error &&
+    data.Domain.length > 0 &&
+    data.Domain[0].childPlans &&
+    data.Domain[0].childPlans.length > 1
+  ) {
+    return (
+      <Fragment>
+        <select
+          id="PlanDrop"
+          name="PlanDrop"
+          value={state.planId}
+          onChange={e => updateSelectedPlan(e.currentTarget.value)}>
+          <option key="-1" value="-1">
+            Not Selected
+          </option>
+          {data.Domain[0].childPlans.map(plan => (
+            <option key={plan.id} value={plan.id}>
+              {plan.label}
             </option>
-            {data.Domain &&
-              data.Domain.length > 0 &&
-              data.Domain[0].childPlans &&
-              data.Domain[0].childPlans.length > 0 &&
-              data.Domain[0].childPlans.map(plan => (
-                <option key={plan.id} value={plan.id}>
-                  {plan.label}
-                </option>
-              ))}
-          </select>
-          {state.planId !== "-1" && <ChooserMilestone />}
-        </Fragment>
-      )}
-    </div>
-  );
+          ))}
+        </select>
+        <br />
+        {state.planId !== "-1" && <ChooserMilestone />}
+      </Fragment>
+    );
+  }
+  if (
+    data.Domain &&
+    data.Domain.length > 0 &&
+    data.Domain[0].childPlans &&
+    data.Domain[0].childPlans.length === 1
+  ) {
+    return (
+      <Fragment>
+        <br />
+        <select
+          id="PlanDrop"
+          name="PlanDrop"
+          value={state.planId}
+          onChange={e => updateSelectedPlan(e.currentTarget.value)}>
+          <option key="-1" value="-1">
+            Not Selected
+          </option>
+          {data.Domain[0].childPlans.map(plan => (
+            <option key={plan.id} value={plan.id} selected="selected">
+              {plan.label}
+            </option>
+          ))}
+        </select>
+        <br />
+        {state.planId !== "-1" && <ChooserMilestone />}
+        {setSelectedIndex(document.getElementById("PlanDrop"), 2)}
+      </Fragment>
+    );
+  } else return null;
 }
 
 export default ChooserPlan;
