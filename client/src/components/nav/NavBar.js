@@ -46,13 +46,13 @@ const NavBar = local => {
         </div>
         <div className="nav-item text-center mx-2">
           <a className="nav-link" href="./myMilestones">
-            Badge
+            Milestone
             <br /> Details {checkLoc(local, "myMilestones")}
           </a>
         </div>
         <div className="nav-item text-center mx-2">
           <a className="nav-link" href="./myOverview">
-            Badge
+            Milestone
             <br /> Overview
           </a>
         </div>
@@ -62,11 +62,11 @@ const NavBar = local => {
             Radar
           </a>
         </div>
-        <div className="nav-item text-center mx-2">
+        {/*         <div className="nav-item text-center mx-2">
           <a className="nav-link" href="./graph">
             Visualize {checkLoc(local, "graph")}
           </a>
-        </div>
+        </div> */}
         <div className="nav-item text-center mx-2">
           <a className="nav-link" href="./edComp">
             Competencies {checkLoc(local, "edComp")}

@@ -4,8 +4,9 @@ import { Query } from "react-apollo";
 import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
 import { getTarget } from "../utilities/maths";
+import { getColor, calcAlpha } from "../utilities/color";
 
-const displayProgress = (category, progresses, inTarget, minValues) => {
+const displayProgress = (category, progresses, inTarget, minValues, color) => {
   // this runs when the Category has a target score.
   var acc = 0;
   var catTarget = -1;
@@ -55,18 +56,25 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
       });
     });
 
-    return { id: category.label, progress: acc, target: catTarget };
+    return {
+      id: category.label,
+      progress: acc,
+      target: catTarget,
+      color: color
+    };
   }
 
   var fullAcc = 0;
   var targetTotal = 0;
   var bonus = 0;
+
   if (catTarget <= 0) {
     // targets are unavalable or further down
     acc = 0;
     fullAcc = 0;
     targetTotal = 0;
     bonus = 0;
+
     // Get totals from child competencies and check progress
     category.category_has_competencies_of.forEach(competency => {
       const relevantProgress = progresses.filter(
@@ -187,7 +195,8 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
     progress: acc,
     adjustedProgress: fullAcc,
     target: targetTotal,
-    bonus: bonus
+    bonus: bonus,
+    color: color
   };
 };
 
@@ -199,6 +208,7 @@ const Tabular = props => {
   var adjProgressList = [];
   var targetList = [];
   var bonusList = [];
+  var colorList = [];
 
   const parseCats = (catList, data) => {
     accy = [];
@@ -208,20 +218,24 @@ const Tabular = props => {
           category,
           data.User[0].has_progress_root[0].child_progress,
           state.milestoneId,
-          data.Milestone[0].minValues
+          data.Milestone[0].minValues,
+          category.color
         );
         accy.push(progress);
         return null;
       });
+
       labelList = [];
       progressList = [];
       adjProgressList = [];
       bonusList = [];
       targetList = [];
+      colorList = [];
       accy.forEach(spur => {
         labelList.push(spur.id);
         progressList.push(spur.progress);
         targetList.push(spur.target);
+        colorList.push(getColor(spur.color, calcAlpha(2)));
         if (spur.adjustedProgress) {
           adjProgressList.push(spur.adjustedProgress);
           bonusList.push(spur.bonus);
@@ -233,7 +247,8 @@ const Tabular = props => {
         progressList,
         targetList,
         adjProgressList,
-        bonusList
+        bonusList,
+        colorList
       };
     } else {
       return null;
@@ -273,10 +288,18 @@ const Tabular = props => {
                   data.PlanRoot[0].has_category,
                   data
                 );
+                var colorIndex = -1;
+                const getNextColor = () => {
+                  colorIndex++;
+                  return tableData.colorList[colorIndex];
+                };
+                const resetColorIndex = () => {
+                  colorIndex = -1;
+                };
                 return (
                   <Fragment>
                     <div className="container">
-                      <h2 className="my-0">
+                      <h2 className="mt-0 mb-3">
                         <small className="text-muted">
                           Tabular Report for{" "}
                         </small>
@@ -284,40 +307,111 @@ const Tabular = props => {
                         <small className="text-muted"> Using Plan </small>{" "}
                         {data.PlanRoot[0].label}
                       </h2>
+                      <p>
+                        When targeting a specific Milestone, the table of
+                        results may look like this:
+                      </p>
                       <br />
                       {/* TODO: Get Full Name for Milestone */}
                       {accy.length > 0 && (
-                        <table>
-                          <tr>
-                            <th />
-                            {tableData.labelList.map(label => (
-                              <th>{label}</th>
-                            ))}
-                          </tr>
-                          <tr>
-                            <th>Relevant Progress</th>
-                            {tableData.progressList.map(progress => (
-                              <td>
-                                <big>{progress}</big>
-                              </td>
-                            ))}
-                          </tr>
-                          <tr>
-                            <th>{data.Milestone[0].short_name[0].label}</th>
-                            {tableData.targetList.map(progress => (
-                              <td>{progress}</td>
-                            ))}
-                          </tr>
-                          {tableData.bonusList && (
+                        <div className="table-responsive">
+                          <table className="table table-sm table-striped table-bordered table-hover text-center">
                             <tr>
-                              <th>Extra Points</th>
-                              {tableData.bonusList.map(bonus => (
-                                <td>{bonus || 0}</td>
+                              <th colspan="2" scope="col row" />
+                              {tableData.labelList.map((label, index) => (
+                                <th
+                                  scope="col"
+                                  style={{
+                                    backgroundColor: tableData.colorList[index]
+                                  }}>
+                                  {label}
+                                </th>
                               ))}
                             </tr>
-                          )}
-                        </table>
+                            <tbody>
+                              {resetColorIndex()}
+                              <tr>
+                                <th colspan="2" scope="row">
+                                  Relevant Progress
+                                </th>
+                                {tableData.progressList.map(progress => (
+                                  <td>
+                                    <strong>
+                                      <big>{progress}</big>
+                                    </strong>
+                                  </td>
+                                ))}
+                              </tr>
+                              <tr>
+                                <th colspan="2" scope="row">
+                                  {data.Milestone[0].short_name[0].label}
+                                </th>
+                                {tableData.targetList.map((target, index) => (
+                                  <td>
+                                    {tableData.progressList[index] >=
+                                      target && (
+                                      <span style={{ color: "#009900" }}>
+                                        <big>{target}</big>
+                                      </span>
+                                    )}
+                                    {tableData.progressList[index] < target && (
+                                      <span style={{ color: "#CC9900" }}>
+                                        <big>{target}</big>
+                                      </span>
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+
+                              {tableData.bonusList &&
+                                tableData.bonusList.length > 0 && (
+                                  <tr>
+                                    <th colspan="2" scope="row">
+                                      Extra Points
+                                    </th>
+                                    {tableData.labelList.map((label, index) => (
+                                      <td>{tableData.bonusList[index] || 0}</td>
+                                    ))}
+                                  </tr>
+                                )}
+                              <tr>
+                                <th colspan="2" scope="row">
+                                  Proposed Level (Per Column)
+                                </th>
+                                {tableData.targetList.map((target, index) => (
+                                  <td>
+                                    {tableData.progressList[index] >=
+                                      target && (
+                                      <span style={{ color: "#009900" }}>
+                                        <big>
+                                          {
+                                            data.Milestone[0].short_name[0]
+                                              .label
+                                          }
+                                        </big>
+                                      </span>
+                                    )}
+                                    {tableData.progressList[index] < target && (
+                                      <span style={{ color: "#CC9900" }}>
+                                        <big>Insufficient Progress</big>
+                                      </span>
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       )}
+                      <h2>Global View</h2>
+                      <p>
+                        Alternately, results could be shown globally as in this
+                        example from Language Technology's Smartsheet:
+                      </p>
+                      <img
+                        src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/SmartsheetTable.png"
+                        alt="A view from smartsheet"
+                        width="100%"></img>
                     </div>
                   </Fragment>
                 );

@@ -68,9 +68,10 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             className="float-right mr-2 mt-2">
             <span style={{ color: "#009900" }}>
               <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
-              {Math.round((acc / inTarget) * 100)}% Completion -{" "}
+              {acc == inTarget && "100% Completion "}
+              {acc > inTarget && "Exceeds Expectations "}
             </span>
-            <img width="100px" alt="Badge" src={imagePath} />
+            <img width="65px" alt="Badge" src={imagePath} />
           </div>
           <br />
         </Fragment>
@@ -82,11 +83,12 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             style={{ backgroundColor: "white" }}
             className="float-right mr-2 mt-2">
             <span style={{ color: "#cc9900" }}>
-              <big>{acc}</big>/<small>{inTarget}</small> points,{" "}
-              {Math.round((acc / inTarget) * 100)}% Completion -{" "}
+              <big> {acc}</big>/<small>{inTarget}</small> points,{" "}
+              {Math.round((acc / inTarget) * 100)}
+              {"% Complete  "}
             </span>
             <img
-              width="100px"
+              width="65px"
               alt="Badge"
               src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/badges/badge0.png"
             />
@@ -187,7 +189,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             style={{ backgroundColor: "white" }}
             className="float-right mr-2 mt-2 px-2">
             <span style={{ color: "#009900" }}>Category Complete - </span>
-            <img width="100px" alt="Badge" src={imagePath} />
+            <img width="65px" alt="Badge" src={imagePath} />
           </div>
           <br />
         </Fragment>
@@ -201,7 +203,7 @@ const displayProgress = (category, progresses, inTarget, minValues) => {
             className="float-right mr-2 mt-2">
             <span style={{ color: "#cc9900" }}>Category Incomplete - </span>
             <img
-              width="100px"
+              width="65px"
               alt="Badge"
               src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/badges/badge0.png"
             />
@@ -242,7 +244,7 @@ export default function Category(props) {
     return (
       <Fragment>
         <div className="card border-success mb-3">
-          <h2 style={{ backgroundColor: color }} className="card-header ml-3">
+          <h2 style={{ backgroundColor: color }} className="card-header mb-1">
             {props.category.label}
             {displayProgress(
               props.category,

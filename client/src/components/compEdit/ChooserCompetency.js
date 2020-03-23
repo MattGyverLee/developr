@@ -34,7 +34,7 @@ function ChooserCompetency(props) {
         )}
         {data && !loading && !error && (
           <Fragment>
-            <div>Choose a competency below:</div>
+            <div>Choose a competency below to view its details:</div>
             <select
               id="CompDrop"
               name="CompDrop"

@@ -12,7 +12,7 @@ function EditCompetency(props) {
         )}
         {state.domainId === "-1" && (
           <div id="makeChoices">
-            Please choose a domain above to view/edit competencies.
+            Please choose a domain above to view competency details.
           </div>
         )}
       </div>

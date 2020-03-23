@@ -22,11 +22,18 @@ export const Plan = props => {
           if (data.PlanRoot) {
             return (
               <Fragment>
-                <h2 id="planTitle" className="display-4 my-0">
+                <h2 id="planTitle" className="display-4 mt-0 mb-0">
                   <small className="text-muted">Plan for: </small>
                   {data.PlanRoot[0].label}
                 </h2>
                 <p>Plan Class: {data.PlanRoot[0].plan_class}</p>
+                <p>
+                  The <b>My Growth Plan</b> view is the main worksheet for
+                  assessment and tracking of progress. Once the community of
+                  practice has determined the minimum requirements for each
+                  level, each organization could add new requirements, and
+                  re-weight or hide optional requirements.
+                </p>
                 {findSortOrder(data.PlanRoot[0].has_category).map(category => (
                   <Category key={category.id} category={category} />
                 ))}

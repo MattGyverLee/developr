@@ -44,12 +44,13 @@ export default function CompetencyDetailsForm(props) {
         props.competency.HAS_USER_PROGRESS_rel[0].Progress.currentLevel;
       return parseInt(level);
     } catch (error) {
-      return 0;
+      return 1;
     }
   };
 
   const GetSuggestion = () => {
-    const level = getProgress();
+    const myprogress = getProgress();
+    const level = 2;
     var outText = "";
     switch (level) {
       case 0:
@@ -90,7 +91,7 @@ export default function CompetencyDetailsForm(props) {
       return (
         <Col className="my-0 mx-0">
           <FormGroup className="my-0 mx-0">
-            <Label for="SuggestionBox">Suggested Activity: </Label>
+            <Label for="SuggestionBox">Suggested Activities: </Label>
             <div id="SuggestionBox">{outText}</div>
           </FormGroup>
         </Col>
@@ -122,7 +123,7 @@ export default function CompetencyDetailsForm(props) {
             <Row>
               {TargetCompetency()}
               {AssessmentCriteria()}
-              {GetSuggestion}
+              {GetSuggestion()}
               <Col>
                 <FormGroup className="my-0 mx-0">
                   <Label for="Progress">Comments:</Label>
@@ -138,16 +139,28 @@ export default function CompetencyDetailsForm(props) {
                   <textarea
                     className="form-control"
                     id="plans"
-                    rows="3"></textarea>
+                    rows="3"
+                    defaultValue="This control would be a list of activities and target dates."></textarea>
                 </FormGroup>
               </Col>
               <Col>
                 <FormGroup>
-                  <Label for="Progress">Mentor</Label>
+                  <Label for="Progress">Mentor(s)</Label>
                   <textarea
                     className="form-control"
                     id="email"
-                    rows="1"></textarea>
+                    rows="3"
+                    defaultValue="This field would contain a list of mentors for this competency and allow them to approve an assessment."></textarea>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="Progress">Artifacts/Proofs</Label>
+                  <textarea
+                    className="form-control"
+                    id="email"
+                    rows="3"
+                    defaultValue="This control would allow you to link documents from Google Drive that serve as proof of assessment or details."></textarea>
                 </FormGroup>
               </Col>
               <Col className="my-0 mx-0">
@@ -157,7 +170,7 @@ export default function CompetencyDetailsForm(props) {
                   <select
                     id={"progDrop" + props.competency.id}
                     name="progress"
-                    defaultValue="3">
+                    defaultValue={getProgress()}>
                     <option value="-1">Not Selected</option>
                     <option value="0">Learner</option>
                     <option value="1">Practitioner</option>

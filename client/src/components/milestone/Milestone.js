@@ -36,13 +36,31 @@ const Milestone = props => {
               return (
                 <Fragment>
                   <div className="container">
-                    <h2 className="card-header my-0">
+                    <h2 className="card-header mt-0 mb-3">
                       <small className="text-muted">Progress Report for </small>
                       {data.Milestone[0].short_name[0].label}
                       <small className="text-muted"> Using Plan </small>{" "}
                       {data.PlanRoot[0].label}
                     </h2>
-                    <br />
+                    <p>
+                      This Milestone view shows your progress towards a specific
+                      Milestone.{" "}
+                      {props.details
+                        ? "Milestone Details shows each individual competency."
+                        : "Milestone Overview only shows the categories, and not each group or competency."}{" "}
+                      If you have met the requirements of your organization for
+                      a Category of your Milestone, you will achieve a "badge",
+                      a cryptographically signed image that serves as a
+                      certificate from your organization. Note: the badges in
+                      this interface are temporary placeholders until a badge
+                      server is in place.
+                      <br />
+                      For more information about badges, visit the following
+                      link:{" "}
+                      <a href="https://support.badgr.com/portal/kb/articles/what-are-open-badges">
+                        What are badges?
+                      </a>
+                    </p>
                     {/* TODO: Get Full Name for Milestone */}
                     {findSortOrder(data.PlanRoot[0].has_category).map(
                       category => (
