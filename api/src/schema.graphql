@@ -144,6 +144,13 @@ type CompetencyCategory {
   TARGET_VALUE_IS_rel: [TARGET_VALUE_IS]
   planroots: [PlanRoot] @relation(name: "HAS_CATEGORY", direction: "IN")
   # Begin Custom
+  target_competency: [TargetCompetency]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_TARGET_COMPETENCY]->(tc:TargetCompetency)
+      WHERE NOT EXISTS(r.to) RETURN tc LIMIT 1
+      """
+    )
   childComps: [Competency]
     @cypher(
       statement: """

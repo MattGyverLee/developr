@@ -91,6 +91,9 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
         id
         label
         color
+        target_competency {
+          label
+        }
         orders {
           order
           planId

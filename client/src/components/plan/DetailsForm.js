@@ -139,7 +139,8 @@ export default function CompetencyDetailsForm(props) {
                   <textarea
                     className="form-control"
                     id="comments"
-                    rows="3"></textarea>
+                    rows="5"
+                    defaultValue="This area is the workspace for mentees and mentorees and can display as much or as little information as desired. Extra details could be moved to collapsible sections."></textarea>
                 </FormGroup>
               </Col>
               <Col>
@@ -149,44 +150,92 @@ export default function CompetencyDetailsForm(props) {
                     className="form-control"
                     id="plans"
                     rows="3"
-                    defaultValue="This control would be a list of activities and target dates."></textarea>
+                    defaultValue="This control would be a list of activities and target dates related to progress towards the next level."></textarea>
+                  <Label>Projected Completion Date</Label>
+                  <input type="date" defaultValue="2020-03-14" />{" "}
+                  <Label>Completed: </Label>{" "}
+                  <input id="actCheck" type="checkbox" checked="true" />
+                  <br />
+                  <img
+                    src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/btnPlus.png"
+                    height="15px"
+                  />{" "}
+                  <Label>Add an activity</Label>
                 </FormGroup>
               </Col>
-              <Col>
-                <FormGroup>
-                  <Label for="Progress">Mentor(s)</Label>
-                  <textarea
-                    className="form-control"
-                    id="email"
-                    rows="3"
-                    defaultValue="This field would contain a list of mentors for this competency and allow them to approve an assessment."></textarea>
-                </FormGroup>
-              </Col>
+
               <Col>
                 <FormGroup>
                   <Label for="Progress">Artifacts/Proofs</Label>
-                  <textarea
-                    className="form-control"
-                    id="email"
-                    rows="3"
-                    defaultValue="This control would allow you to link documents from Google Drive that serve as proof of assessment or details."></textarea>
+                  <br />
+                  <Label>
+                    This area would allow you to link documents from Google
+                    Drive that serve as proof of assessment or details.
+                  </Label>
+                  <br />
+                  <a href="./">
+                    <u>Relevant Personal Document</u>
+                  </a>
+                  <br />
+                  <img
+                    src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/btnPlus.png"
+                    height="15px"
+                  />{" "}
+                  <Label>Add a document</Label>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="Progress">Mentor Approval</Label>
+                  <div>
+                    <textarea
+                      className="form-control"
+                      id="email"
+                      rows="1"
+                      defaultValue="Joe Mentor"></textarea>
+                    <br />
+                    <label></label>
+                    <Label for="Progress">Mentor Approval: </Label>{" "}
+                    <input id="appCheck" type="checkbox" checked="true" />{" "}
+                    <input type="date" defaultValue="2020-03-14" />
+                  </div>
+                  <img
+                    src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/btnPlus.png"
+                    height="15px"
+                  />{" "}
+                  <Label>Add a mentor</Label>
                 </FormGroup>
               </Col>
               <Col className="my-0 mx-0">
                 <FormGroup className="my-0 mx-0">
                   <Label for="ProgDrop">Progress: </Label>
                   <br />
-                  <select
-                    id={"progDrop" + props.competency.id}
-                    name="progress"
-                    defaultValue={getProgress()}>
-                    <option value="-1">Not Selected</option>
-                    <option value="0">Learner</option>
-                    <option value="1">Practitioner</option>
-                    <option value="2">Guide</option>
-                    <option value="3">Expert</option>
-                    <option value="4">Thought Leader</option>
-                  </select>
+                  {props.progressNames.length === 0 && (
+                    <select
+                      id={"progDrop" + props.competency.id}
+                      name="progress"
+                      defaultValue={getProgress()}>
+                      <option value="-1">Not Selected</option>
+                      <option value="0">0. Learner</option>
+                      <option value="1">1. Practitioner</option>
+                      <option value="2">2. Guide</option>
+                      <option value="3">3. Expert</option>
+                      <option value="4">4. Thought Leader</option>
+                    </select>
+                  )}
+                  {props.progressNames.length > 0 && (
+                    <select
+                      id={"progDrop" + props.competency.id}
+                      name="progress"
+                      defaultValue={getProgress()}>
+                      {props.progressNames.map(name => (
+                        <option value={name.order.toString()}>
+                          {name.order >= 0 && name.order.toString() + ". "}
+                          {name.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </FormGroup>
               </Col>
             </Row>

@@ -13,6 +13,7 @@ export default function GroupDetails(props) {
           competency={competency}
           color={props.color}
           depth={props.depth + 1}
+          progressNames={props.progressNames}
         />
       ));
     }
@@ -26,6 +27,7 @@ export default function GroupDetails(props) {
           group={group}
           color={props.color}
           depth={props.depth + 1}
+          progressNames={props.progressNames}
         />
       ));
     }
