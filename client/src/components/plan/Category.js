@@ -34,6 +34,7 @@ export default function Category(props) {
               color={props.category.color}
               depth={depth + 1}
               progressNames={props.progressNames}
+              user={props.user}
             />
           )
         )}
@@ -44,6 +45,7 @@ export default function Category(props) {
             color={props.category.color}
             depth={depth + 1}
             progressNames={props.progressNames}
+            user={props.user}
           />
         ))}
       </div>

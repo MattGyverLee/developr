@@ -221,6 +221,18 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
         }
       }
     }
+    User(id: "${userId}") {
+      id
+      has_progress_root {
+        child_progress {
+          currentLevel
+          competency_progress {
+            id
+            label
+          }
+        }
+      }
+    }
   }
 `;
 

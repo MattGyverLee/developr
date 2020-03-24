@@ -39,6 +39,7 @@ export const Plan = props => {
                     key={category.id}
                     category={category}
                     progressNames={data.PlanRoot[0].progressnames}
+                    user={data.User}
                   />
                 ))}
               </Fragment>

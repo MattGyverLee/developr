@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Form, Row, Col, Label, FormGroup } from "reactstrap";
 import { getColor, calcAlpha } from "../utilities/color";
+import getScore2 from "../milestone/Competency";
 
 export default function CompetencyDetailsForm(props) {
   //console.log(props.competency);
@@ -39,47 +40,83 @@ export default function CompetencyDetailsForm(props) {
   };
 
   const getProgress = () => {
-    try {
-      const level =
-        props.competency.HAS_USER_PROGRESS_rel[0].Progress.currentLevel;
-      return parseInt(level);
-    } catch (error) {
-      return 1;
+    var relevantProgress = "-1";
+    const user = props.user;
+    /* try { */
+    if (
+      user &&
+      user.length > 0 &&
+      user[0].has_progress_root &&
+      user[0].has_progress_root.length > 0
+    ) {
+      const progressList = user[0].has_progress_root[0].child_progress;
+      relevantProgress = progressList.filter(
+        progress => progress.competency_progress[0].id === props.competency.id
+      );
+      console.log(relevantProgress);
+      if (relevantProgress.length > 0) {
+        return relevantProgress[0].currentLevel;
+      } else {
+        return -1;
+      }
     }
+    /* } catch (error) {
+      return "-1";
+    } */
   };
 
   const GetSuggestion = () => {
-    const myprogress = getProgress();
-    const level = 2;
+    const level = getProgress();
     var outText = "";
     switch (level) {
+      case -1:
+        outText = "Not Selected";
+        break;
       case 0:
-        if (props.competency.lv0_activity) {
+        if (
+          props.competency.lv0_activity &&
+          props.competency.lv0_activity.length > 0
+        ) {
           outText = props.competency.lv0_activity[0].label;
         }
         break;
       case 1:
-        if (props.competency.lv1_activity) {
+        if (
+          props.competency.lv1_activity &&
+          props.competency.lv1_activity.length > 0
+        ) {
           outText = props.competency.lv1_activity[0].label;
         }
         break;
       case 2:
-        if (props.competency.lv2_activity.length > 0) {
+        if (
+          props.competency.lv2_activity &&
+          props.competency.lv2_activity.length > 0
+        ) {
           outText = props.competency.lv2_activity[0].label;
         }
         break;
       case 3:
-        if (props.competency.lv3_activity.length > 0) {
+        if (
+          props.competency.lv3_activity &&
+          props.competency.lv3_activity.length > 0
+        ) {
           outText = props.competency.lv3_activity[0].label;
         }
         break;
       case 4:
-        if (props.competency.lv4_activity.length > 0) {
+        if (
+          props.competency.lv4_activity &&
+          props.competency.lv4_activity.length > 0
+        ) {
           outText = props.competency.lv4_activity[0].label;
         }
         break;
       case 5:
-        if (props.competency.lv5_activity.length > 0) {
+        if (
+          props.competency.lv5_activity &&
+          props.competency.lv5_activity.length > 0
+        ) {
           outText = props.competency.lv5_activity[0].label;
         }
         break;
@@ -154,7 +191,7 @@ export default function CompetencyDetailsForm(props) {
                   <Label>Projected Completion Date</Label>
                   <input type="date" defaultValue="2020-03-14" />{" "}
                   <Label>Completed: </Label>{" "}
-                  <input id="actCheck" type="checkbox" checked="true" />
+                  <input id="actCheck" type="checkbox" checked={true} />
                   <br />
                   <img
                     src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/btnPlus.png"
@@ -196,7 +233,7 @@ export default function CompetencyDetailsForm(props) {
                     <br />
                     <label></label>
                     <Label for="Progress">Mentor Approval: </Label>{" "}
-                    <input id="appCheck" type="checkbox" checked="true" />{" "}
+                    <input id="appCheck" type="checkbox" checked={true} />{" "}
                     <input type="date" defaultValue="2020-03-14" />
                   </div>
                   <img
@@ -214,7 +251,7 @@ export default function CompetencyDetailsForm(props) {
                     <select
                       id={"progDrop" + props.competency.id}
                       name="progress"
-                      defaultValue={getProgress()}>
+                      defaultValue={getProgress().toString()}>
                       <option value="-1">Not Selected</option>
                       <option value="0">0. Learner</option>
                       <option value="1">1. Practitioner</option>
@@ -227,7 +264,7 @@ export default function CompetencyDetailsForm(props) {
                     <select
                       id={"progDrop" + props.competency.id}
                       name="progress"
-                      defaultValue={getProgress()}>
+                      defaultValue={getProgress().toString()}>
                       {props.progressNames.map(name => (
                         <option value={name.order.toString()}>
                           {name.order >= 0 && name.order.toString() + ". "}

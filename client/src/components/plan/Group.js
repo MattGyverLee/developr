@@ -14,6 +14,7 @@ export default function GroupDetails(props) {
           color={props.color}
           depth={props.depth + 1}
           progressNames={props.progressNames}
+          user={props.user}
         />
       ));
     }
@@ -28,6 +29,7 @@ export default function GroupDetails(props) {
           color={props.color}
           depth={props.depth + 1}
           progressNames={props.progressNames}
+          user={props.user}
         />
       ));
     }
