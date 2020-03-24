@@ -1,0 +1,167 @@
+Type	ID	Order	Competency	Description	Cons1 min
+Cat	Trans-Exe	1	Exegetical and Hermeneutical Competencies	"It is important that a consultant demonstrates: exegetical skills (OT and or NT) the ability to make use of commentaries and translation helps, exegetical reasoning, including taking into account the context in order to get at the meaning of the source text, the ability to detect exegetical and logical fallacies, and to detect and interpret ambiguities in the text"
+Grp	Trans-Exe-Exe	2	A) Exegesis & Hermeneutics
+Cmp	Trans-GUID	3	Identify exegetical problems	"Identify a potential problem in exegesis, think about alternative solutions, and evaluate those solutions based on sound reasoning."	2
+Cmp	Trans-GUID	4	Hermeneutical awareness	"Demonstrate the awareness that exegesis is a hermeneutical activity that is partly based on the theological, social, and cultural assumptions of the interpreter."	2
+Grp	Trans-Exe-Bible	5	B) Bible
+Cmp	Trans-GUID	6	Bible background	"Demonstrate overall knowledge of the Bible, e.g. the geographical, cultural, social, historical and theological background and its relevance for translation. "	3
+Cmp	Trans-GUID	7	Biblical key terms	Demonstrate a good understanding of the meanings of Biblical key terms/concepts.	3
+Cmp	Trans-GUID	8	Intertextuality	Demonstrate a good understanding of intertextuality issues related to translation.	2
+Grp	Trans-Exe-BibLang	9	C) Biblical languages
+Cmp	Trans-GUID	10	Biblical languages	"Explain how the structure and properties of the Biblical languages (word order, use of articles, discourse structures, etc.) affect existing translations (which in turn affect the translation team). "	2
+Cat	Trans-Ling	11	Linguistic Competencies
+Grp	Trans-Ling-Exp	12	A) Personal experience
+Cmp	Trans-GUID	13	Experience in foreign language	Converse in at least one language outside the language family of their native language.  Has a personal experiential appreciation for the effect the difficulties of learning and processing a radically different language may have on the translation process.  	2
+Grp	Trans-Ling-Typ	14	B) Language typology
+Cmp	Trans-GUID	15	Language typology	Demonstrate an understanding of language typology and basic grammatical structures of the minority language(s) and LWC(s) and how this may affect translation.	2
+Grp	Trans-Ling-Disc	16	C) Discourse
+Cmp	Trans-GUID	17	Discourse structures	"Understand the basic discourse structures and features in a variety of genres in the source text (LWC, Hebrew or Greek) and in the receptor language and their impact on exegesis and translation."	2
+Cmp	Trans-GUID	18	Discourse mismatch	"Demonstrate a good understanding of areas of potential discourse mismatch between the Biblical, source and target languages."	2
+Grp	Trans-Ling-Socio	19	D) Sociolinguistics
+Cmp	Trans-GUID	20	Sociolinguistics and pragmatics	"Demonstrate a good understanding of the linguistic-pragmatic and sociolinguistic aspects of languages (e.g. language style, register, various pragmatic-linguistic functions of language, politeness, inferences, linguistic variation, multilingualism, language attitudes etc.) and their impact upon the translation."	2
+Cmp	Trans-GUID	21	Sociolinguistics and pragmatics	"Demonstrate an understanding of the impact of the sociolinguistic context (e.g. impact of gender, dialect, register, voice quality) on the acceptability of written and audio Scripture."	2
+Cat	Trans-Proc	22	Translation Competencies	"It is fundamental that a translation consultant demonstrates critical thinking skills and a clear understanding of best practices in translation in general and Bible translation in particular (including drafting, checking procedures, exegetical checks, comprehension checks, naturalness checks, and acceptability checks). "
+Grp	Trans-Proc-Problems	23	A) Deal with translation problems
+Cmp	Trans-GUID	24	Identify potential problems	"Identify a (potential) problem in translation, think about alternative solutions, and evaluate those solutions based on sound reasoning."	3
+Cmp	Trans-GUID	25	Evaluate problems	"Evaluate whether a potential problem of a translation is a real problem based on clear, systematic thinking."	2
+Cmp	Trans-GUID	26	Solve problems	"Demonstrate a good understanding of frequently occurring translation problems (related to participant reference, foreign concepts, metaphors, rhetorical questions, lexical choices, culture and worldview interference, implicit information, key terms etc.) and of ways to solve these problems."	2
+Cmp	Trans-GUID	27	Principles	"Demonstrate a good understanding of translation principles (accurate, clear, natural, acceptable) and of translation theory and its application in translation. "	3
+Cmp	Trans-GUID	28	Theological awareness	Detect theological bias in translations and to help translation teams to remove those biases from the translation.	3
+Grp	Trans-Proc-Teams	29	B) Work with translation team
+Cmp	Trans-GUID	30	Translation roles	"Explain the different roles and responsibilities of translators, translation facilitators, translation consultants. "	2
+Cmp	Trans-GUID	31	Prepare for consultant check	"Prepare for a consultant check, analyze written back translations, write clear and concise exegetical notes for translation teams, to actually do a face-to-face consultant check as well as remote check, and to follow up on the consultant check."	2
+Cmp	Trans-GUID	32	Train translation team	"Guide and assist the translation team in drafting a section of Scripture. This includes, but is not limited to, exegesis, internalization, drafting, oral drafting, and quality assessment of the draft in relation to the source text and project goals. "	2
+Cmp	Trans-GUID	33	Translation styles	Demonstrate a good understanding of different translation styles appropriate for different audiences and of the sociolinguistic factors that play a role in regard to making decisions related to translation style.	2
+Cmp	Trans-GUID	34	Biblical genres	"Explain the differences to the translation team between different genres in the Bible (narrative, poetic, epistolary, prophetic) and the implications for translation."	2
+Cmp	Trans-GUID	35	Back translations	Train the translation team in how to elicit or produce back translations and then verify them.	2
+Cmp	Trans-GUID	36	Comprehension check	"Model, mentor and conduct good comprehension checks (including issues of naturalness and acceptability) with native speakers of the receptor language. "	2
+Grp	Trans-Proc-xText	37	C) Extra textual considerations
+Cmp	Trans-GUID	38	Impact of performance on meaning	"Demonstrate an understanding of the impact of performance upon the meaning of the text/audio. Demonstrate familiarity with different theories of communication, the role of the communicator, the role of the audience, and the impact upon meaning. "	2
+Cmp	Trans-GUID	39	Adaptation to audio	Demonstrate an understanding of the issues associated with adapting written text to audio and recorded audio to text and the ability to help a team think through the issues and choose appropriate translation solutions.	2
+Cmp	Trans-GUID	40	Paratextual materials	"Demonstrate a clear understanding of the use of paratextual materials (e.g. footnotes, pictures, headings, introduction) and their impact upon the meaning of Scripture (e.g. written, audio) and their impact upon people’s engagement with Scripture (e.g. written, audio). The ability to assess the impact of paratextual materials and advise the team on making appropriate decisions about paratextual material."	2
+Cat	Trans-Lang	41	Language and Culture	"Technical competencies are normally performed in multi-language, multicultural environments. Good communication through language, together with an appropriate cultural mindset and basic anthropological skills becomes increasingly important as a person’s technical competencies and range of responsibilities increase. LWC=Language of wider communication used in the area where the consultant primarily works (some consultants may require proficiency in more than one); L1=first language; L2=second language (at a degree of proficiency sufficient for normal work activities)."
+Grp	Trans-Lang-Commun	42	A) Communicate using LWC
+Cmp	Trans-GUID	43	Communicate in LWC	Listen and communicate well in the LWC with people from a variety of language communities.	2
+Cmp	Trans-GUID	44	Choose LWC	Choose the most appropriate language(s) from their repertoire for each context and be aware of the social implications of their language choice.	2
+Cmp	Trans-GUID	45	Instruct in LWC	Use the LWC to design and lead instruction in multicultural contexts.	2
+Cmp	Trans-GUID	46	Mentor in LWC	Coach and mentor others through the LWC.	2
+Cmp	Trans-GUID	47	Present in LWC	"Prepare proposals, reports, and presentations in the LWC."	2
+Cmp	Trans-GUID	48	Assess in LWC	Assess and evaluate fairly the work of individuals and project teams in the LWC.	2
+Grp	Trans-Lang-Creative	49	B) Creative use of LWC
+Cmp	Trans-GUID	50	Create materials in LWC	Develop or adapt materials for instructional use and for publication in the LWC.	1
+Cmp	Trans-GUID	51	Participate in community in LWC	Contribute to a community of practice [CoP] through the LWC.	0
+Cmp	Trans-GUID	52	Research in LWC	Perform research which involves reading published technical materials in his/her specialty through the LWC.	1
+Cmp	Trans-GUID	53	Write in LWC for L2 speakers	Write in the LWC so that L2 readers can understand easily.	2
+Grp	Trans-Lang-CrossCulture	54	C) Cross-cultural Research
+Cmp	Trans-GUID	55	Cross-cultural research: execute	Choose and apply appropriate research skills to better understand cross-cultural experiences and situations.	2
+Cmp	Trans-GUID	56	Cross-cultural research: analyze	Find implications of results and share them with others.	2
+Cmp	Trans-GUID	57	Cross-cultural research: apply	Use research findings to improve consulting strategies and practices.	2
+Cmp	Trans-GUID	58	Cross-cultural research: document	Document research findings so they can be shared in the organization and beyond.	1
+Cmp	Trans-GUID	59	Cross-cultural research: train	Help others to be reflexive and to apply basic anthropological skills.	2
+Cat	Trans-Culture	60	Working in a Multicultural Environment	"Consulting effectively in a multicultural environment involves understanding the cultural values of each person and the dynamics of communication in a group or team situation. It requires being able to adapt one’s own communication style, and to give and receive feedback in a manner that befits the group dynamics."
+Grp	Trans-Culture-Work	61	A) Work with others cross-culturally
+Cmp	Trans-GUID	62	Understand patterns of communication	Identify and understand different patterns of communication.	2
+Cmp	Trans-GUID	63	Relate in different communication styles	"Communicate and relate effectively with people of different communication styles, being aware of the impact of body language."	2
+Cmp	Trans-GUID	64	Complete team assignments	Complete team assignments acceptably where applicable.	2
+Cmp	Trans-GUID	65	Account for cultural backgrounds	Account for people’s different cultural backgrounds and facilitate positive group dynamics and patterns of working that allow people to contribute more effectively.	2
+Cmp	Trans-GUID	66	Adapt to leadership styles	"Identify, understand and adapt to a variety of cross-cultural leadership styles."	2
+Cmp	Trans-GUID	67	Participate in decision-making	Participate effectively in decision-making processes.	2
+Cmp	Trans-GUID	68	"Communicate and participate effectively in cross-cultural mentoring, training, and project team activities, guiding translation teams to find translation problems and to solve them rather than solving the problems for them."	"Explain how the various cultural structures and social processes may present both opportunities and challenges in leadership, decision-making and relationships when working with a multicultural group or team."	2
+Grp	Trans-Culture-Lead	69	B) Take a lead cross-culturally
+Cmp	Trans-GUID	70	Train cross-culturally	"Communicate and participate effectively in cross-cultural mentoring, training, and project team activities, guiding translation teams to find translation problems and to solve them rather than solving the problems for them."	2
+Cmp	Trans-GUID	71	Mentor peers cross-culturally	Coach and mentor peers in culturally sensitive ways.	2
+Cmp	Trans-GUID	72	Assess cross-culturally	"Assess and evaluate the work of individuals in a multicultural environment, and communicate that assessment in a culturally appropriate way: knowing when to be flexible and when to insist that a certain interpretation or rendering is not acceptable; clearly explaining why a certain interpretation or rendering is not acceptable."	2
+Cat	Trans-Mentor	73	Mentoring	"Mentoring occurs informally when an individual is accompanied for a while by a friend or colleague more experienced in the field who offers guidance and advice. Mentoring formally is an organized and structured process with defined roles and responsibilities for guiding people in their professional development. There is an agreement that establishes the goals of the mentoring, means of evaluation and report of progress, and how the mentoring will finish. Formal mentoring seeks to ensure that everyone in an organization who needs mentoring receives it. (Some of these competencies overlap with interpersonal skills, but they are listed here because they are especially important for mentors.)"
+Grp	Trans-Mentor-Knowledge	74	A) Knowledge
+Cmp	Trans-GUID	75	Mentoring and Coaching	Describe how formal mentoring is different from informal mentoring and coaching/facilitation.	2
+Cmp	Trans-GUID	76	Mentor and Mentoree in Formal Mentoring	"Understand and be able to explain the purpose and expectations of formal mentoring, and the roles of the mentor and mentoree."	2
+Cmp	Trans-GUID	77	Administrative expectations	Know the administrative tasks expected by the mentoree’s organization.	2
+Grp	Trans-Mentor-Skills	78	B) Skills
+Cmp	Trans-GUID	79	Expectations for relationship	"Set and follow protocols and expectations for the relationship (how goals are going to be achieved, how to handle disagreements, how to track progress, etc.)."	2
+Cmp	Trans-GUID	80	Reciprocal relationship	"Develop a reciprocal relationship through sharing experiences, exploring expectations, and clarifying the roles of mentor and mentoree."	2
+Cmp	Trans-GUID	81	Mutual learning	Encourage a relationship of mutual learning between mentor and mentoree (with an attitude of “Let us learn together”).	2
+Cmp	Trans-GUID	82	Listen to encourage growth	Listen actively and use encouragement to facilitate growth.	2
+Cmp	Trans-GUID	83	Goals for continuous improvement	Provide guidance in reflecting upon and interpreting experiences and performance in order to develop goals in a plan for continuous improvement.	2
+Cmp	Trans-GUID	84	Recognize goals met	"Set clear goals for the mentoree to achieve, recognize and articulate when goals are met. "	2
+Cmp	Trans-GUID	85	Transfer competencies	"Use knowledge and experience in a particular domain to help the mentoree acquire and apply new knowledge, skills and attitudes, a. by explaining, modeling, giving effective examples b. by drawing out the mentoree’s thoughts in culturally appropriate ways (e.g open questions, polite commands, sharing stories with each other, saying “ I wonder what the best way would be to..”)."	2
+Cmp	Trans-GUID	86	Provide feedback	"Give and receive sincere feedback about the mentoree's performance, behavior and development with care and compassion in a culturally appropriate way (identifying both positive growth and areas still needing improvement)."	2
+Cmp	Trans-GUID	87	Create safe space	"Create a safe space for the mentoree to excel, shine and build confidence. "	2
+Cmp	Trans-GUID	88	Advocate on behalf of mentoree	Advocate on behalf of one’s mentorees so they have opportunities to get experiences necessary for their growth.	2
+Cmp	Trans-GUID	89	Maintain confidentiality	"Maintain confidentiality when sharing experiences, discussing issues and solving problems."	2
+Grp	Trans-Mentor-Attitudes	90	C) Attitudes
+Cmp	Trans-GUID	91	Respect	"Respects and values other people’s opinions, knowledge, and experience."	2
+Cmp	Trans-GUID	92	Humility	Is realistically self-aware and humble.	2
+Cmp	Trans-GUID	93	Rejoice with others	Delights in other people’s success.	2
+Cmp	Trans-GUID	94	Open	Is willing to be open about one’s own successes and failures (wise and appropriate self-disclosure).	2
+Cmp	Trans-GUID	95	Self-aware	"Understands the limitations of one’s own experiences and perspective, and minimize any negative impact on the mentoree."	2
+Cmp	Trans-GUID	96	Expect mentoree to mentor others	Expects that the mentoree develops to mentor others.	2
+Cat	Trans-Cons	97	Consulting Process Skills	"For consultants to use their expertise to effect change requires understanding the emotional and personal dimensions involved, and needs just as much attention as the content. Skills include establishing the relationship, defining the assignment, understanding and dealing with resistance, organizing a process of discovery, providing feedback, managing meetings for action, and implementation."
+Grp	Trans-Cons-Gen	98	A) General
+Cmp	Trans-GUID	99	Establish collaborative relationships	Establish collaborative relationships with individual clients and within an organization.	2
+Cmp	Trans-GUID	100	Represent organization with diplomacy	Represent their organization with diplomacy in intra- and inter-organizational projects/consulting processes.	2
+Cmp	Trans-GUID	101	 Articulate different stages of the consulting process	"Articulate an understanding of different stages/facets of the consulting process, including contracting (defining the assignment and clarifying roles), discovery, feedback, engagement/implementation, and evaluation."	3
+Grp	Trans-Cons-Cont	102	B) Contracting
+Cmp	Trans-GUID	103	Define expectations	"Define what is expected of the consultation process, what the boundaries are, what support the consultant requires, and what and when the consultant and consultee are expected to deliver."	3
+Cmp	Trans-GUID	104	Listen to needs of team	"Listen to and understand the needs that the client/team/organization expresses. Understands the interplay between budget, time, scope, project goals, and their impact on quality and can successfully shape and navigate these things to meet desired parameters."	2
+Grp	Trans-Cons-Disc	105	C) Discovery and feedback
+Cmp	Trans-GUID	106	Guide team through consultant process	"Organize a process of discovery, data collection, and dialogue that will help analyze the expressed needs/problems. (Is able to guide the team through a consulting session, including preparation and follow-up)."	2
+Cmp	Trans-GUID	107	Provide feedback	Provide feedback and recommendations from the discovery process in a way that maximizes client commitment and engagement (write a consultant report).	2
+Cmp	Trans-GUID	108	Deal with resistance to change	"Understand the process of change (including cultural, emotional, and personal factors) and deal with resistance to it from within the organization."	2
+Grp	Trans-Cons-Eval	109	D) Implementation and evaluation
+Cmp	Trans-GUID	110	Define specific assignments	"Manage meetings which will lead to a plan of action, clearly defining specific assignments needed to implement change."	2
+Cmp	Trans-GUID	111	Monitor progress	Monitor progress during the implementation.	2
+Cmp	Trans-GUID	112	Equip the team	Work towards a situation where the organization/client is equipped to carry forward the project independent of the consultant.	2
+Cmp	Trans-GUID	113	Final evaluation	"Provide an evaluation of the process/results before withdrawal (including oral feedback and written reports, as appropriate)."	2
+Cat	Trans-Tech	114	Technology for Consulting	"The widespread and growing use of technology means that consultants need to be able to perform from memory the basic, routine, and typical Technology for Consulting tasks, using current Best Practice techniques and tools."
+Grp	Trans-Tech-Soft	115	A) Translation software
+Cmp	Trans-GUID	116	Use relevant translation software	"Demonstrate the ability to use relevant software (e.g. Paratext, Logos, Render, OneStory Editor, HearThis, Transcriber) well (research an exegetical issue, prepare exegetical notes, resolve notes, perform various kinds of checks)."	2
+Cmp	Trans-GUID	117	Help team with first aid on software	"Demonstrate the ability to help translation teams (“first aid”), when they run into a problem with their equipment and software (e.g. reinstalling the relevant software)."	2
+Grp	Trans-Tech-Gen	118	B) General
+Cmp	Trans-GUID	119	Maintain technological devices	Responsibly maintain digital devices.	2
+Cmp	Trans-GUID	120	Safeguard data	Keep data safe and well-organized.	2
+Cmp	Trans-GUID	121	Digital communication	Use various devices and digital tools to communicate with others.	2
+Cmp	Trans-GUID	122	Written communication	Use best practices for email and other written communication with others.	2
+Cmp	Trans-GUID	123	Collaboration tools	"Use collaboration tools (e.g. file sharing, track changes, Google, etc.)."	2
+Cmp	Trans-GUID	124	Internet	Use the internet to find reliable information in the field and share information appropriately.	2
+Cat	Trans-Prog	125	Language Programs	"Consultants need an understanding of the overall goals and objectives of translation projects, the various stages of translation projects, the need for strategic planning, and the need for involving stakeholders from the very beginning for the sake of acceptability. They need to be aware of how the project contributes to a vision of transforming societies holistically through their languages."
+Grp	Trans-Prog-Gen	126	A) General elements of program design
+Cmp	Trans-GUID	127	Planning process	Articulate the elements of the planning process.	1
+Cmp	Trans-GUID	128	Project funding proposal	Articulate the key elements of a project funding proposal.	1
+Cmp	Trans-GUID	129	Authorisations required	Explain the checks and sign-offs required at different stages of a language program.	1
+Cmp	Trans-GUID	130	Sociolingiustic relevance	"Explain the relevance of basic concepts of sociolinguistics, such as variation, identity, multilingualism, attitudes, vitality, etc. to language program design."	2
+Cmp	Trans-GUID	131	Intellectual property	Demonstrate appropriate handling of Intellectual Property issues.	1
+Cmp	Trans-GUID	132	Working in partnership	"Demonstrate understanding of, and positive attitudes towards, working through partnerships and teams to accomplish all language development strategic goals."	2
+Cmp	Trans-GUID	133	Participatory methods	Demonstrate an ability to use participatory methods when working with a language community to promote acceptance.	2
+Cmp	Trans-GUID	134	Best practices for project design	"Explain general principles, approaches and best practices for designing and developing language programs. Understands the interplay between Budget, Time, Scope, project goals, and their impact on Quality and can successfully shape and navigate these things to meet desired parameters."	2
+Grp	Trans-Prog-Role	135	B) Roles of consultants within a BT/SE program
+Cmp	Trans-GUID	136	Interdisciplinary approach	Articulate the roles of the different academic domains in a language program.	2
+Cmp	Trans-GUID	137	Scripture Engagement principles	Articulate the basic principles and conditions for effective Scripture Engagement.	2
+Cmp	Trans-GUID	138	Multilingualism Urbanisation & Scripture Engagement (MUSE)	"Articulate the relevance of multilingualism, urbanization and migration to a BT/SE program."	2
+Cmp	Trans-GUID	139	Church mission & community engagement	Articulate and appreciate the role of the church and missions in a BT/SE program: how the community will engage with the Scriptures and the implications that has for how Scripture is translated.	2
+Cmp	Trans-GUID	140	SE approaches	"Is familiar with a variety of SE approaches (e.g. private reading, public reading, Storying Fellowship Groups, Listening Groups, apps). Demonstrate a good understanding of the most relevant developments and approaches in Scripture Engagement. "	2
+Cat	Trans-Interp	141	Interpersonal Skills	"Interpersonal skills are crucial for successfully developing good relationships for collaboration, solving problems and strengthening practices. These skills are linked to a person’s personality, and as such are not as easily learned as other competencies. So they are worded here in terms of descriptions of attitudes and behavior demonstrated over time."
+Grp	Trans-Interp-Hol	142	A) Holistic personal growth
+Cmp	Trans-GUID	143	Awareness of culture	"Is able to explain how one’s own cultural background and personality impacts one's thinking, values and behavior and how one relates to others."	2
+Cmp	Trans-GUID	144	Self-awareness	"Being aware of one's own personality and cultural background, is able to take responsible courses of action in cross-cultural situations."	2
+Cmp	Trans-GUID	145	Tolerance	Tolerantly considers other views/perspectives.	2
+Cmp	Trans-GUID	146	Acknowledging responsibility	Is willing to take responsibility for negative patterns that affect one's interactions in community.	2
+Cmp	Trans-GUID	147	Initiative	Takes initiative.	2
+Cmp	Trans-GUID	148	Self-control	Is intentional about dealing with one's own inner dynamics appropriately as one becomes aware of them.	2
+Cmp	Trans-GUID	149	Balance	Balances workload in a healthy way.	2
+Cmp	Trans-GUID	150	Dependability	Fulfills obligations/achieves agreed upon goals consistently.	2
+Cmp	Trans-GUID	151	Attitude	Demonstrates a positive attitude in all circumstances.	2
+Grp	Trans-Interp-Rel	152	B) Interpersonal relationships
+Cmp	Trans-GUID	153	Even-tempered	"Takes responsibility for negative patterns, does not easily take offense."	2
+Cmp	Trans-GUID	154	Builds relationships	Builds personal relationships that extend beyond work situations.	2
+Cmp	Trans-GUID	155	Genuine interest	Shows genuine interest in the work of others.	2
+Cmp	Trans-GUID	156	Constructive critcism	Expresses and receives criticism in constructive ways.	2
+Cmp	Trans-GUID	157	Learning spirit	Listens to the ideas of others and learns from them.	2
+Grp	Trans-Interp-Situ	158	C) Skills in consulting situation
+Cmp	Trans-GUID	159	Respect	Shows respect for the person consulted: that s/he is a learner but also an expert in his/her own domain.	2
+Cmp	Trans-GUID	160	Listens to needs	Listens attentively to understand what others need and want.	3
+Cmp	Trans-GUID	161	Insightful questions	Formulates insightful questions.	3
+Cmp	Trans-GUID	162	Responsive	Responds to comments initiated by others.	3
+Cmp	Trans-GUID	163	Gives advice	Gives advice in a way that is appropriate and persuasive.	3
+Cmp	Trans-GUID	164	Gives affirmation	"Expresses appreciation and affirmation for good work and goals met, and so motivates those being consulted."	3
+Cmp	Trans-GUID	165	Diffuses tension	Seeks to defuse tension and promote positive relationships in culturally appropriate ways.	2
+Cmp	Trans-GUID	166	Resolves conflicts	"Resolves conflicts in a way that results in strengthened, positive relationships. (for example with regard to the question of how to translate a certain Biblical key term), or when there is a conflict between the translation team and the translation consultant."	3

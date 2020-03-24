@@ -12,6 +12,18 @@ type PlanRoot {
   has_milestone: [Milestone] @relation(name: "HAS_MILESTONE", direction: "OUT")
   competencycategories: [CompetencyCategory]
     @relation(name: "IS_CATEGORY_OF", direction: "IN")
+  progressnames: [ProgressResult]
+    @cypher(
+      statement: """
+      MATCH (this)-[r:HAS_CUSTOM_PROGRESS_NAME]->(pn:ProgressName)
+      RETURN {order: r.order, label: pn.label} ORDER BY r.order
+      """
+    )
+}
+
+type ProgressResult {
+  order: Int!
+  label: String!
 }
 
 type Competency {
@@ -363,6 +375,11 @@ type Progress {
   COMPETENCY_PROGRESS_rel: [COMPETENCY_PROGRESS]
   progressroots: [ProgressRoot]
     @relation(name: "CHILD_PROGRESS", direction: "IN")
+}
+
+type ProgressName {
+  _id: Long!
+  label: String
 }
 
 type Milestone {

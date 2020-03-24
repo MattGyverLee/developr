@@ -20,7 +20,7 @@ with open('./Trans2.tsv') as tsvfile:
     o.write('\tSET d.label = "Translation (Orlando)"\n')
     o.write(
         '\tMERGE (d)-[:IS_PRIMARY_DOMAIN_OF]->(p:PlanRoot {id: "'+currentPlanRoot+'"})-[:HAS_PRIMARY_DOMAIN]->(d)\n')
-    o.write('\tSET p.label = "Translation (Orlando) Plan",\n')
+    o.write('\tSET p.label = "Translation (Orlando) Mockup",\n')
     o.write('\t\tp.plan_class = "Generic"\n')
     o.write(
         '\tMERGE (ms:Milestone {ms: "TransCons1"})<-[:HAS_MILESTONE]-(p)\n')
@@ -31,7 +31,19 @@ with open('./Trans2.tsv') as tsvfile:
     o.write(
         '\tMERGE (ms2)-[:HAS_SHORT_NAME]->(:ShortName {label: "Translator (1)"}) \n')
     o.write('\n')
-
+    o.write(
+        '\tMERGE (p)-[:HAS_CUSTOM_PROGRESS_NAME {order: -1 }]->(:ProgressName {label: "Not Selected"})\n')
+    o.write(
+        '\tMERGE (p)-[:HAS_CUSTOM_PROGRESS_NAME {order: 0 }]->(:ProgressName {label: "In Progress"})\n')
+    o.write(
+        '\tMERGE (p)-[:HAS_CUSTOM_PROGRESS_NAME {order: 1 }]->(:ProgressName {label: "Foundational"})\n')
+    o.write(
+        '\tMERGE (p)-[:HAS_CUSTOM_PROGRESS_NAME {order: 2 }]->(:ProgressName {label: "Core"})\n')
+    o.write(
+        '\tMERGE (p)-[:HAS_CUSTOM_PROGRESS_NAME {order: 3 }]->(:ProgressName {label: "Advanced"})\n')
+    o.write(
+        '\tMERGE (p)-[:HAS_CUSTOM_PROGRESS_NAME {order: 4 }]->(:ProgressName {label: "Expert"})\n')
+    o.write('\n')
     for row in reader:
         if row['Type'] == 'Cat':
             currentCat = row['ID']
@@ -122,7 +134,7 @@ with open('./Trans2.tsv') as tsvfile:
                         '"})\n')
                 o.write("\tSET tc" + str(tcIndex) +
                         '.label = "' + row['Description']+'"\n')
-            o.write('\tMerge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: 2, competency_ref: "' +
+            o.write('\tMerge (pr)-[:CHILD_PROGRESS]->(:Progress {currentLevel: ' + row['User'] + ', competency_ref: "' +
                     row['ID']+str(cmpIndex)+'"})-[:COMPETENCY_PROGRESS {userId: "1"}]-(cmp' + str(cmpIndex) + ')\n')
             o.write('\tMerge (cmp' + str(cmpIndex) +
                     ')-[:TARGET_VALUE_IS {planId: "2", min: ' + row['Cons1 min']+'}]->(ms)\n')

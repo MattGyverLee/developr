@@ -83,6 +83,10 @@ export const DOMAIN_QUERY = (rootId, userId) => gql`
       id
       label
       plan_class
+      progressnames {
+        order
+        label
+      }
       has_category {
         id
         label
