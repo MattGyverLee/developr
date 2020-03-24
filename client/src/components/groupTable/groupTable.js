@@ -5,7 +5,6 @@ import { SelectionContext } from "../utilities/SelectionContext";
 import { findSortOrder } from "../utilities/sort";
 import { getTarget } from "../utilities/maths";
 import { getColor, calcAlpha } from "../utilities/color";
-
 const displayProgress = (category, progresses, inTarget, minValues, color) => {
   // this runs when the Category has a target score.
   var acc = 0;
@@ -200,7 +199,7 @@ const displayProgress = (category, progresses, inTarget, minValues, color) => {
   };
 };
 
-const Tabular = props => {
+const GroupTable = props => {
   const { state } = useContext(SelectionContext);
   var accy = [];
   var labelList = [];
@@ -296,6 +295,7 @@ const Tabular = props => {
                 const resetColorIndex = () => {
                   colorIndex = -1;
                 };
+
                 return (
                   <Fragment>
                     <div className="container">
@@ -308,8 +308,11 @@ const Tabular = props => {
                         {data.PlanRoot[0].label}
                       </h2>
                       <p>
-                        When targeting a specific Milestone, the table of
-                        results may look like this:
+                        Typically, a mentoree and mentors would spend the most
+                        time in such a system, but information that is deemed
+                        non-confidential (for example, names and badges) could
+                        be shared with indirect supervisors, domain leadership,
+                        or other partners and made available in reports.
                       </p>
                       <br />
                       {/* TODO: Get Full Name for Milestone */}
@@ -332,54 +335,7 @@ const Tabular = props => {
                               {resetColorIndex()}
                               <tr>
                                 <th colspan="2" scope="row">
-                                  Relevant Progress
-                                </th>
-                                {tableData.progressList.map(progress => (
-                                  <td>
-                                    <strong>
-                                      <big>{progress}</big>
-                                    </strong>
-                                  </td>
-                                ))}
-                              </tr>
-                              <tr>
-                                <th colspan="2" scope="row">
-                                  {data.Milestone[0].short_name[0].label}
-                                </th>
-                                {tableData.targetList.map((target, index) => (
-                                  <td>
-                                    {tableData.progressList[index] >=
-                                      target && (
-                                      <span style={{ color: "#009900" }}>
-                                        <big>{target}</big>
-                                      </span>
-                                    )}
-                                    {tableData.progressList[index] < target && (
-                                      <span style={{ color: "#CC9900" }}>
-                                        <big>{target}</big>
-                                      </span>
-                                    )}
-                                  </td>
-                                ))}
-                              </tr>
-
-                              {tableData.bonusList &&
-                                tableData.bonusList.length > 0 && (
-                                  <tr>
-                                    <th colspan="2" scope="row">
-                                      Extra Points
-                                      <a href="#extra">
-                                        <u>*</u>
-                                      </a>
-                                    </th>
-                                    {tableData.labelList.map((label, index) => (
-                                      <td>{tableData.bonusList[index] || 0}</td>
-                                    ))}
-                                  </tr>
-                                )}
-                              <tr>
-                                <th colspan="2" scope="row">
-                                  Proposed Level (Per Column)
+                                  User 1
                                 </th>
                                 {tableData.targetList.map((target, index) => (
                                   <td>
@@ -402,28 +358,69 @@ const Tabular = props => {
                                   </td>
                                 ))}
                               </tr>
+                              <tr>
+                                <th colspan="2">Bobby</th>
+                                {tableData.targetList.map((target, index) => (
+                                  <td>
+                                    {Math.random() >= 0.5 ? (
+                                      <span style={{ color: "#009900" }}>
+                                        <big>
+                                          {
+                                            data.Milestone[0].short_name[0]
+                                              .label
+                                          }
+                                        </big>
+                                      </span>
+                                    ) : (
+                                      <span style={{ color: "#CC9900" }}>
+                                        <big>Insufficient Progress</big>
+                                      </span>
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
+                              <tr>
+                                <th colspan="2">Bonny</th>
+                                {tableData.targetList.map((target, index) => (
+                                  <td>
+                                    {Math.random() >= 0.3 ? (
+                                      <span style={{ color: "#009900" }}>
+                                        <big>
+                                          {
+                                            data.Milestone[0].short_name[0]
+                                              .label
+                                          }
+                                        </big>
+                                      </span>
+                                    ) : (
+                                      <span style={{ color: "#CC9900" }}>
+                                        <big>Insufficient Progress</big>
+                                      </span>
+                                    )}
+                                  </td>
+                                ))}
+                              </tr>
                             </tbody>
                           </table>
                         </div>
                       )}
-                      {tableData.bonusList && tableData.bonusList.length > 0 && (
-                        <p>
-                          <a id="extra" />* If targets are defined
-                          per-competency, then excess points don't count toward
-                          the Milestone. It's not clear how these "overachiever
-                          points" should best be displayed.
-                        </p>
-                      )}
-                      <h2>Multi-Milestone View</h2>
-                      <p>
-                        Alternately, results could be shown globally and a level
-                        can be proposed as in this example screenshot from
-                        Language Technology's Smartsheet (not live data):
-                      </p>
-                      <img
-                        src="https://raw.githubusercontent.com/MattGyverLee/developr/master/client/public/images/SmartsheetTable.png"
-                        alt="A view from smartsheet"
-                        width="100%"></img>
+                      <br />
+
+                      <h2>Per-competency Reports</h2>
+                      <div>
+                        Reports could also be run by domain leadership to
+                        determine which users have a specific competency.
+                      </div>
+                      <div className="card mt-3 ml-3">
+                        <h3>
+                          List of users with an expert level in Underwater
+                          Basketweaving:
+                        </h3>
+                        <ul>
+                          <li>Bill</li>
+                          <li>Bonny</li>
+                        </ul>
+                      </div>
                     </div>
                   </Fragment>
                 );
@@ -435,4 +432,4 @@ const Tabular = props => {
   );
 };
 
-export default Tabular;
+export default GroupTable;

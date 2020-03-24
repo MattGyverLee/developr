@@ -56,7 +56,15 @@ const NavBar = local => {
         </div>
         <div className="nav-item text-center mx-2">
           <a className="nav-link" href="./table">
-            Results <br />
+            My Results <br />
+            Table
+          </a>
+        </div>
+        <div className="nav-item text-center mx-2">
+          <a className="nav-link" href="./groupTable">
+            Group <br />
+            Results
+            <br />
             Table
           </a>
         </div>
