@@ -37,7 +37,7 @@
     "graphql-tag": "^2.10.1",
     "neo4j-driver": "^4.0.2",
     "neo4j-graphql-js": "^2.7.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "now": "^17.0.4",
     "react-router": "^5.1.2"
   },
